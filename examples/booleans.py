@@ -103,8 +103,8 @@ gmsh.initialize(sys.argv)
 
 gmsh.option.setNumber("General.Terminal", 0)
 gmsh.option.setNumber("Mesh.Algorithm", 6)
-gmsh.option.setNumber("Mesh.CharacteristicLengthMin", 0.4)
-gmsh.option.setNumber("Mesh.CharacteristicLengthMax", 0.4)
+gmsh.option.setNumber("Mesh.CharacteristicLengthMin", 0.2)
+gmsh.option.setNumber("Mesh.CharacteristicLengthMax", 0.2)
 
 gmsh.model.add("boolean")
 
@@ -121,7 +121,7 @@ union = factory.boolean_union(factory.boolean_union(cx, cy), cz)
 cut = factory.boolean_difference(intersection, union)
 
 gmsh.model.occ.synchronize()
-gmsh.model.mesh.generate(3)
+gmsh.model.mesh.generate(2)
 gmsh.model.mesh.refine()
 #gmsh.model.mesh.setOrder(2)
 #gmsh.model.mesh.partition(4)
