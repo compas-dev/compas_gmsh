@@ -1,22 +1,75 @@
 import sys
 import gmsh
 
-from compas.utilities import rgb_to_hex
 from compas.geometry import Point
 from compas.geometry import Vector
 from compas.geometry import Plane
 from compas.geometry import Sphere
 from compas.geometry import Cylinder
 from compas.geometry import Box
+from compas.geometry import Torus
+from compas.geometry import Capsule
+
 from compas.datastructures import Mesh
+from compas.utilities import rgb_to_hex
+
 from compas_viewers.multimeshviewer import MultiMeshViewer
 from compas_viewers.multimeshviewer import MeshObject
 
 
-class Factory(object):
+class Model(object):
 
-    def __init__(self, factory):
-        self.factory = factory
+    def __init__(self, name):
+        self.name = name
+        self.model = gmsh.model
+        self.mesh = gmsh.model.mesh
+        self.factory = gmsh.model.occ
+
+    def info(self):
+        types = self.model.mesh.getElementTypes()
+        for number in types:
+            props = self.model.mesh.getElementProperties(number)
+            name = props[0]
+            dim = props[1]
+            order = props[2]
+            number_of_nodes = props[3]
+            local_node_coords = props[4]
+            number_of_primary_nodes = props[5]
+            print(name)
+            print('--', number)
+            print('--', dim)
+            print('--', order)
+            print('--', number_of_nodes)
+            print('--', local_node_coords)
+            print('--', number_of_primary_nodes)
+
+    def synchronize(self):
+        self.factory.synchronize()
+
+    def generate_mesh(self, dim=2):
+        self.synchronize()
+        self.model.mesh.generate(dim)
+
+    def refine_mesh(self):
+        self.model.mesh.refine()
+
+    def mesh_to_compas(self):
+        nodes = self.mesh.getNodes()
+        node_tags = nodes[0]
+        node_coords = nodes[1].reshape((-1, 3), order='C')
+        node_paramcoords = nodes[2]
+        xyz = {}
+        for tag, coords  in zip(node_tags, node_coords):
+            xyz[int(tag)] = coords.tolist()
+        elements = self.mesh.getElements()
+        triangles = []
+        for etype, etags, ntags in zip(*elements):
+            if etype == 2:
+                for i, etag in enumerate(etags):
+                    n = self.mesh.getElementProperties(etype)[3]
+                    triangle = ntags[i * n: i * n + n]
+                    triangles.append(triangle.tolist())
+        return Mesh.from_vertices_and_faces(xyz, triangles)
 
     def add_cylinder(self, cylinder):
         H = cylinder.height
@@ -78,108 +131,44 @@ XY = Plane(O, Z)
 box = Box.from_width_height_depth(2 * R, 2 * R, 2 * R)
 sphere = Sphere(O, 1.25 * R)
 
-cylinderX = Cylinder((YZ, 0.7 * R), 4 * R)
-cylinderY = Cylinder((ZX, 0.7 * R), 4 * R)
-cylinderZ = Cylinder((XY, 0.7 * R), 4 * R)
+cylinderx = Cylinder((YZ, 0.7 * R), 4 * R)
+cylindery = Cylinder((ZX, 0.7 * R), 4 * R)
+cylinderz = Cylinder((XY, 0.7 * R), 4 * R)
 
 # ==============================================================================
 # Gmsh
 # ==============================================================================
 
 gmsh.initialize(sys.argv)
-
 gmsh.option.setNumber("General.Terminal", 0)
 gmsh.option.setNumber("Mesh.Algorithm", 6)
 gmsh.option.setNumber("Mesh.CharacteristicLengthMin", 0.2)
 gmsh.option.setNumber("Mesh.CharacteristicLengthMax", 0.2)
 
-gmsh.model.add("boolean")
-
-factory = Factory(gmsh.model.occ)
-
-b = factory.add_box(box)
-s = factory.add_sphere(sphere)
-cx = factory.add_cylinder(cylinderX)
-cy = factory.add_cylinder(cylinderY)
-cz = factory.add_cylinder(cylinderZ)
-
-intersection = factory.boolean_intersection(b, s)
-union = factory.boolean_union(factory.boolean_union(cx, cy), cz)
-cut = factory.boolean_difference(intersection, union)
-
-gmsh.model.occ.synchronize()
-
-gmsh.model.mesh.generate(2)
-
-# types = gmsh.model.mesh.getElementTypes()
-# for number in types:
-#     props = gmsh.model.mesh.getElementProperties(number)
-#     name = props[0]
-#     dim = props[1]
-#     order = props[2]
-#     number_of_nodes = props[3]
-#     local_node_coords = props[4]
-#     number_of_primary_nodes = props[5]
-#     print(name)
-#     print('--', number)
-#     print('--', dim)
-#     print('--', order)
-#     print('--', number_of_nodes)
-#     print('--', local_node_coords)
-#     print('--', number_of_primary_nodes)
-
-gmsh.model.mesh.refine()
-#gmsh.model.mesh.setOrder(2)
-#gmsh.model.mesh.partition(4)
-
 # ==============================================================================
-# Mesh nodes
+# Solid Model
 # ==============================================================================
 
-nodes = gmsh.model.mesh.getNodes()
-node_tags = nodes[0]
-node_coords = nodes[1].reshape((-1, 3), order='C')
-node_paramcoords = nodes[2]
+model = Model(name="boolean")
 
-xyz = {}
-for tag, coords  in zip(node_tags, node_coords):
-    xyz[int(tag)] = coords.tolist()
+BOX = model.add_box(box)
+SPHERE = model.add_sphere(sphere)
+CX = model.add_cylinder(cylinderx)
+CY = model.add_cylinder(cylindery)
+CZ = model.add_cylinder(cylinderz)
 
-# ==============================================================================
-# Mesh elements
-# ==============================================================================
+I = model.boolean_intersection(BOX, SPHERE)
+U = model.boolean_union(model.boolean_union(CX, CY), CZ)
+D = model.boolean_difference(I, U)
 
-elements = gmsh.model.mesh.getElements()
-
-lines = []
-triangles = []
-tetrahedrons = []
-points = []
-
-for etype, etags, ntags in zip(*elements):
-    if not etype:
-        continue
-    if etype == 1:
-        # lines
-        pass
-    elif etype == 2:
-        # triangles
-        for i, etag in enumerate(etags):
-            n = gmsh.model.mesh.getElementProperties(etype)[3]
-            triangle = ntags[i * n: i * n + n]
-            triangles.append(triangle.tolist())
-    elif etype == 3:
-        # tetrahedrons
-        pass
-    elif etype == 15:
-        # points
-        pass
+model.generate_mesh(2)
+model.refine_mesh()
 
 # ==============================================================================
 # COMPAS mesh
 # ==============================================================================
 
-mesh = Mesh.from_vertices_and_faces(xyz, triangles)
+mesh = model.mesh_to_compas()
 
 # ==============================================================================
 # Visualization with viewer
