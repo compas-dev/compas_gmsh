@@ -13,8 +13,7 @@ from compas.geometry import Capsule
 from compas.datastructures import Mesh
 from compas.utilities import rgb_to_hex
 
-from compas_viewers.multimeshviewer import MultiMeshViewer
-from compas_viewers.multimeshviewer import MeshObject
+from compas_view2.app import App
 
 
 class Model(object):
@@ -177,13 +176,10 @@ mesh = model.mesh_to_compas()
 # Visualization with viewer
 # ==============================================================================
 
-meshes = []
-meshes.append(MeshObject(mesh, color=rgb_to_hex((210, 210, 210))))
+viewer = App()
 
-viewer = MultiMeshViewer()
-viewer.meshes = meshes
-
-viewer.show()
+viewer.add(mesh)
+viewer.run()
 
 # ==============================================================================
 # Shutdown

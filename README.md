@@ -5,7 +5,7 @@ COMPAS friendly interface for Python-GMSH.
 ## Installation
 
 ```bash
-conda create -n gmsh python=3.7 python.app python-gmsh COMPAS --yes
+conda create -n gmsh python=3.8 python.app python-gmsh COMPAS --yes
 conda activate gmsh
 ```
 
@@ -14,7 +14,7 @@ pip install path/to/compas_gmsh
 ```
 
 To install the COMPAS viewer for 3D visualisation, follow the instructions here:
-<https://github.com/compas-dev/compas_viewers>
+<https://github.com/compas-dev/compas_view2>
 
 ## Getting Started
 

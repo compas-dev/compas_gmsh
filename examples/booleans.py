@@ -9,8 +9,8 @@ from compas.geometry import Sphere
 from compas.geometry import Cylinder
 from compas.geometry import Box
 from compas.datastructures import Mesh
-from compas_viewers.multimeshviewer import MultiMeshViewer
-from compas_viewers.multimeshviewer import MeshObject
+
+from compas_view2.app import App
 
 
 class Factory(object):
@@ -185,13 +185,10 @@ mesh = Mesh.from_vertices_and_faces(xyz, triangles)
 # Visualization with viewer
 # ==============================================================================
 
-meshes = []
-meshes.append(MeshObject(mesh, color=rgb_to_hex((210, 210, 210))))
+viewer = App()
 
-viewer = MultiMeshViewer()
-viewer.meshes = meshes
-
-viewer.show()
+viewer.add(mesh)
+viewer.run()
 
 # ==============================================================================
 # Shutdown
