@@ -24,7 +24,6 @@ class Model(object):
         self.model = gmsh.model
         self.mesh = gmsh.model.mesh
         self.factory = gmsh.model.occ
-        gmsh.model.add(name)
 
     def info(self):
         types = self.model.mesh.getElementTypes()
@@ -99,33 +98,20 @@ class Model(object):
         return 3, tag
 
     def boolean_intersection(self, A, B):
-        """Boolean intersection of two shapes.
-
-        Parameters
-        ----------
-        A : tuple
-            The dimension and tag of the first shape.
-        B : tuple
-            The dimension and tag of the second shape.
-
-        Results
-        -------
-        tuple
-            The dimension and tag of the resulting shape.
-        """
+        # the dim is necessary because tags are only unique per dimension
         result = self.factory.intersect([A], [B])
-        dimtags = result[0]
-        return dimtags[0]
+        objects = result[0]
+        return objects[0]  # return the dim and the tag
 
     def boolean_union(self, A, B):
         result = self.factory.fuse([A], [B])
-        dimtags = result[0]
-        return dimtags[0]
+        objects = result[0]
+        return objects[0]
 
     def boolean_difference(self, A, B):
         result = self.factory.cut([A], [B])
-        dimtags = result[0]
-        return dimtags[0]
+        objects = result[0]
+        return objects[0]
 
     def boolean_fragment(self, A, B):
         pass
