@@ -35,9 +35,13 @@ cylinderz = Cylinder((XY, 0.7 * R), 4 * R)
 # Solid Model
 # ==============================================================================
 
-model = Model(name="boolean")
+model = Model(name="csg2")
 model.length_min = 0.5
 model.length_max = 1.0
+
+# this needs to become `model.add()`
+# and delegated to the corresponding ModelObject
+# through registration of Object - ModelObject pairs
 
 BOX = model.add_box(box)
 SPHERE = model.add_sphere(sphere)
@@ -45,11 +49,15 @@ CX = model.add_cylinder(cylinderx)
 CY = model.add_cylinder(cylindery)
 CZ = model.add_cylinder(cylinderz)
 
+# ideally this is passed to the model
+# as a CSG tree
+# and executed in one go
+
 I = model.boolean_intersection(BOX, SPHERE)
 U = model.boolean_union(model.boolean_union(CX, CY), CZ)
 D = model.boolean_difference(I, U)
 
-model.generate_mesh(2)
+model.generate_mesh()
 model.refine_mesh()
 
 # ==============================================================================

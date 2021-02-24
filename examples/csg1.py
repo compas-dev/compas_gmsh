@@ -18,7 +18,7 @@ b2 = Box(Frame([-4, -4, 0], [1, 0, 0], [0, 1, 0]), 10, 10, 10)
 # Solid Model
 # ==============================================================================
 
-model = Model(name="boolean")
+model = Model(name="csg1")
 model.length_min = 0.2
 model.length_max = 0.5
 
@@ -26,8 +26,8 @@ B1 = model.add_box(b1)
 B2 = model.add_box(b2)
 
 model.boolean_union(B1, B2)
-model.generate_mesh(2)
-model.refine_mesh()
+model.generate_mesh()
+# model.refine_mesh()
 
 # ==============================================================================
 # COMPAS mesh
