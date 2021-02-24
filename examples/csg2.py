@@ -1,17 +1,11 @@
-import sys
-import gmsh
-
 from compas.geometry import Point
 from compas.geometry import Vector
 from compas.geometry import Plane
 from compas.geometry import Sphere
 from compas.geometry import Cylinder
 from compas.geometry import Box
-from compas.geometry import Torus
-from compas.geometry import Capsule
 
 from compas.datastructures import Mesh
-from compas.utilities import rgb_to_hex
 
 from compas_view2.app import App
 from compas_gmsh.model import Model
