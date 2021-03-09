@@ -36,8 +36,8 @@ cylinderz = Cylinder((XY, 0.7 * R), 4 * R)
 # ==============================================================================
 
 model = Model(name="csg2")
-model.length_min = 0.5
-model.length_max = 1.0
+model.length_min = 0.2
+model.length_max = 0.2
 
 # this needs to become `model.add()`
 # and delegated to the corresponding ModelObject
