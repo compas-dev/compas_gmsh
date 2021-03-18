@@ -1,5 +1,9 @@
 # COMPAS GMSH
 
+**THIS REPO IS WIP. COMTRIBUTIONS TOWARDS CREATING A FIRST STABLE VERSION A VERY WELCOME :)**
+
+----
+
 COMPAS friendly interface for Python-GMSH.
 
 ## Installation
