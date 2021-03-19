@@ -9,7 +9,7 @@ COMPAS friendly interface for Python-GMSH.
 ## Installation
 
 ```bash
-conda create -n gmsh python=3.8 python.app python-gmsh COMPAS --yes
+conda create -n gmsh python=3.8 python-gmsh COMPAS --yes
 conda activate gmsh
 ```
 
