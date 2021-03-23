@@ -1,8 +1,8 @@
 # COMPAS GMSH
 
-**THIS PROJECT IS WIP**
+**THIS PROJECT IS WIP.**
 
-**CONTRIBUTIONS TOWARDS CREATING A FIRST STABLE VERSION A VERY WELCOME :)**
+**CONTRIBUTIONS TOWARDS CREATING A FIRST STABLE VERSION A VERY WELCOME :)...**
 
 ----
 
@@ -11,16 +11,20 @@ COMPAS friendly interface for Python-GMSH.
 ## Installation
 
 ```bash
-conda create -n gmsh python=3.8 python-gmsh COMPAS --yes
+conda create -n gmsh -c conda-forge python=3.8 python-gmsh compas --yes
 conda activate gmsh
 ```
 
 ```bash
-pip install path/to/compas_gmsh
+pip install -e .
 ```
 
-To install the COMPAS viewer for 3D visualisation, follow the instructions here:
-<https://github.com/compas-dev/compas_view2>
+To install COMPAS View2 for 3D visualisation outside of CAD environments
+
+```bash
+conda activate gmsh
+conda install -n gmsh -c conda-forge compas_view2
+```
 
 ## Getting Started
 
