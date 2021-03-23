@@ -4,7 +4,7 @@ from compas.geometry import Frame
 from compas.datastructures import Mesh
 
 from compas_view2.app import App
-from compas_gmsh.model import Model
+from compas_gmsh.models.model import Model
 
 
 # ==============================================================================

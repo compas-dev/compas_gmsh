@@ -8,7 +8,7 @@ class Model:
 
     def __init__(self, name):
         gmsh.initialize(sys.argv)
-        gmsh.option.setNumber("General.Terminal", 1)
+        gmsh.option.setNumber("General.Terminal", 0)
         gmsh.option.setNumber("Mesh.Algorithm", 6)
         gmsh.model.add(name)
         self.mesh = gmsh.model.mesh
@@ -69,11 +69,19 @@ class Model:
         elements = self.mesh.getElements()
         triangles = []
         for etype, etags, ntags in zip(*elements):
-            if etype == 2:
+            if etype == 1:  # lines
+                print(f'line: {len(etags)}')
+            elif etype == 2:  # triangles
+                print(f'triangle: {len(etags)}')
                 for i, etag in enumerate(etags):
                     n = self.mesh.getElementProperties(etype)[3]
                     triangle = ntags[i * n: i * n + n]
                     triangles.append(triangle.tolist())
+            elif etype == 4:  # tets
+                print(f'tetrahedron: {len(etags)}')
+            elif etype == 15:  # points
+                print(f'point: {len(etags)}')
+
         return Mesh.from_vertices_and_faces(xyz, triangles)
 
     def add_cylinder(self, cylinder):

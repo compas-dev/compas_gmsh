@@ -1,7 +1,7 @@
 from compas.geometry import Sphere
 
 from compas_view2.app import App
-from compas_gmsh.model import Model
+from compas_gmsh.models.model import Model
 
 
 # ==============================================================================
@@ -21,7 +21,7 @@ model.add_sphere(sphere)
 model.length_min = 2
 model.length_max = 3
 
-model.generate_mesh()
+model.generate_mesh(3)
 
 # ==============================================================================
 # COMPAS mesh
