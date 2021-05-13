@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 import sys
 import gmsh
 
@@ -5,8 +7,9 @@ from compas.datastructures import Mesh
 
 
 class Model:
+    """Base model for mesh generation."""
 
-    def __init__(self, name, verbose=False, algo=6):
+    def __init__(self, name: str, verbose: bool = False, algo: int = 6) -> Model:
         gmsh.initialize(sys.argv)
         gmsh.option.setNumber("General.Terminal", int(verbose))
         gmsh.option.setNumber("Mesh.Algorithm", algo)
@@ -18,22 +21,25 @@ class Model:
         gmsh.finalize()
 
     @property
-    def length_min(self):
+    def length_min(self) -> float:
+        """Minimum edge length for meshing."""
         gmsh.option.getNumber("Mesh.CharacteristicLengthMin")
 
     @length_min.setter
-    def length_min(self, value):
+    def length_min(self, value: float):
         gmsh.option.setNumber("Mesh.CharacteristicLengthMin", value)
 
     @property
-    def length_max(self):
+    def length_max(self) -> float:
+        """Maximum edge length for meshing."""
         gmsh.option.getNumber("Mesh.CharacteristicLengthMax")
 
     @length_max.setter
-    def length_max(self, value):
+    def length_max(self, value: float):
         gmsh.option.setNumber("Mesh.CharacteristicLengthMax", value)
 
-    def info(self):
+    def info(self) -> None:
+        """Print information about the current model."""
         types = self.mesh.getElementTypes()
         for number in types:
             props = self.mesh.getElementProperties(number)
@@ -51,14 +57,17 @@ class Model:
             print('--', local_node_coords)
             print('--', number_of_primary_nodes)
 
-    def generate_mesh(self, dim=2):
+    def generate_mesh(self, dim: int = 2) -> None:
+        """Generate a mesh of the current model."""
         self.factory.synchronize()
         self.mesh.generate(dim)
 
-    def refine_mesh(self):
+    def refine_mesh(self) -> None:
+        """Refine the model mesh."""
         self.mesh.refine()
 
-    def mesh_to_compas(self):
+    def mesh_to_compas(self) -> Mesh:
+        """Convert the model mesh to a COMPAS mesh data structure."""
         nodes = self.mesh.getNodes()
         node_tags = nodes[0]
         node_coords = nodes[1].reshape((-1, 3), order='C')
