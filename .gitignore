@@ -116,3 +116,5 @@ temp/**
 .vscode/
 
 scripts/__floor
+
+docs/api/generated
