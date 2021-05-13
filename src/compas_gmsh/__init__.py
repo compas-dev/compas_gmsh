@@ -9,13 +9,15 @@ compas_gmsh
 .. toctree::
     :maxdepth: 1
 
+    compas_gmsh.interop
+    compas_gmsh.models
 
 """
 
 from __future__ import print_function
 
 import os
-import sys
+import compas
 
 
 __author__ = ["tom van mele"]
