@@ -1,7 +1,11 @@
 ********************************************************************************
-Licenses
+Mesh Remeshing
 ********************************************************************************
 
-.. literalinclude:: ../LICENSE.GPL
+.. figure:: /_images/remeshing.png
+    :figclass: figure
+    :class: figure-img img-fluid
 
-.. literalinclude:: ../LICENSE.MIT
+
+.. literalinclude:: remeshing.py
+    :language: python

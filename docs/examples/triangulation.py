@@ -1,35 +1,27 @@
-from compas.geometry import Box
-from compas.geometry import Frame
-
-from compas.datastructures import Mesh
+from compas.geometry import Sphere
 
 from compas_view2.app import App
-from compas_gmsh.models.model import Model
+from compas_gmsh.models import ShapeModel
 
 
 # ==============================================================================
 # Geometry
 # ==============================================================================
 
-b1 = Box(Frame([+4, +4, 0], [1, 0, 0], [0, 1, 0]), 10, 10, 10)
-b2 = Box(Frame([-4, -4, 0], [1, 0, 0], [0, 1, 0]), 10, 10, 10)
+sphere = Sphere([0, 0, 0], 10)
 
 # ==============================================================================
 # Solid Model
 # ==============================================================================
 
-model = Model(name="csg1")
+model = ShapeModel(name="triangulation")
 
-B1 = model.add_box(b1)
-B2 = model.add_box(b2)
+model.add_sphere(sphere)
 
-model.boolean_union(B1, B2)
+model.length_min = 2
+model.length_max = 3
 
-model.length_min = 0.2
-model.length_max = 0.5
-
-model.generate_mesh()
-model.refine_mesh()
+model.generate_mesh(3)
 
 # ==============================================================================
 # COMPAS mesh

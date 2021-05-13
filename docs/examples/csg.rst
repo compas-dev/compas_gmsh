@@ -1,7 +1,11 @@
 ********************************************************************************
-Licenses
+Shape Modelling
 ********************************************************************************
 
-.. literalinclude:: ../LICENSE.GPL
+.. figure:: /_images/csg.png
+    :figclass: figure
+    :class: figure-img img-fluid
 
-.. literalinclude:: ../LICENSE.MIT
+
+.. literalinclude:: csg.py
+    :language: python
