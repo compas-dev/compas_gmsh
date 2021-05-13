@@ -63,8 +63,15 @@ class Model:
         self.mesh.generate(dim)
 
     def refine_mesh(self) -> None:
-        """Refine the model mesh."""
+        """Refine the model mesh by uniformly splitting the edges."""
         self.mesh.refine()
+
+    # Literal["Netgen", "HighOrder", "HighOrderElastic", "HighOrderFastCurving"]
+    def optimize_mesh(self,
+                      method: str = "",
+                      niter: int = 1) -> None:
+        """Optimize the model mesh using the specified method."""
+        self.mesh.optimize(method, niter=niter)
 
     def mesh_to_compas(self) -> Mesh:
         """Convert the model mesh to a COMPAS mesh data structure."""
