@@ -64,7 +64,7 @@ class Model:
         node_coords = nodes[1].reshape((-1, 3), order='C')
         # node_paramcoords = nodes[2]
         xyz = {}
-        for tag, coords  in zip(node_tags, node_coords):
+        for tag, coords in zip(node_tags, node_coords):
             xyz[int(tag)] = coords.tolist()
         elements = self.mesh.getElements()
         triangles = []
