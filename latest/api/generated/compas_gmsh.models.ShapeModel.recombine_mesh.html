@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   
-  <title>compas_gmsh - ShapeModel.optimize_mesh</title>
+  <title>compas_gmsh - ShapeModel.recombine_mesh</title>
   
 
   <meta charset="utf-8" />
@@ -19,11 +19,11 @@
   <link rel="stylesheet" type="text/css" href="../../_static/css/compas-reference.css" />
 
   
-    <link rel="next" title="ShapeModel.recombine_mesh" href="compas_gmsh.models.ShapeModel.recombine_mesh.html" />
+    <link rel="next" title="ShapeModel.refine_mesh" href="compas_gmsh.models.ShapeModel.refine_mesh.html" />
   
 
   
-    <link rel="prev" title="ShapeModel.mesh_to_compas" href="compas_gmsh.models.ShapeModel.mesh_to_compas.html" />
+    <link rel="prev" title="ShapeModel.optimize_mesh" href="compas_gmsh.models.ShapeModel.optimize_mesh.html" />
   
 
   <script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-MML-AM_CHTML"></script>
@@ -90,19 +90,19 @@
             
               <li class="breadcrumb-item"><a href="compas_gmsh.models.ShapeModel.html">ShapeModel</a></li>
             
-            <li class="breadcrumb-item active" aria-current="page">ShapeModel.optimize_mesh</li>
+            <li class="breadcrumb-item active" aria-current="page">ShapeModel.recombine_mesh</li>
           </ol>
         </nav>
         
 
         
         
-        <section class="detail" id="shapemodel-optimize-mesh">
-<h1>ShapeModel.optimize_mesh</h1>
+        <section class="detail" id="shapemodel-recombine-mesh">
+<h1>ShapeModel.recombine_mesh</h1>
 <dl class="py method">
-<dt class="sig sig-object py" id="compas_gmsh.models.ShapeModel.optimize_mesh">
-<span class="sig-prename descclassname"><span class="pre">ShapeModel.</span></span><span class="sig-name descname"><span class="pre">optimize_mesh</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">algo</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">compas_gmsh.options.OptimizationAlgorithm</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">niter</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><span class="pre">int</span></a></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">1</span></span></em><span class="sig-paren">)</span> &#x2192; <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.9)"><span class="pre">None</span></a><a class="reference external" href="https://github.com/compas-dev/compas_gmsh/blob/main/src/compas_gmsh/models/shape.py#L82"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
-<dd><p>Optimize the model mesh using the specified method.</p>
+<dt class="sig sig-object py" id="compas_gmsh.models.ShapeModel.recombine_mesh">
+<span class="sig-prename descclassname"><span class="pre">ShapeModel.</span></span><span class="sig-name descname"><span class="pre">recombine_mesh</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.9)"><span class="pre">None</span></a><a class="reference external" href="https://github.com/compas-dev/compas_gmsh/blob/main/src/compas_gmsh/models/shape.py#L92"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<dd><p>Recombine the mesh into quadrilateral faces.</p>
 </dd></dl>
 
 </section>
@@ -146,7 +146,7 @@
       <div class="d-none d-xl-block col-xl-2 compas-toc" role="toc">
         
         <ul class="nav flex-column" id="compas-toc">
-<li class="nav-item"><a class="nav-link reference internal" href="#">ShapeModel.optimize_mesh</a></li>
+<li class="nav-item"><a class="nav-link reference internal" href="#">ShapeModel.recombine_mesh</a></li>
 </ul>
 
       </div>
@@ -158,20 +158,20 @@
   <footer class="compas-footer">
     <nav class="nav p-2">
       
-        <a href="compas_gmsh.models.ShapeModel.mesh_to_compas.html" title="ShapeModel.mesh_to_compas" class="nav-link footer-link float-start text-left d-flex w-50" rel="prev">
+        <a href="compas_gmsh.models.ShapeModel.optimize_mesh.html" title="ShapeModel.optimize_mesh" class="nav-link footer-link float-start text-left d-flex w-50" rel="prev">
           <div class="nav-button p-2 m-2"><i class="fas fa-arrow-left"></i></div>
           <div class="nav-title flex-grow-1 align-self-center">
             <div class="nav-direction small font-weight-light">Previous</div>
-            ShapeModel.mesh_to_compas
+            ShapeModel.optimize_mesh
           </div>
         </a>
       
 
       
-        <a href="compas_gmsh.models.ShapeModel.recombine_mesh.html" title="ShapeModel.recombine_mesh" class="nav-link footer-link float-end text-right d-flex w-50" rel="next">
+        <a href="compas_gmsh.models.ShapeModel.refine_mesh.html" title="ShapeModel.refine_mesh" class="nav-link footer-link float-end text-right d-flex w-50" rel="next">
           <div class="nav-title footer-link flex-grow-1 align-self-center">
             <div class="nav-direction small font-weight-light">Next</div>
-            ShapeModel.recombine_mesh
+            ShapeModel.refine_mesh
           </div>
           <div class="nav-button p-2 m-2"><i class="fas fa-arrow-right"></i></div>
         </a>

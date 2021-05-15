@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   
-  <title>compas_gmsh - Shape Triangulation</title>
+  <title>compas_gmsh - FE Meshes: Point load on plate</title>
   
 
   <meta charset="utf-8" />
@@ -19,11 +19,11 @@
   <link rel="stylesheet" type="text/css" href="../_static/css/compas-reference.css" />
 
   
-    <link rel="next" title="API Reference" href="../api.html" />
+    <link rel="next" title="Mesh Remeshing" href="remeshing.html" />
   
 
   
-    <link rel="prev" title="Mesh Remeshing" href="remeshing.html" />
+    <link rel="prev" title="Shape Modelling" href="csg.html" />
   
 
   <script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-MML-AM_CHTML"></script>
@@ -84,56 +84,79 @@
             
               <li class="breadcrumb-item"><a href="../examples.html">Examples</a></li>
             
-            <li class="breadcrumb-item active" aria-current="page">Shape Triangulation</li>
+            <li class="breadcrumb-item active" aria-current="page">FE Meshes: Point load on plate</li>
           </ol>
         </nav>
         
 
         
         
-        <section id="shape-triangulation">
-<h1>Shape Triangulation</h1>
+        <section id="fe-meshes-point-load-on-plate">
+<h1>FE Meshes: Point load on plate</h1>
 <figure class="figure align-default">
-<img alt="_images/triangulation.png" class="figure-img img-fluid" src="_images/triangulation.png" />
+<img alt="../_images/plate.png" class="figure-img img-fluid" src="../_images/plate.png" />
 </figure>
-<div class="language-python notranslate"><div class="highlight"><pre><code><span></span><span class="kn">from</span> <span class="nn">compas.geometry</span> <span class="kn">import</span> <span class="n">Sphere</span>
-
+<div class="language-python notranslate"><div class="highlight"><pre><code><span></span><span class="kn">from</span> <span class="nn">random</span> <span class="kn">import</span> <span class="n">choice</span>
+<span class="kn">import</span> <span class="nn">compas</span>
+<span class="kn">from</span> <span class="nn">compas.geometry</span> <span class="kn">import</span> <span class="n">Point</span><span class="p">,</span> <span class="n">Vector</span>
+<span class="kn">from</span> <span class="nn">compas.datastructures</span> <span class="kn">import</span> <span class="n">Mesh</span><span class="p">,</span> <span class="n">mesh_thicken</span>
+<span class="kn">from</span> <span class="nn">compas.utilities</span> <span class="kn">import</span> <span class="n">geometric_key_xy</span>
+<span class="kn">from</span> <span class="nn">compas_gmsh.models</span> <span class="kn">import</span> <span class="n">MeshModel</span>
 <span class="kn">from</span> <span class="nn">compas_view2.app</span> <span class="kn">import</span> <span class="n">App</span>
-<span class="kn">from</span> <span class="nn">compas_gmsh.models</span> <span class="kn">import</span> <span class="n">ShapeModel</span>
-
-
-<span class="c1"># ==============================================================================</span>
-<span class="c1"># Geometry</span>
-<span class="c1"># ==============================================================================</span>
-
-<span class="n">sphere</span> <span class="o">=</span> <span class="n">Sphere</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="mi">10</span><span class="p">)</span>
+<span class="kn">from</span> <span class="nn">compas_view2.shapes</span> <span class="kn">import</span> <span class="n">Arrow</span>
 
 <span class="c1"># ==============================================================================</span>
-<span class="c1"># Solid Model</span>
+<span class="c1"># Make a plate mesh</span>
 <span class="c1"># ==============================================================================</span>
 
-<span class="n">model</span> <span class="o">=</span> <span class="n">ShapeModel</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">&quot;triangulation&quot;</span><span class="p">)</span>
-
-<span class="n">model</span><span class="o">.</span><span class="n">add_sphere</span><span class="p">(</span><span class="n">sphere</span><span class="p">)</span>
-
-<span class="n">model</span><span class="o">.</span><span class="n">length_min</span> <span class="o">=</span> <span class="mi">2</span>
-<span class="n">model</span><span class="o">.</span><span class="n">length_max</span> <span class="o">=</span> <span class="mi">3</span>
-
-<span class="n">model</span><span class="o">.</span><span class="n">generate_mesh</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>
+<span class="n">mesh</span> <span class="o">=</span> <span class="n">Mesh</span><span class="o">.</span><span class="n">from_obj</span><span class="p">(</span><span class="n">compas</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;faces.obj&quot;</span><span class="p">))</span>
+<span class="n">plate</span> <span class="o">=</span> <span class="n">mesh_thicken</span><span class="p">(</span><span class="n">mesh</span><span class="p">,</span> <span class="mf">0.3</span><span class="p">)</span>
 
 <span class="c1"># ==============================================================================</span>
-<span class="c1"># COMPAS mesh</span>
+<span class="c1"># Select random internal vertex for load application</span>
 <span class="c1"># ==============================================================================</span>
 
-<span class="n">mesh</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">mesh_to_compas</span><span class="p">()</span>
+<span class="n">poa</span> <span class="o">=</span> <span class="n">choice</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="n">mesh</span><span class="o">.</span><span class="n">vertices</span><span class="p">())</span> <span class="o">-</span> <span class="nb">set</span><span class="p">(</span><span class="n">mesh</span><span class="o">.</span><span class="n">vertices_on_boundary</span><span class="p">())))</span>
 
 <span class="c1"># ==============================================================================</span>
-<span class="c1"># Visualization with viewer</span>
+<span class="c1"># Set target sizes at load vertex and on boundaries and corners</span>
+<span class="c1"># ==============================================================================</span>
+
+<span class="n">vertex_target</span> <span class="o">=</span> <span class="p">{</span><span class="n">poa</span><span class="p">:</span> <span class="mf">0.02</span><span class="p">}</span>
+<span class="n">vertex_target</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="n">vertex</span><span class="p">:</span> <span class="mf">0.2</span> <span class="k">for</span> <span class="n">vertex</span> <span class="ow">in</span> <span class="n">mesh</span><span class="o">.</span><span class="n">vertices_on_boundary</span><span class="p">()})</span>
+<span class="n">vertex_target</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="n">vertex</span><span class="p">:</span> <span class="mf">0.02</span> <span class="k">for</span> <span class="n">vertex</span> <span class="ow">in</span> <span class="n">mesh</span><span class="o">.</span><span class="n">vertices_where</span><span class="p">({</span><span class="s1">&#39;vertex_degree&#39;</span><span class="p">:</span> <span class="mi">2</span><span class="p">})})</span>
+
+<span class="k">for</span> <span class="n">u</span> <span class="ow">in</span> <span class="nb">list</span><span class="p">(</span><span class="n">vertex_target</span><span class="p">):</span>
+    <span class="n">a</span> <span class="o">=</span> <span class="n">geometric_key_xy</span><span class="p">(</span><span class="n">mesh</span><span class="o">.</span><span class="n">vertex_coordinates</span><span class="p">(</span><span class="n">u</span><span class="p">))</span>
+    <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">plate</span><span class="o">.</span><span class="n">vertices</span><span class="p">():</span>
+        <span class="n">b</span> <span class="o">=</span> <span class="n">geometric_key_xy</span><span class="p">(</span><span class="n">plate</span><span class="o">.</span><span class="n">vertex_coordinates</span><span class="p">(</span><span class="n">v</span><span class="p">))</span>
+        <span class="k">if</span> <span class="n">b</span> <span class="o">==</span> <span class="n">a</span><span class="p">:</span>
+            <span class="n">vertex_target</span><span class="p">[</span><span class="n">v</span><span class="p">]</span> <span class="o">=</span> <span class="n">vertex_target</span><span class="p">[</span><span class="n">u</span><span class="p">]</span>
+
+<span class="c1"># ==============================================================================</span>
+<span class="c1"># Make meshing model</span>
+<span class="c1"># ==============================================================================</span>
+
+<span class="n">model</span> <span class="o">=</span> <span class="n">MeshModel</span><span class="o">.</span><span class="n">from_mesh</span><span class="p">(</span><span class="n">plate</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s2">&quot;test&quot;</span><span class="p">,</span> <span class="n">vertex_length</span><span class="o">=</span><span class="n">vertex_target</span><span class="p">)</span>
+
+<span class="n">model</span><span class="o">.</span><span class="n">generate_mesh</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+<span class="n">model</span><span class="o">.</span><span class="n">optimize_mesh</span><span class="p">(</span><span class="n">niter</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
+
+<span class="c1"># ==============================================================================</span>
+<span class="c1"># Viz</span>
 <span class="c1"># ==============================================================================</span>
 
 <span class="n">viewer</span> <span class="o">=</span> <span class="n">App</span><span class="p">()</span>
+<span class="n">viewer</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">mesh_to_compas</span><span class="p">())</span>
 
-<span class="n">viewer</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">mesh</span><span class="p">)</span>
+<span class="n">viewer</span><span class="o">.</span><span class="n">add</span><span class="p">(</span>
+    <span class="n">Arrow</span><span class="p">(</span>
+        <span class="n">Point</span><span class="p">(</span><span class="o">*</span> <span class="n">plate</span><span class="o">.</span><span class="n">vertex_coordinates</span><span class="p">(</span><span class="n">poa</span><span class="p">))</span> <span class="o">+</span> <span class="n">Vector</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span> <span class="n">Vector</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">),</span>
+        <span class="n">body_width</span><span class="o">=</span><span class="mf">0.03</span>
+    <span class="p">),</span>
+    <span class="n">facecolor</span><span class="o">=</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+<span class="p">)</span>
+
 <span class="n">viewer</span><span class="o">.</span><span class="n">run</span><span class="p">()</span>
 </code></pre></div>
 </div>
@@ -160,9 +183,9 @@
 <li class="nav-item"><a class="nav-link reference internal" href="../gettingstarted.html">Getting Started</a></li>
 <li class="nav-item active"><a class="nav-link reference internal" href="../examples.html">Examples</a><ul class="nav flex-column active">
 <li class="nav-item"><a class="nav-link reference internal" href="csg.html">Shape Modelling</a></li>
-<li class="nav-item"><a class="nav-link reference internal" href="plate.html">FE Meshes: Point load on plate</a></li>
+<li class="nav-item active"><a class="nav-link active current reference internal" href="#">FE Meshes: Point load on plate</a></li>
 <li class="nav-item"><a class="nav-link reference internal" href="remeshing.html">Mesh Remeshing</a></li>
-<li class="nav-item active"><a class="nav-link active current reference internal" href="#">Shape Triangulation</a></li>
+<li class="nav-item"><a class="nav-link reference internal" href="triangulation.html">Shape Triangulation</a></li>
 </ul>
 </li>
 <li class="nav-item"><a class="nav-link reference internal" href="../api.html">API Reference</a></li>
@@ -177,7 +200,7 @@
       <div class="d-none d-xl-block col-xl-2 compas-toc" role="toc">
         
         <ul class="nav flex-column" id="compas-toc">
-<li class="nav-item"><a class="nav-link reference internal" href="#">Shape Triangulation</a></li>
+<li class="nav-item"><a class="nav-link reference internal" href="#">FE Meshes: Point load on plate</a></li>
 </ul>
 
       </div>
@@ -189,20 +212,20 @@
   <footer class="compas-footer">
     <nav class="nav p-2">
       
-        <a href="remeshing.html" title="Mesh Remeshing" class="nav-link footer-link float-start text-left d-flex w-50" rel="prev">
+        <a href="csg.html" title="Shape Modelling" class="nav-link footer-link float-start text-left d-flex w-50" rel="prev">
           <div class="nav-button p-2 m-2"><i class="fas fa-arrow-left"></i></div>
           <div class="nav-title flex-grow-1 align-self-center">
             <div class="nav-direction small font-weight-light">Previous</div>
-            Mesh Remeshing
+            Shape Modelling
           </div>
         </a>
       
 
       
-        <a href="../api.html" title="API Reference" class="nav-link footer-link float-end text-right d-flex w-50" rel="next">
+        <a href="remeshing.html" title="Mesh Remeshing" class="nav-link footer-link float-end text-right d-flex w-50" rel="next">
           <div class="nav-title footer-link flex-grow-1 align-self-center">
             <div class="nav-direction small font-weight-light">Next</div>
-            API Reference
+            Mesh Remeshing
           </div>
           <div class="nav-button p-2 m-2"><i class="fas fa-arrow-right"></i></div>
         </a>

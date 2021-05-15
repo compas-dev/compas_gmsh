@@ -99,7 +99,7 @@
 <h1>Model</h1>
 <dl class="py class">
 <dt class="sig sig-object py" id="compas_gmsh.models.Model">
-<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">compas_gmsh.models.</span></span><span class="sig-name descname"><span class="pre">Model</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><span class="pre">str</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.9)"><span class="pre">bool</span></a></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">algo</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><span class="pre">int</span></a></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">6</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/compas-dev/compas_gmsh/blob/main/src/compas_gmsh/models/model.py#L9"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">compas_gmsh.models.</span></span><span class="sig-name descname"><span class="pre">Model</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">name:</span> <span class="pre">str</span></em>, <em class="sig-param"><span class="pre">verbose:</span> <span class="pre">bool</span> <span class="pre">=</span> <span class="pre">False</span></em>, <em class="sig-param"><span class="pre">algo:</span> <span class="pre">compas_gmsh.options.MeshAlgorithm</span> <span class="pre">=</span> <span class="pre">&lt;MeshAlgorithm.FrontalDelaunay:</span> <span class="pre">6&gt;</span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/compas-dev/compas_gmsh/blob/main/src/compas_gmsh/models/model.py#L14"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
 <dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
 <p>Base model for mesh generation.</p>
 <p class="rubric">Methods</p>
@@ -109,7 +109,7 @@
 <col style="width: 90%" />
 </colgroup>
 <tbody>
-<tr class="row-odd"><td><p><a class="reference internal" href="compas_gmsh.models.Model.generate_mesh.html#compas_gmsh.models.Model.generate_mesh" title="compas_gmsh.models.Model.generate_mesh"><code class="xref py py-obj docutils literal notranslate"><span class="pre">generate_mesh</span></code></a>([dim])</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="compas_gmsh.models.Model.generate_mesh.html#compas_gmsh.models.Model.generate_mesh" title="compas_gmsh.models.Model.generate_mesh"><code class="xref py py-obj docutils literal notranslate"><span class="pre">generate_mesh</span></code></a>([dim, verbose, algo])</p></td>
 <td><p>Generate a mesh of the current model.</p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="compas_gmsh.models.Model.info.html#compas_gmsh.models.Model.info" title="compas_gmsh.models.Model.info"><code class="xref py py-obj docutils literal notranslate"><span class="pre">info</span></code></a>()</p></td>
@@ -118,10 +118,13 @@
 <tr class="row-odd"><td><p><a class="reference internal" href="compas_gmsh.models.Model.mesh_to_compas.html#compas_gmsh.models.Model.mesh_to_compas" title="compas_gmsh.models.Model.mesh_to_compas"><code class="xref py py-obj docutils literal notranslate"><span class="pre">mesh_to_compas</span></code></a>()</p></td>
 <td><p>Convert the model mesh to a COMPAS mesh data structure.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="compas_gmsh.models.Model.optimize_mesh.html#compas_gmsh.models.Model.optimize_mesh" title="compas_gmsh.models.Model.optimize_mesh"><code class="xref py py-obj docutils literal notranslate"><span class="pre">optimize_mesh</span></code></a>([method, niter])</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="compas_gmsh.models.Model.optimize_mesh.html#compas_gmsh.models.Model.optimize_mesh" title="compas_gmsh.models.Model.optimize_mesh"><code class="xref py py-obj docutils literal notranslate"><span class="pre">optimize_mesh</span></code></a>([algo, niter])</p></td>
 <td><p>Optimize the model mesh using the specified method.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="compas_gmsh.models.Model.refine_mesh.html#compas_gmsh.models.Model.refine_mesh" title="compas_gmsh.models.Model.refine_mesh"><code class="xref py py-obj docutils literal notranslate"><span class="pre">refine_mesh</span></code></a>()</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="compas_gmsh.models.Model.recombine_mesh.html#compas_gmsh.models.Model.recombine_mesh" title="compas_gmsh.models.Model.recombine_mesh"><code class="xref py py-obj docutils literal notranslate"><span class="pre">recombine_mesh</span></code></a>()</p></td>
+<td><p>Recombine the mesh into quadrilateral faces.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="compas_gmsh.models.Model.refine_mesh.html#compas_gmsh.models.Model.refine_mesh" title="compas_gmsh.models.Model.refine_mesh"><code class="xref py py-obj docutils literal notranslate"><span class="pre">refine_mesh</span></code></a>()</p></td>
 <td><p>Refine the model mesh by uniformly splitting the edges.</p></td>
 </tr>
 </tbody>
