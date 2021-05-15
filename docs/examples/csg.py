@@ -57,7 +57,7 @@ model.boolean_difference(
 )
 
 model.generate_mesh()
-model.refine_mesh()
+model.optimize_mesh()
 
 # ==============================================================================
 # COMPAS mesh

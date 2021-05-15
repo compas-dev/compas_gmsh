@@ -11,7 +11,7 @@ COMPAS friendly interface for Python-GMSH.
 ## Installation
 
 ```bash
-conda create -n gmsh -c conda-forge python=3.8 python-gmsh compas --yes
+conda create -n gmsh -c conda-forge python=3.8 python-gmsh compas compas_view2 --yes
 conda activate gmsh
 ```
 
@@ -28,13 +28,7 @@ conda install -n gmsh -c conda-forge compas_view2
 
 ## Getting Started
 
-There are a few scripts in the `examples` folder to get started.
-`csg1.py` creates the union of two boxes and refines the resulting mesh.
-`csg2.py` is the intersection of a box and sphere, union of three cylinders, and difference of the intersection and union...
-
-![CSG1](docs/_images/csg1.png)
-
-![CSG2](docs/_images/csg2.png)
+Have a look at some of the first [examples in the documentation](https://compas.dev/compas_gmsh/latest/examples.html).
 
 ## License
 
