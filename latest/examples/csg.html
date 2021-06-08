@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   
-  <title>compas_gmsh - Shape Modelling</title>
+  <title>compas_gmsh - CSG Modelling</title>
   
 
   <meta charset="utf-8" />
@@ -84,15 +84,15 @@
             
               <li class="breadcrumb-item"><a href="../examples.html">Examples</a></li>
             
-            <li class="breadcrumb-item active" aria-current="page">Shape Modelling</li>
+            <li class="breadcrumb-item active" aria-current="page">CSG Modelling</li>
           </ol>
         </nav>
         
 
         
         
-        <section id="shape-modelling">
-<h1>Shape Modelling</h1>
+        <section id="csg-modelling">
+<h1>CSG Modelling</h1>
 <figure class="figure align-default">
 <img alt="../_images/csg.png" class="figure-img img-fluid" src="../_images/csg.png" />
 </figure>
@@ -104,7 +104,7 @@
 <span class="kn">from</span> <span class="nn">compas.geometry</span> <span class="kn">import</span> <span class="n">Box</span>
 
 <span class="kn">from</span> <span class="nn">compas_view2.app</span> <span class="kn">import</span> <span class="n">App</span>
-<span class="kn">from</span> <span class="nn">compas_gmsh.models</span> <span class="kn">import</span> <span class="n">ShapeModel</span>
+<span class="kn">from</span> <span class="nn">compas_gmsh.models</span> <span class="kn">import</span> <span class="n">CSGModel</span>
 
 <span class="c1"># ==============================================================================</span>
 <span class="c1"># Geometry</span>
@@ -123,38 +123,23 @@
 <span class="n">box</span> <span class="o">=</span> <span class="n">Box</span><span class="o">.</span><span class="n">from_width_height_depth</span><span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">R</span><span class="p">,</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">R</span><span class="p">,</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">R</span><span class="p">)</span>
 <span class="n">sphere</span> <span class="o">=</span> <span class="n">Sphere</span><span class="p">(</span><span class="n">P</span><span class="p">,</span> <span class="mf">1.25</span> <span class="o">*</span> <span class="n">R</span><span class="p">)</span>
 
-<span class="n">cylinderx</span> <span class="o">=</span> <span class="n">Cylinder</span><span class="p">((</span><span class="n">YZ</span><span class="p">,</span> <span class="mf">0.7</span> <span class="o">*</span> <span class="n">R</span><span class="p">),</span> <span class="mi">4</span> <span class="o">*</span> <span class="n">R</span><span class="p">)</span>
-<span class="n">cylindery</span> <span class="o">=</span> <span class="n">Cylinder</span><span class="p">((</span><span class="n">ZX</span><span class="p">,</span> <span class="mf">0.7</span> <span class="o">*</span> <span class="n">R</span><span class="p">),</span> <span class="mi">4</span> <span class="o">*</span> <span class="n">R</span><span class="p">)</span>
-<span class="n">cylinderz</span> <span class="o">=</span> <span class="n">Cylinder</span><span class="p">((</span><span class="n">XY</span><span class="p">,</span> <span class="mf">0.7</span> <span class="o">*</span> <span class="n">R</span><span class="p">),</span> <span class="mi">4</span> <span class="o">*</span> <span class="n">R</span><span class="p">)</span>
+<span class="n">cylx</span> <span class="o">=</span> <span class="n">Cylinder</span><span class="p">((</span><span class="n">YZ</span><span class="p">,</span> <span class="mf">0.7</span> <span class="o">*</span> <span class="n">R</span><span class="p">),</span> <span class="mi">4</span> <span class="o">*</span> <span class="n">R</span><span class="p">)</span>
+<span class="n">cyly</span> <span class="o">=</span> <span class="n">Cylinder</span><span class="p">((</span><span class="n">ZX</span><span class="p">,</span> <span class="mf">0.7</span> <span class="o">*</span> <span class="n">R</span><span class="p">),</span> <span class="mi">4</span> <span class="o">*</span> <span class="n">R</span><span class="p">)</span>
+<span class="n">cylz</span> <span class="o">=</span> <span class="n">Cylinder</span><span class="p">((</span><span class="n">XY</span><span class="p">,</span> <span class="mf">0.7</span> <span class="o">*</span> <span class="n">R</span><span class="p">),</span> <span class="mi">4</span> <span class="o">*</span> <span class="n">R</span><span class="p">)</span>
 
 <span class="c1"># ==============================================================================</span>
-<span class="c1"># Solid Model</span>
+<span class="c1"># CSG Model</span>
 <span class="c1"># ==============================================================================</span>
 
-<span class="n">model</span> <span class="o">=</span> <span class="n">ShapeModel</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">&quot;csg&quot;</span><span class="p">)</span>
+<span class="n">tree</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;difference&#39;</span><span class="p">:</span> <span class="p">[{</span><span class="s1">&#39;intersection&#39;</span><span class="p">:</span> <span class="p">[</span><span class="n">sphere</span><span class="p">,</span> <span class="n">box</span><span class="p">]},</span> <span class="p">{</span><span class="s1">&#39;union&#39;</span><span class="p">:</span> <span class="p">[</span><span class="n">cylx</span><span class="p">,</span> <span class="n">cyly</span><span class="p">,</span> <span class="n">cylz</span><span class="p">]}]}</span>
+
+<span class="n">model</span> <span class="o">=</span> <span class="n">CSGModel</span><span class="p">(</span><span class="n">tree</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s2">&quot;csg&quot;</span><span class="p">)</span>
 <span class="n">model</span><span class="o">.</span><span class="n">length_min</span> <span class="o">=</span> <span class="mf">0.2</span>
 <span class="n">model</span><span class="o">.</span><span class="n">length_max</span> <span class="o">=</span> <span class="mf">0.2</span>
 
-<span class="c1"># this needs to become `model.add()`</span>
-<span class="c1"># and delegated to the corresponding ModelObject</span>
-<span class="c1"># through registration of Object - ModelObject pairs</span>
-
-<span class="n">BOX</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">add_box</span><span class="p">(</span><span class="n">box</span><span class="p">)</span>
-<span class="n">SPHERE</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">add_sphere</span><span class="p">(</span><span class="n">sphere</span><span class="p">)</span>
-<span class="n">CX</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">add_cylinder</span><span class="p">(</span><span class="n">cylinderx</span><span class="p">)</span>
-<span class="n">CY</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">add_cylinder</span><span class="p">(</span><span class="n">cylindery</span><span class="p">)</span>
-<span class="n">CZ</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">add_cylinder</span><span class="p">(</span><span class="n">cylinderz</span><span class="p">)</span>
-
-<span class="c1"># ideally this is passed to the model</span>
-<span class="c1"># as a CSG tree</span>
-<span class="c1"># and executed in one go</span>
-
-<span class="n">model</span><span class="o">.</span><span class="n">boolean_difference</span><span class="p">(</span>
-    <span class="n">model</span><span class="o">.</span><span class="n">boolean_intersection</span><span class="p">(</span><span class="n">BOX</span><span class="p">,</span> <span class="n">SPHERE</span><span class="p">),</span>
-    <span class="n">model</span><span class="o">.</span><span class="n">boolean_union</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">boolean_union</span><span class="p">(</span><span class="n">CX</span><span class="p">,</span> <span class="n">CY</span><span class="p">),</span> <span class="n">CZ</span><span class="p">)</span>
-<span class="p">)</span>
-
+<span class="n">model</span><span class="o">.</span><span class="n">compute_tree</span><span class="p">()</span>
 <span class="n">model</span><span class="o">.</span><span class="n">generate_mesh</span><span class="p">()</span>
+<span class="n">model</span><span class="o">.</span><span class="n">refine_mesh</span><span class="p">()</span>
 <span class="n">model</span><span class="o">.</span><span class="n">optimize_mesh</span><span class="p">()</span>
 
 <span class="c1"># ==============================================================================</span>
@@ -195,7 +180,7 @@
 <li class="nav-item"><a class="nav-link reference internal" href="../intro.html">Introduction</a></li>
 <li class="nav-item"><a class="nav-link reference internal" href="../gettingstarted.html">Getting Started</a></li>
 <li class="nav-item active"><a class="nav-link reference internal" href="../examples.html">Examples</a><ul class="nav flex-column active">
-<li class="nav-item active"><a class="nav-link active current reference internal" href="#">Shape Modelling</a></li>
+<li class="nav-item active"><a class="nav-link active current reference internal" href="#">CSG Modelling</a></li>
 <li class="nav-item"><a class="nav-link reference internal" href="plate.html">FE Meshes: Point load on plate</a></li>
 <li class="nav-item"><a class="nav-link reference internal" href="remeshing.html">Mesh Remeshing</a></li>
 <li class="nav-item"><a class="nav-link reference internal" href="triangulation.html">Shape Triangulation</a></li>
@@ -213,7 +198,7 @@
       <div class="d-none d-xl-block col-xl-2 compas-toc" role="toc">
         
         <ul class="nav flex-column" id="compas-toc">
-<li class="nav-item"><a class="nav-link reference internal" href="#">Shape Modelling</a></li>
+<li class="nav-item"><a class="nav-link reference internal" href="#">CSG Modelling</a></li>
 </ul>
 
       </div>
