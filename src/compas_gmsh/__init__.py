@@ -5,7 +5,6 @@ compas_gmsh
 
 .. currentmodule:: compas_gmsh
 
-
 .. toctree::
     :maxdepth: 1
 
@@ -52,6 +51,7 @@ try:
             with open(git_head_refs_file, 'r') as git_head_ref:
                 git_commit = git_head_ref.read().strip()
                 __version__ += '-' + git_commit[:8]
+
 except Exception:
     pass
 
