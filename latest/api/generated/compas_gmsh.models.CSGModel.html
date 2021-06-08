@@ -99,8 +99,20 @@
 <h1>CSGModel</h1>
 <dl class="py class">
 <dt class="sig sig-object py" id="compas_gmsh.models.CSGModel">
-<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">compas_gmsh.models.</span></span><span class="sig-name descname"><span class="pre">CSGModel</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tree</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/compas-dev/compas_gmsh/blob/main/src/compas_gmsh/models/csg.py#L47"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">compas_gmsh.models.</span></span><span class="sig-name descname"><span class="pre">CSGModel</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tree</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.9)"><span class="pre">dict</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><span class="pre">str</span></a></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/compas-dev/compas_gmsh/blob/main/src/compas_gmsh/models/csg.py#L50"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
 <dd><p>Bases: <a class="reference internal" href="compas_gmsh.models.Model.html#compas_gmsh.models.Model" title="compas_gmsh.models.model.Model"><code class="xref py py-class docutils literal notranslate"><span class="pre">compas_gmsh.models.model.Model</span></code></a></p>
+<p>Model for shape generation through Constructive Solid Geometry.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>tree</strong> (<em>dict</em>) – The CSG tree as a dictionary mapping operations to operands.
+The operations have to be one of <cite>{‘union’, ‘intersection’, ‘difference’}</cite>.
+The operands have to be lists of shapes or lists of dicts that are CSG trees themselves.
+At every level of the tree, there can be only one operation.</p></li>
+<li><p><strong>name</strong> (<em>str</em>) – The name of the model.</p></li>
+</ul>
+</dd>
+</dl>
 <p class="rubric">Methods</p>
 <table class="longtable docutils align-default">
 <colgroup>
@@ -108,11 +120,11 @@
 <col style="width: 90%" />
 </colgroup>
 <tbody>
-<tr class="row-odd"><td><p><a class="reference internal" href="compas_gmsh.models.CSGModel.add.html#compas_gmsh.models.CSGModel.add" title="compas_gmsh.models.CSGModel.add"><code class="xref py py-obj docutils literal notranslate"><span class="pre">add</span></code></a>(obj)</p></td>
-<td><p></p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="compas_gmsh.models.CSGModel.add.html#compas_gmsh.models.CSGModel.add" title="compas_gmsh.models.CSGModel.add"><code class="xref py py-obj docutils literal notranslate"><span class="pre">add</span></code></a>(shape)</p></td>
+<td><p>Add a shape to the underlying OCC model.</p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="compas_gmsh.models.CSGModel.compute_tree.html#compas_gmsh.models.CSGModel.compute_tree" title="compas_gmsh.models.CSGModel.compute_tree"><code class="xref py py-obj docutils literal notranslate"><span class="pre">compute_tree</span></code></a>()</p></td>
-<td><p></p></td>
+<td><p>Comute the compound shape resulting from the operations on shape primitives in the tree.</p></td>
 </tr>
 <tr class="row-odd"><td><p><a class="reference internal" href="compas_gmsh.models.CSGModel.generate_mesh.html#compas_gmsh.models.CSGModel.generate_mesh" title="compas_gmsh.models.CSGModel.generate_mesh"><code class="xref py py-obj docutils literal notranslate"><span class="pre">generate_mesh</span></code></a>([dim, verbose, algo])</p></td>
 <td><p>Generate a mesh of the current model.</p></td>
