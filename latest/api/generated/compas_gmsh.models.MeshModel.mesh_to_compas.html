@@ -101,7 +101,7 @@
 <h1>MeshModel.mesh_to_compas</h1>
 <dl class="py method">
 <dt class="sig sig-object py" id="compas_gmsh.models.MeshModel.mesh_to_compas">
-<span class="sig-prename descclassname"><span class="pre">MeshModel.</span></span><span class="sig-name descname"><span class="pre">mesh_to_compas</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; <a class="reference external" href="https://compas.dev/compas/latest/api/generated/compas.datastructures.Mesh.html#compas.datastructures.Mesh" title="(in COMPAS v1.6)"><span class="pre">compas.datastructures.mesh._mesh.Mesh</span></a><a class="reference external" href="https://github.com/compas-dev/compas_gmsh/blob/main/src/compas_gmsh/models/mesh.py#L96"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<span class="sig-prename descclassname"><span class="pre">MeshModel.</span></span><span class="sig-name descname"><span class="pre">mesh_to_compas</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">compas.datastructures.mesh.mesh.Mesh</span></span></span><a class="reference external" href="https://github.com/compas-dev/compas_gmsh/blob/main/src/compas_gmsh/models/mesh.py#L96"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
 <dd><p>Convert the model mesh to a COMPAS mesh data structure.</p>
 </dd></dl>
 
@@ -245,10 +245,6 @@
     hljs.initHighlighting();
     anchors.add();
 
-    $('.nav-versions .dropdown-item').filter(function(i, ver) {
-      return window.location.href.startsWith(ver.href);
-    }).addClass("active");
-
   });
 
 
@@ -261,6 +257,13 @@
       lines.forEach(version => {
         $("#doc_version_list").append("<a class=\"dropdown-item\" href=\""+ docs_site + version + "\">" + version + "</a>");
       });
+
+      var selected_version = $('.nav-versions .dropdown-item').filter(function(i, ver) {
+        return window.location.href.startsWith(ver.href);
+      });
+      selected_version.addClass('active');
+      $("#bd-versions").text(selected_version.text());
+
     })
   }
   </script>
