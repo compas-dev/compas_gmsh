@@ -6,8 +6,8 @@ compas_gmsh
    :maxdepth: 3
    :titlesonly:
 
-   intro
-   gettingstarted
+   Introduction <self>
+   installation
    examples
    api
    license
