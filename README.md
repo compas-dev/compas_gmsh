@@ -13,17 +13,7 @@ COMPAS friendly interface for Python-GMSH.
 ```bash
 conda create -n gmsh -c conda-forge python=3.8 python-gmsh compas compas_view2 --yes
 conda activate gmsh
-```
-
-```bash
-pip install -e .
-```
-
-To install COMPAS View2 for 3D visualisation outside of CAD environments
-
-```bash
-conda activate gmsh
-conda install -n gmsh -c conda-forge compas_view2
+pip install compas_gmsh
 ```
 
 ## Getting Started
