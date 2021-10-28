@@ -1,9 +1,6 @@
-from compas.geometry import Point
-from compas.geometry import Vector
-from compas.geometry import Plane
-from compas.geometry import Sphere
-from compas.geometry import Cylinder
-from compas.geometry import Box
+from compas.geometry import Point, Vector, Plane
+from compas.geometry import Sphere, Cylinder, Box
+from compas.geometry import Translation
 
 from compas_view2.app import App
 from compas_gmsh.models import CSGModel
@@ -25,21 +22,27 @@ XY = Plane(P, Z)
 box = Box.from_width_height_depth(2 * R, 2 * R, 2 * R)
 sphere = Sphere(P, 1.25 * R)
 
-cylx = Cylinder((YZ, 0.7 * R), 4 * R)
-cyly = Cylinder((ZX, 0.7 * R), 4 * R)
-cylz = Cylinder((XY, 0.7 * R), 4 * R)
+cylx = Cylinder((YZ, 0.7 * R), 3 * R)
+cyly = Cylinder((ZX, 0.7 * R), 3 * R)
+cylz = Cylinder((XY, 0.7 * R), 3 * R)
 
 # ==============================================================================
 # CSG Model
 # ==============================================================================
 
-tree = {'difference': [{'intersection': [sphere, box]}, {'union': [cylx, cyly, cylz]}]}
+tree = {
+    'difference': [
+        {'intersection': [sphere, box]},
+        {'union': [cylx, cyly, cylz]}
+    ]
+}
 
 model = CSGModel(tree, name="csg")
 model.length_min = 0.2
 model.length_max = 0.2
 
 model.compute_tree()
+
 model.generate_mesh()
 model.refine_mesh()
 model.optimize_mesh()
@@ -50,11 +53,25 @@ model.optimize_mesh()
 
 mesh = model.mesh_to_compas()
 
+mesh.transform(Translation.from_vector([4 * R, 0, 0]))
+
 # ==============================================================================
 # Visualization with viewer
 # ==============================================================================
 
-viewer = App()
+viewer = App(width=1600, height=900)
+
+viewer.view.camera.rz = -35
+viewer.view.camera.rx = -75
+viewer.view.camera.tx = -2 * R
+viewer.view.camera.ty = 1
+viewer.view.camera.distance = 12
+
+viewer.add(sphere, u=32, v=32, opacity=0.5, color=(1, 0, 0))
+viewer.add(box, opacity=0.5, color=(0, 1, 0))
+viewer.add(cylx, u=32, opacity=0.5, color=(0, 0, 1))
+viewer.add(cyly, u=32, opacity=0.5, color=(0, 0, 1))
+viewer.add(cylz, u=32, opacity=0.5, color=(0, 0, 1))
 
 viewer.add(mesh)
 viewer.run()

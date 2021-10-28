@@ -118,22 +118,25 @@ class CSGModel(Model):
         def walk(tree: dict) -> List[Tuple[int, int]]:
             operation = next(iter(tree))
             operands = tree[operation]
+
             for index, operand in enumerate(operands):
                 if isinstance(operand, dict):
                     operands[index] = walk(operand)
+                elif isinstance(operand, list):
+                    operands[index] = [self.add(o) for o in operand]
                 else:
-                    operands[index] = [self.add(operand)]
+                    operands[index] = self.add(operand)
 
             if operation == 'union':
                 result = self.factory.fuse(operands[:-1], operands[-1:])
-                return result[0]
+                return result[0][0]
 
             if operation == 'difference':
                 result = self.factory.cut(operands[:-1], operands[-1:])
-                return result[0]
+                return result[0][0]
 
             if operation == 'intersection':
                 result = self.factory.intersect(operands[:-1], operands[-1:])
-                return result[0]
+                return result[0][0]
 
         walk(self.tree)

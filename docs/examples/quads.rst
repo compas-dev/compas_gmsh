@@ -1,11 +1,11 @@
 ********************************************************************************
-Shape Triangulation
+Quad Remeshing
 ********************************************************************************
 
-.. figure:: /_images/triangulation.png
+.. figure:: /_images/quads.png
     :figclass: figure
     :class: figure-img img-fluid
 
 
-.. literalinclude:: triangulation.py
+.. literalinclude:: quads.py
     :language: python

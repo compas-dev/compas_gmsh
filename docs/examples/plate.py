@@ -36,7 +36,7 @@ for u in list(vertex_target):
             vertex_target[v] = vertex_target[u]
 
 # ==============================================================================
-# Make meshing model
+# GMSH model
 # ==============================================================================
 
 model = MeshModel.from_mesh(plate, 1.0, name="test", vertex_length=vertex_target)
@@ -45,18 +45,29 @@ model.generate_mesh(2)
 model.optimize_mesh(niter=10)
 
 # ==============================================================================
+# COMPAS mesh
+# ==============================================================================
+
+mesh = model.mesh_to_compas()
+
+# ==============================================================================
 # Viz
 # ==============================================================================
 
-viewer = App()
-viewer.add(model.mesh_to_compas())
+viewer = App(width=1600, height=900)
 
-viewer.add(
-    Arrow(
-        Point(* plate.vertex_coordinates(poa)) + Vector(0, 0, 1), Vector(0, 0, -1),
-        body_width=0.03
-    ),
-    facecolor=(1, 0, 0)
-)
+viewer.view.camera.rz = 0
+viewer.view.camera.rx = -55
+viewer.view.camera.tx = -5
+viewer.view.camera.ty = -2
+viewer.view.camera.distance = 10
+
+viewer.add(mesh)
+
+point = Point(* plate.vertex_coordinates(poa)) + Vector(0, 0, 1)
+vector = Vector(0, 0, -1)
+load = Arrow(point, vector, body_width=0.03)
+
+viewer.add(load, facecolor=(1, 0, 0))
 
 viewer.run()
