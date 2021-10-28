@@ -14,13 +14,15 @@ class Model:
     """Base model for mesh generation."""
 
     def __init__(self,
-                 name: str,
+                 name: Optional[str] = None,
                  verbose: bool = False,
-                 algo: MeshAlgorithm = MeshAlgorithm.FrontalDelaunay) -> None:
+                 mesh_algorithm: MeshAlgorithm = MeshAlgorithm.FrontalDelaunay) -> None:
         gmsh.initialize(sys.argv)
-        gmsh.option.setNumber("General.Terminal", int(verbose))
-        gmsh.option.setNumber("Mesh.Algorithm", algo.value)
-        gmsh.model.add(name)
+        gmsh.model.add(name or f'{self.__class__.__name__}')
+        self._verbose = False
+        self._mesh_algorithm = None
+        self.verbose = verbose
+        self.mesh_algorithm = mesh_algorithm
         self.mesh = gmsh.model.mesh
         self.factory = gmsh.model.occ
 
@@ -28,22 +30,40 @@ class Model:
         gmsh.finalize()
 
     @property
-    def length_min(self) -> float:
+    def lmin(self) -> float:
         """Minimum edge length for meshing."""
         gmsh.option.getNumber("Mesh.CharacteristicLengthMin")
 
-    @length_min.setter
-    def length_min(self, value: float):
+    @lmin.setter
+    def lmin(self, value: float):
         gmsh.option.setNumber("Mesh.CharacteristicLengthMin", value)
 
     @property
-    def length_max(self) -> float:
+    def lmax(self) -> float:
         """Maximum edge length for meshing."""
         gmsh.option.getNumber("Mesh.CharacteristicLengthMax")
 
-    @length_max.setter
-    def length_max(self, value: float):
+    @lmax.setter
+    def lmax(self, value: float):
         gmsh.option.setNumber("Mesh.CharacteristicLengthMax", value)
+
+    @property
+    def verbose(self) -> bool:
+        return self._verbose
+
+    @verbose.setter
+    def verbose(self, value: bool) -> None:
+        self._verbose = bool(value)
+        gmsh.option.setNumber("General.Terminal", int(value))
+
+    @property
+    def mesh_algorithm(self) -> MeshAlgorithm:
+        return self._mesh_algorithm
+
+    @mesh_algorithm.setter
+    def mesh_algorithm(self, algo: MeshAlgorithm) -> None:
+        self._mesh_algorithm = algo.value
+        gmsh.option.setNumber("Mesh.Algorithm", algo.value)
 
     def info(self) -> None:
         """Print information about the current model."""
@@ -67,10 +87,10 @@ class Model:
     def generate_mesh(self,
                       dim: int = 2,
                       verbose: bool = False,
-                      algo: MeshAlgorithm = MeshAlgorithm.FrontalDelaunay) -> None:
+                      algorithm: MeshAlgorithm = MeshAlgorithm.FrontalDelaunay) -> None:
         """Generate a mesh of the current model."""
-        gmsh.option.setNumber("General.Terminal", int(verbose))
-        gmsh.option.setNumber("Mesh.Algorithm", algo.value)
+        self.verbose = verbose
+        self.mesh_algorithm = algorithm
         self.factory.synchronize()
         self.mesh.generate(dim)
 
@@ -99,7 +119,7 @@ class Model:
         node_coords = nodes[1].reshape((-1, 3), order='C')
         xyz = {}
         for tag, coords in zip(node_tags, node_coords):
-            xyz[int(tag)] = coords.tolist()
+            xyz[int(tag)] = coords
         elements = self.mesh.getElements()
         faces = []
         for etype, etags, ntags in zip(*elements):
@@ -120,7 +140,12 @@ class Model:
 
     def mesh_to_openmesh(self) -> Mesh:
         """Convert the model mesh to a COMPAS mesh data structure."""
-        pass
+        try:
+            import openmesh as om
+        except ImportError:
+            print('OpenMesh is not installed. Install using `pip install openmesh`.')
+            raise
+        om.TriMesh()
 
     def mesh_to_volmesh(self) -> Mesh:
         """Convert the model mesh to a COMPAS mesh data structure."""
@@ -133,7 +158,7 @@ class Model:
         node_coords = nodes[1].reshape((-1, 3), order='C')
         xyz = {}
         for tag, coords in zip(node_tags, node_coords):
-            xyz[int(tag)] = coords.tolist()
+            xyz[int(tag)] = coords
         elements = self.mesh.getElements()
         tets = []
         for etype, etags, ntags in zip(*elements):
@@ -141,7 +166,6 @@ class Model:
                 # tetrahedron
                 for i, etag in enumerate(etags):
                     n = self.mesh.getElementProperties(etype)[3]
-
                     vertices = [xyz[index] for index in ntags[i * n: i * n + n]]
                     faces = [
                         [0, 1, 2],
