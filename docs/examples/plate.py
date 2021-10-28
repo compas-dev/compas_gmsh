@@ -41,7 +41,7 @@ for u in list(vertex_target):
 
 model = MeshModel.from_mesh(plate, 1.0, name="test", vertex_length=vertex_target)
 
-model.generate_mesh(2)
+model.generate_mesh()
 model.optimize_mesh(niter=10)
 
 # ==============================================================================

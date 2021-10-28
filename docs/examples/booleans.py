@@ -3,7 +3,7 @@ from compas.geometry import Sphere, Cylinder, Box
 from compas.geometry import Translation
 
 from compas_view2.app import App
-from compas_gmsh.models import CSGModel
+from compas_gmsh.models import ShapeModel
 
 # ==============================================================================
 # Geometry
@@ -30,19 +30,24 @@ cylz = Cylinder((XY, 0.7 * R), 3 * R)
 # CSG Model
 # ==============================================================================
 
-tree = {
-    'difference': [
-        {'intersection': [sphere, box]},
-        {'union': [cylx, cyly, cylz]}
-    ]
-}
-
-model = CSGModel(tree, name="csg")
+model = ShapeModel(name="booleans")
 
 model.lmin = 0.2
 model.lmax = 0.2
 
-model.compute_tree()
+model.boolean_difference(
+    model.boolean_intersection(
+        model.add_sphere(sphere),
+        model.add_box(box)
+    ),
+    model.boolean_union(
+        model.add_cylinder(cylz),
+        model.boolean_union(
+            model.add_cylinder(cylx),
+            model.add_cylinder(cyly)
+        )
+    )
+)
 
 model.generate_mesh()
 model.refine_mesh()

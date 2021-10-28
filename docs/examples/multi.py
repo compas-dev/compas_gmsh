@@ -1,43 +1,39 @@
-from math import radians
-import compas
-from compas.geometry import Point, Translation, Rotation, Scale
-from compas.datastructures import Mesh
-from compas_gmsh.models import MeshModel
+from compas.geometry import Sphere, Translation
 from compas_view2.app import App
+from compas_gmsh.models import ShapeModel
 
 # ==============================================================================
-# Input
+# Geometry
 # ==============================================================================
 
-mesh = Mesh.from_obj(compas.get('tubemesh.obj'))
-
-centroid = Point(* mesh.centroid())
-vector = Point(0, 0, 0) - centroid
-vector.z = 0
-
-T = Translation.from_vector(vector)
-R = Rotation.from_axis_and_angle([0, 0, 1], radians(105))
-S = Scale.from_factors([0.3, 0.3, 0.3])
-
-mesh.transform(S * R * T)
+sphere = Sphere([0, 0, 0], 2)
 
 # ==============================================================================
-# GMSH model
+# Solid Model
 # ==============================================================================
 
-model = MeshModel.from_mesh(mesh, 1.0, name='tubemesh')
+model = ShapeModel(name="trimesh")
+
+model.add_sphere(sphere)
 
 model.lmin = 0.1
 model.lmax = 0.2
 
 model.generate_mesh()
-model.optimize_mesh()
 
 # ==============================================================================
 # COMPAS mesh
 # ==============================================================================
 
-mesh = model.mesh_to_compas()
+model.refine_mesh()
+
+trimesh = model.mesh_to_compas()
+
+model.recombine_mesh()
+
+quadmesh = model.mesh_to_compas()
+
+quadmesh.transform(Translation.from_vector([5, 0, 0]))
 
 # ==============================================================================
 # Visualization with viewer
@@ -45,10 +41,13 @@ mesh = model.mesh_to_compas()
 
 viewer = App(width=1600, height=900)
 
-viewer.view.camera.rx = -75
-viewer.view.camera.tx = -1
+viewer.view.camera.rz = 0
+viewer.view.camera.rx = -55
+viewer.view.camera.tx = -2.5
 viewer.view.camera.ty = 0
+viewer.view.camera.distance = 7
 
-viewer.add(mesh)
+viewer.add(trimesh)
+viewer.add(quadmesh)
 
 viewer.run()
