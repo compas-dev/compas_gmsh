@@ -1,1 +1,2 @@
-compas
+compas>=1.0
+gmsh

@@ -11,9 +11,9 @@ COMPAS friendly interface for Python-GMSH.
 ## Installation
 
 ```bash
-conda create -n gmsh -c conda-forge python=3.8 python-gmsh compas compas_view2 --yes
+conda create -n gmsh -c conda-forge compas compas_view2 --yes
 conda activate gmsh
-pip install compas_gmsh
+pip install gmsh compas_gmsh
 ```
 
 ## Getting Started
@@ -22,5 +22,5 @@ Have a look at some of the first [examples in the documentation](https://compas.
 
 ## License
 
-`compas_gmsh` provides a COMPAS friendly interface to `Python-Gmsh`.
-`Gmsh` and `Python-Gmsh` are released under GPL-2.0-or-later.
+`compas_gmsh` provides a COMPAS friendly interface to `Gmsh`.
+`Gmsh` is released under GPL-2.0-or-later.
