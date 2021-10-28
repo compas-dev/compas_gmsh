@@ -1,8 +1,8 @@
 ********************************************************************************
-Quad Remeshing
+Quad Recombination
 ********************************************************************************
 
-.. figure:: /_images/quads.png
+.. figure:: /_images/recombine.png
     :figclass: figure
     :class: figure-img img-fluid
 
