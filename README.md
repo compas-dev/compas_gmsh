@@ -1,12 +1,11 @@
 # COMPAS GMSH
 
-**THIS PROJECT IS WIP.**
+![build](https://github.com/compas-dev/compas_gmsh/workflows/build/badge.svg)
+[![GitHub - License](https://img.shields.io/github/license/compas-dev/compas_gmsh.svg)](https://github.com/compas-dev/compas_gmsh)
+[![PyPI - Python Version](https://img.shields.io/pypi/pyversions/compas_gmsh.svg)](https://pypi.python.org/project/compas_gmsh)
+[![PyPI - Latest Release](https://img.shields.io/pypi/v/compas_gmsh.svg)](https://pypi.python.org/project/compas_gmsh)
 
-**CONTRIBUTIONS TOWARDS CREATING A FIRST STABLE VERSION A VERY WELCOME :)...**
-
-----
-
-COMPAS friendly interface for Python-GMSH.
+COMPAS friendly interface for Gmsh.
 
 ## Installation
 
