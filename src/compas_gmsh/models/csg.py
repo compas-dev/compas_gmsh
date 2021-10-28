@@ -62,7 +62,7 @@ class CSGModel(Model):
 
     """
 
-    def __init__(self, tree: dict, name: str, **kwargs):
+    def __init__(self, tree: dict, name: str, **kwargs) -> None:
         super().__init__(name, **kwargs)
         self._tree = None
         self.tree = tree

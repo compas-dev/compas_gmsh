@@ -1,10 +1,9 @@
-from __future__ import annotations
-
-from typing import Optional
+from typing import List, Optional
 
 import sys
 import gmsh
 
+from compas.geometry import Polyhedron
 from compas.datastructures import Mesh
 
 from compas_gmsh.options import MeshAlgorithm
@@ -17,7 +16,7 @@ class Model:
     def __init__(self,
                  name: str,
                  verbose: bool = False,
-                 algo: MeshAlgorithm = MeshAlgorithm.FrontalDelaunay) -> Model:
+                 algo: MeshAlgorithm = MeshAlgorithm.FrontalDelaunay) -> None:
         gmsh.initialize(sys.argv)
         gmsh.option.setNumber("General.Terminal", int(verbose))
         gmsh.option.setNumber("Mesh.Algorithm", algo.value)
@@ -105,16 +104,49 @@ class Model:
         faces = []
         for etype, etags, ntags in zip(*elements):
             if etype == 2:
-                # triangles
+                # triangle
                 for i, etag in enumerate(etags):
                     n = self.mesh.getElementProperties(etype)[3]
-                    triangle = ntags[i * n: i * n + n]
-                    faces.append(triangle.tolist())
+                    a, b, c = ntags[i * n: i * n + n]
+                    faces.append([a, b, c])
             elif etype == 3:
-                # quads
+                # quad
                 for i, etag in enumerate(etags):
                     n = self.mesh.getElementProperties(etype)[3]
-                    quad = ntags[i * n: i * n + n]
-                    faces.append(quad.tolist())
+                    a, b, c, d = ntags[i * n: i * n + n]
+                    faces.append([a, b, c, d])
 
         return Mesh.from_vertices_and_faces(xyz, faces)
+
+    def mesh_to_openmesh(self) -> Mesh:
+        """Convert the model mesh to a COMPAS mesh data structure."""
+        pass
+
+    def mesh_to_volmesh(self) -> Mesh:
+        """Convert the model mesh to a COMPAS mesh data structure."""
+        pass
+
+    def mesh_to_tets(self) -> List[Polyhedron]:
+        """Convert the model mesh to a COMPAS mesh data structure."""
+        nodes = self.mesh.getNodes()
+        node_tags = nodes[0]
+        node_coords = nodes[1].reshape((-1, 3), order='C')
+        xyz = {}
+        for tag, coords in zip(node_tags, node_coords):
+            xyz[int(tag)] = coords.tolist()
+        elements = self.mesh.getElements()
+        tets = []
+        for etype, etags, ntags in zip(*elements):
+            if etype == 4:
+                # tetrahedron
+                for i, etag in enumerate(etags):
+                    n = self.mesh.getElementProperties(etype)[3]
+
+                    vertices = [xyz[index] for index in ntags[i * n: i * n + n]]
+                    faces = [
+                        [0, 1, 2],
+                        [0, 2, 3],
+                        [1, 3, 2],
+                        [0, 3, 1]]
+                    tets.append(Polyhedron(vertices, faces))
+        return tets

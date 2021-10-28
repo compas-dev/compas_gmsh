@@ -1,5 +1,3 @@
-from __future__ import annotations
-
 from typing import Dict, Optional
 
 from compas.datastructures import Mesh
@@ -10,11 +8,11 @@ class MeshModel(Model):
     """Model for mesh (re)meshing."""
 
     @classmethod
-    def from_mesh(cls: MeshModel,
+    def from_mesh(cls: 'MeshModel',
                   mesh: Mesh,
                   default_length: float,
                   name: str = 'Mesh',
-                  vertex_length: Optional[Dict[int, float]] = None) -> MeshModel:
+                  vertex_length: Optional[Dict[int, float]] = None) -> None:
         model = cls(name)
         vertex_length = vertex_length or {}
         vertex_tag = {}
