@@ -116,10 +116,10 @@
 
 <span class="n">model</span><span class="o">.</span><span class="n">add_sphere</span><span class="p">(</span><span class="n">sphere</span><span class="p">)</span>
 
-<span class="n">model</span><span class="o">.</span><span class="n">length_min</span> <span class="o">=</span> <span class="mf">0.05</span>
-<span class="n">model</span><span class="o">.</span><span class="n">length_max</span> <span class="o">=</span> <span class="mf">0.1</span>
+<span class="n">model</span><span class="o">.</span><span class="n">lmin</span> <span class="o">=</span> <span class="mf">0.05</span>
+<span class="n">model</span><span class="o">.</span><span class="n">lmax</span> <span class="o">=</span> <span class="mf">0.1</span>
 
-<span class="n">model</span><span class="o">.</span><span class="n">generate_mesh</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+<span class="n">model</span><span class="o">.</span><span class="n">generate_mesh</span><span class="p">()</span>
 <span class="n">model</span><span class="o">.</span><span class="n">recombine_mesh</span><span class="p">()</span>
 
 <span class="c1"># ==============================================================================</span>
@@ -168,6 +168,7 @@
 <li class="nav-item"><a class="nav-link reference internal" href="../installation.html">Installation</a></li>
 <li class="nav-item active"><a class="nav-link reference internal" href="../examples.html">Examples</a><ul class="nav flex-column active">
 <li class="nav-item"><a class="nav-link reference internal" href="csg.html">CSG Modelling</a></li>
+<li class="nav-item"><a class="nav-link reference internal" href="multi.html">Generate Multiple Meshes</a></li>
 <li class="nav-item"><a class="nav-link reference internal" href="plate.html">FE Meshes: Point load on plate</a></li>
 <li class="nav-item active"><a class="nav-link active current reference internal" href="#">Quad Recombination</a></li>
 <li class="nav-item"><a class="nav-link reference internal" href="remeshing.html">Mesh Remeshing</a></li>
