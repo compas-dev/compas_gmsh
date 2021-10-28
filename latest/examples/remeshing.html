@@ -19,11 +19,11 @@
   <link rel="stylesheet" type="text/css" href="../_static/css/compas-reference.css" />
 
   
-    <link rel="next" title="Shape Triangulation" href="triangulation.html" />
+    <link rel="next" title="Shape Tetrahedralisation" href="tets.html" />
   
 
   
-    <link rel="prev" title="FE Meshes: Point load on plate" href="plate.html" />
+    <link rel="prev" title="Quad Remeshing" href="quads.html" />
   
 
   <script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-MML-AM_CHTML"></script>
@@ -96,21 +96,59 @@
 <figure class="figure align-default">
 <img alt="../_images/remeshing.png" class="figure-img img-fluid" src="../_images/remeshing.png" />
 </figure>
-<div class="language-python notranslate"><div class="highlight"><pre><code><span></span><span class="kn">import</span> <span class="nn">compas</span>
+<div class="language-python notranslate"><div class="highlight"><pre><code><span></span><span class="kn">from</span> <span class="nn">math</span> <span class="kn">import</span> <span class="n">radians</span>
+<span class="kn">import</span> <span class="nn">compas</span>
+<span class="kn">from</span> <span class="nn">compas.geometry</span> <span class="kn">import</span> <span class="n">Point</span><span class="p">,</span> <span class="n">Translation</span><span class="p">,</span> <span class="n">Rotation</span><span class="p">,</span> <span class="n">Scale</span>
 <span class="kn">from</span> <span class="nn">compas.datastructures</span> <span class="kn">import</span> <span class="n">Mesh</span>
 <span class="kn">from</span> <span class="nn">compas_gmsh.models</span> <span class="kn">import</span> <span class="n">MeshModel</span>
 <span class="kn">from</span> <span class="nn">compas_view2.app</span> <span class="kn">import</span> <span class="n">App</span>
 
+<span class="c1"># ==============================================================================</span>
+<span class="c1"># Input</span>
+<span class="c1"># ==============================================================================</span>
+
 <span class="n">mesh</span> <span class="o">=</span> <span class="n">Mesh</span><span class="o">.</span><span class="n">from_obj</span><span class="p">(</span><span class="n">compas</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;tubemesh.obj&#39;</span><span class="p">))</span>
 
-<span class="n">model</span> <span class="o">=</span> <span class="n">MeshModel</span><span class="o">.</span><span class="n">from_mesh</span><span class="p">(</span><span class="n">mesh</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s1">&#39;tubemesh&#39;</span><span class="p">)</span>
+<span class="n">centroid</span> <span class="o">=</span> <span class="n">Point</span><span class="p">(</span><span class="o">*</span> <span class="n">mesh</span><span class="o">.</span><span class="n">centroid</span><span class="p">())</span>
+<span class="n">vector</span> <span class="o">=</span> <span class="n">Point</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span> <span class="o">-</span> <span class="n">centroid</span>
+<span class="n">vector</span><span class="o">.</span><span class="n">z</span> <span class="o">=</span> <span class="mi">0</span>
+
+<span class="n">T</span> <span class="o">=</span> <span class="n">Translation</span><span class="o">.</span><span class="n">from_vector</span><span class="p">(</span><span class="n">vector</span><span class="p">)</span>
+<span class="n">R</span> <span class="o">=</span> <span class="n">Rotation</span><span class="o">.</span><span class="n">from_axis_and_angle</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="n">radians</span><span class="p">(</span><span class="mi">105</span><span class="p">))</span>
+<span class="n">S</span> <span class="o">=</span> <span class="n">Scale</span><span class="o">.</span><span class="n">from_factors</span><span class="p">([</span><span class="mf">0.3</span><span class="p">,</span> <span class="mf">0.3</span><span class="p">,</span> <span class="mf">0.3</span><span class="p">])</span>
+
+<span class="n">mesh</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">S</span> <span class="o">*</span> <span class="n">R</span> <span class="o">*</span> <span class="n">T</span><span class="p">)</span>
+
+<span class="c1"># ==============================================================================</span>
+<span class="c1"># GMSH model</span>
+<span class="c1"># ==============================================================================</span>
+
+<span class="n">model</span> <span class="o">=</span> <span class="n">MeshModel</span><span class="o">.</span><span class="n">from_mesh</span><span class="p">(</span><span class="n">mesh</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s1">&#39;tubemesh&#39;</span><span class="p">)</span>
 
 <span class="n">model</span><span class="o">.</span><span class="n">length_min</span> <span class="o">=</span> <span class="mf">0.1</span>
-<span class="n">model</span><span class="o">.</span><span class="n">length_max</span> <span class="o">=</span> <span class="mf">0.5</span>
-<span class="n">model</span><span class="o">.</span><span class="n">generate_mesh</span><span class="p">()</span>
+<span class="n">model</span><span class="o">.</span><span class="n">length_max</span> <span class="o">=</span> <span class="mf">0.2</span>
 
-<span class="n">viewer</span> <span class="o">=</span> <span class="n">App</span><span class="p">()</span>
-<span class="n">viewer</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">mesh_to_compas</span><span class="p">())</span>
+<span class="n">model</span><span class="o">.</span><span class="n">generate_mesh</span><span class="p">()</span>
+<span class="n">model</span><span class="o">.</span><span class="n">optimize_mesh</span><span class="p">()</span>
+
+<span class="c1"># ==============================================================================</span>
+<span class="c1"># COMPAS mesh</span>
+<span class="c1"># ==============================================================================</span>
+
+<span class="n">mesh</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">mesh_to_compas</span><span class="p">()</span>
+
+<span class="c1"># ==============================================================================</span>
+<span class="c1"># Visualization with viewer</span>
+<span class="c1"># ==============================================================================</span>
+
+<span class="n">viewer</span> <span class="o">=</span> <span class="n">App</span><span class="p">(</span><span class="n">width</span><span class="o">=</span><span class="mi">1600</span><span class="p">,</span> <span class="n">height</span><span class="o">=</span><span class="mi">900</span><span class="p">)</span>
+
+<span class="n">viewer</span><span class="o">.</span><span class="n">view</span><span class="o">.</span><span class="n">camera</span><span class="o">.</span><span class="n">rx</span> <span class="o">=</span> <span class="o">-</span><span class="mi">75</span>
+<span class="n">viewer</span><span class="o">.</span><span class="n">view</span><span class="o">.</span><span class="n">camera</span><span class="o">.</span><span class="n">tx</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span>
+<span class="n">viewer</span><span class="o">.</span><span class="n">view</span><span class="o">.</span><span class="n">camera</span><span class="o">.</span><span class="n">ty</span> <span class="o">=</span> <span class="mi">0</span>
+
+<span class="n">viewer</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">mesh</span><span class="p">)</span>
+
 <span class="n">viewer</span><span class="o">.</span><span class="n">run</span><span class="p">()</span>
 </code></pre></div>
 </div>
@@ -138,8 +176,9 @@
 <li class="nav-item active"><a class="nav-link reference internal" href="../examples.html">Examples</a><ul class="nav flex-column active">
 <li class="nav-item"><a class="nav-link reference internal" href="csg.html">CSG Modelling</a></li>
 <li class="nav-item"><a class="nav-link reference internal" href="plate.html">FE Meshes: Point load on plate</a></li>
+<li class="nav-item"><a class="nav-link reference internal" href="quads.html">Quad Remeshing</a></li>
 <li class="nav-item active"><a class="nav-link active current reference internal" href="#">Mesh Remeshing</a></li>
-<li class="nav-item"><a class="nav-link reference internal" href="triangulation.html">Shape Triangulation</a></li>
+<li class="nav-item"><a class="nav-link reference internal" href="tets.html">Shape Tetrahedralisation</a></li>
 </ul>
 </li>
 <li class="nav-item"><a class="nav-link reference internal" href="../api.html">API Reference</a></li>
@@ -166,20 +205,20 @@
   <footer class="compas-footer">
     <nav class="nav p-2">
       
-        <a href="plate.html" title="FE Meshes: Point load on plate" class="nav-link footer-link float-start text-left d-flex w-50" rel="prev">
+        <a href="quads.html" title="Quad Remeshing" class="nav-link footer-link float-start text-left d-flex w-50" rel="prev">
           <div class="nav-button p-2 m-2"><i class="fas fa-arrow-left"></i></div>
           <div class="nav-title flex-grow-1 align-self-center">
             <div class="nav-direction small font-weight-light">Previous</div>
-            FE Meshes: Point load on plate
+            Quad Remeshing
           </div>
         </a>
       
 
       
-        <a href="triangulation.html" title="Shape Triangulation" class="nav-link footer-link float-end text-right d-flex w-50" rel="next">
+        <a href="tets.html" title="Shape Tetrahedralisation" class="nav-link footer-link float-end text-right d-flex w-50" rel="next">
           <div class="nav-title footer-link flex-grow-1 align-self-center">
             <div class="nav-direction small font-weight-light">Next</div>
-            Shape Triangulation
+            Shape Tetrahedralisation
           </div>
           <div class="nav-button p-2 m-2"><i class="fas fa-arrow-right"></i></div>
         </a>

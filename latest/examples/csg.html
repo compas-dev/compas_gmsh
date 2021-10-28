@@ -96,12 +96,9 @@
 <figure class="figure align-default">
 <img alt="../_images/csg.png" class="figure-img img-fluid" src="../_images/csg.png" />
 </figure>
-<div class="language-python notranslate"><div class="highlight"><pre><code><span></span><span class="kn">from</span> <span class="nn">compas.geometry</span> <span class="kn">import</span> <span class="n">Point</span>
-<span class="kn">from</span> <span class="nn">compas.geometry</span> <span class="kn">import</span> <span class="n">Vector</span>
-<span class="kn">from</span> <span class="nn">compas.geometry</span> <span class="kn">import</span> <span class="n">Plane</span>
-<span class="kn">from</span> <span class="nn">compas.geometry</span> <span class="kn">import</span> <span class="n">Sphere</span>
-<span class="kn">from</span> <span class="nn">compas.geometry</span> <span class="kn">import</span> <span class="n">Cylinder</span>
-<span class="kn">from</span> <span class="nn">compas.geometry</span> <span class="kn">import</span> <span class="n">Box</span>
+<div class="language-python notranslate"><div class="highlight"><pre><code><span></span><span class="kn">from</span> <span class="nn">compas.geometry</span> <span class="kn">import</span> <span class="n">Point</span><span class="p">,</span> <span class="n">Vector</span><span class="p">,</span> <span class="n">Plane</span>
+<span class="kn">from</span> <span class="nn">compas.geometry</span> <span class="kn">import</span> <span class="n">Sphere</span><span class="p">,</span> <span class="n">Cylinder</span><span class="p">,</span> <span class="n">Box</span>
+<span class="kn">from</span> <span class="nn">compas.geometry</span> <span class="kn">import</span> <span class="n">Translation</span>
 
 <span class="kn">from</span> <span class="nn">compas_view2.app</span> <span class="kn">import</span> <span class="n">App</span>
 <span class="kn">from</span> <span class="nn">compas_gmsh.models</span> <span class="kn">import</span> <span class="n">CSGModel</span>
@@ -123,21 +120,27 @@
 <span class="n">box</span> <span class="o">=</span> <span class="n">Box</span><span class="o">.</span><span class="n">from_width_height_depth</span><span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">R</span><span class="p">,</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">R</span><span class="p">,</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">R</span><span class="p">)</span>
 <span class="n">sphere</span> <span class="o">=</span> <span class="n">Sphere</span><span class="p">(</span><span class="n">P</span><span class="p">,</span> <span class="mf">1.25</span> <span class="o">*</span> <span class="n">R</span><span class="p">)</span>
 
-<span class="n">cylx</span> <span class="o">=</span> <span class="n">Cylinder</span><span class="p">((</span><span class="n">YZ</span><span class="p">,</span> <span class="mf">0.7</span> <span class="o">*</span> <span class="n">R</span><span class="p">),</span> <span class="mi">4</span> <span class="o">*</span> <span class="n">R</span><span class="p">)</span>
-<span class="n">cyly</span> <span class="o">=</span> <span class="n">Cylinder</span><span class="p">((</span><span class="n">ZX</span><span class="p">,</span> <span class="mf">0.7</span> <span class="o">*</span> <span class="n">R</span><span class="p">),</span> <span class="mi">4</span> <span class="o">*</span> <span class="n">R</span><span class="p">)</span>
-<span class="n">cylz</span> <span class="o">=</span> <span class="n">Cylinder</span><span class="p">((</span><span class="n">XY</span><span class="p">,</span> <span class="mf">0.7</span> <span class="o">*</span> <span class="n">R</span><span class="p">),</span> <span class="mi">4</span> <span class="o">*</span> <span class="n">R</span><span class="p">)</span>
+<span class="n">cylx</span> <span class="o">=</span> <span class="n">Cylinder</span><span class="p">((</span><span class="n">YZ</span><span class="p">,</span> <span class="mf">0.7</span> <span class="o">*</span> <span class="n">R</span><span class="p">),</span> <span class="mi">3</span> <span class="o">*</span> <span class="n">R</span><span class="p">)</span>
+<span class="n">cyly</span> <span class="o">=</span> <span class="n">Cylinder</span><span class="p">((</span><span class="n">ZX</span><span class="p">,</span> <span class="mf">0.7</span> <span class="o">*</span> <span class="n">R</span><span class="p">),</span> <span class="mi">3</span> <span class="o">*</span> <span class="n">R</span><span class="p">)</span>
+<span class="n">cylz</span> <span class="o">=</span> <span class="n">Cylinder</span><span class="p">((</span><span class="n">XY</span><span class="p">,</span> <span class="mf">0.7</span> <span class="o">*</span> <span class="n">R</span><span class="p">),</span> <span class="mi">3</span> <span class="o">*</span> <span class="n">R</span><span class="p">)</span>
 
 <span class="c1"># ==============================================================================</span>
 <span class="c1"># CSG Model</span>
 <span class="c1"># ==============================================================================</span>
 
-<span class="n">tree</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;difference&#39;</span><span class="p">:</span> <span class="p">[{</span><span class="s1">&#39;intersection&#39;</span><span class="p">:</span> <span class="p">[</span><span class="n">sphere</span><span class="p">,</span> <span class="n">box</span><span class="p">]},</span> <span class="p">{</span><span class="s1">&#39;union&#39;</span><span class="p">:</span> <span class="p">[</span><span class="n">cylx</span><span class="p">,</span> <span class="n">cyly</span><span class="p">,</span> <span class="n">cylz</span><span class="p">]}]}</span>
+<span class="n">tree</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s1">&#39;difference&#39;</span><span class="p">:</span> <span class="p">[</span>
+        <span class="p">{</span><span class="s1">&#39;intersection&#39;</span><span class="p">:</span> <span class="p">[</span><span class="n">sphere</span><span class="p">,</span> <span class="n">box</span><span class="p">]},</span>
+        <span class="p">{</span><span class="s1">&#39;union&#39;</span><span class="p">:</span> <span class="p">[</span><span class="n">cylx</span><span class="p">,</span> <span class="n">cyly</span><span class="p">,</span> <span class="n">cylz</span><span class="p">]}</span>
+    <span class="p">]</span>
+<span class="p">}</span>
 
 <span class="n">model</span> <span class="o">=</span> <span class="n">CSGModel</span><span class="p">(</span><span class="n">tree</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s2">&quot;csg&quot;</span><span class="p">)</span>
 <span class="n">model</span><span class="o">.</span><span class="n">length_min</span> <span class="o">=</span> <span class="mf">0.2</span>
 <span class="n">model</span><span class="o">.</span><span class="n">length_max</span> <span class="o">=</span> <span class="mf">0.2</span>
 
 <span class="n">model</span><span class="o">.</span><span class="n">compute_tree</span><span class="p">()</span>
+
 <span class="n">model</span><span class="o">.</span><span class="n">generate_mesh</span><span class="p">()</span>
 <span class="n">model</span><span class="o">.</span><span class="n">refine_mesh</span><span class="p">()</span>
 <span class="n">model</span><span class="o">.</span><span class="n">optimize_mesh</span><span class="p">()</span>
@@ -148,11 +151,25 @@
 
 <span class="n">mesh</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">mesh_to_compas</span><span class="p">()</span>
 
+<span class="n">mesh</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">Translation</span><span class="o">.</span><span class="n">from_vector</span><span class="p">([</span><span class="mi">4</span> <span class="o">*</span> <span class="n">R</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]))</span>
+
 <span class="c1"># ==============================================================================</span>
 <span class="c1"># Visualization with viewer</span>
 <span class="c1"># ==============================================================================</span>
 
-<span class="n">viewer</span> <span class="o">=</span> <span class="n">App</span><span class="p">()</span>
+<span class="n">viewer</span> <span class="o">=</span> <span class="n">App</span><span class="p">(</span><span class="n">width</span><span class="o">=</span><span class="mi">1600</span><span class="p">,</span> <span class="n">height</span><span class="o">=</span><span class="mi">900</span><span class="p">)</span>
+
+<span class="n">viewer</span><span class="o">.</span><span class="n">view</span><span class="o">.</span><span class="n">camera</span><span class="o">.</span><span class="n">rz</span> <span class="o">=</span> <span class="o">-</span><span class="mi">35</span>
+<span class="n">viewer</span><span class="o">.</span><span class="n">view</span><span class="o">.</span><span class="n">camera</span><span class="o">.</span><span class="n">rx</span> <span class="o">=</span> <span class="o">-</span><span class="mi">75</span>
+<span class="n">viewer</span><span class="o">.</span><span class="n">view</span><span class="o">.</span><span class="n">camera</span><span class="o">.</span><span class="n">tx</span> <span class="o">=</span> <span class="o">-</span><span class="mi">2</span> <span class="o">*</span> <span class="n">R</span>
+<span class="n">viewer</span><span class="o">.</span><span class="n">view</span><span class="o">.</span><span class="n">camera</span><span class="o">.</span><span class="n">ty</span> <span class="o">=</span> <span class="mi">1</span>
+<span class="n">viewer</span><span class="o">.</span><span class="n">view</span><span class="o">.</span><span class="n">camera</span><span class="o">.</span><span class="n">distance</span> <span class="o">=</span> <span class="mi">12</span>
+
+<span class="n">viewer</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">sphere</span><span class="p">,</span> <span class="n">u</span><span class="o">=</span><span class="mi">32</span><span class="p">,</span> <span class="n">v</span><span class="o">=</span><span class="mi">32</span><span class="p">,</span> <span class="n">opacity</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">))</span>
+<span class="n">viewer</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">box</span><span class="p">,</span> <span class="n">opacity</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">))</span>
+<span class="n">viewer</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">cylx</span><span class="p">,</span> <span class="n">u</span><span class="o">=</span><span class="mi">32</span><span class="p">,</span> <span class="n">opacity</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
+<span class="n">viewer</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">cyly</span><span class="p">,</span> <span class="n">u</span><span class="o">=</span><span class="mi">32</span><span class="p">,</span> <span class="n">opacity</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
+<span class="n">viewer</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">cylz</span><span class="p">,</span> <span class="n">u</span><span class="o">=</span><span class="mi">32</span><span class="p">,</span> <span class="n">opacity</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
 
 <span class="n">viewer</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">mesh</span><span class="p">)</span>
 <span class="n">viewer</span><span class="o">.</span><span class="n">run</span><span class="p">()</span>
@@ -182,8 +199,9 @@
 <li class="nav-item active"><a class="nav-link reference internal" href="../examples.html">Examples</a><ul class="nav flex-column active">
 <li class="nav-item active"><a class="nav-link active current reference internal" href="#">CSG Modelling</a></li>
 <li class="nav-item"><a class="nav-link reference internal" href="plate.html">FE Meshes: Point load on plate</a></li>
+<li class="nav-item"><a class="nav-link reference internal" href="quads.html">Quad Remeshing</a></li>
 <li class="nav-item"><a class="nav-link reference internal" href="remeshing.html">Mesh Remeshing</a></li>
-<li class="nav-item"><a class="nav-link reference internal" href="triangulation.html">Shape Triangulation</a></li>
+<li class="nav-item"><a class="nav-link reference internal" href="tets.html">Shape Tetrahedralisation</a></li>
 </ul>
 </li>
 <li class="nav-item"><a class="nav-link reference internal" href="../api.html">API Reference</a></li>

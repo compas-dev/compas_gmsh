@@ -19,7 +19,7 @@
   <link rel="stylesheet" type="text/css" href="../_static/css/compas-reference.css" />
 
   
-    <link rel="next" title="Mesh Remeshing" href="remeshing.html" />
+    <link rel="next" title="Quad Remeshing" href="quads.html" />
   
 
   
@@ -134,7 +134,7 @@
             <span class="n">vertex_target</span><span class="p">[</span><span class="n">v</span><span class="p">]</span> <span class="o">=</span> <span class="n">vertex_target</span><span class="p">[</span><span class="n">u</span><span class="p">]</span>
 
 <span class="c1"># ==============================================================================</span>
-<span class="c1"># Make meshing model</span>
+<span class="c1"># GMSH model</span>
 <span class="c1"># ==============================================================================</span>
 
 <span class="n">model</span> <span class="o">=</span> <span class="n">MeshModel</span><span class="o">.</span><span class="n">from_mesh</span><span class="p">(</span><span class="n">plate</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s2">&quot;test&quot;</span><span class="p">,</span> <span class="n">vertex_length</span><span class="o">=</span><span class="n">vertex_target</span><span class="p">)</span>
@@ -143,19 +143,30 @@
 <span class="n">model</span><span class="o">.</span><span class="n">optimize_mesh</span><span class="p">(</span><span class="n">niter</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
 
 <span class="c1"># ==============================================================================</span>
+<span class="c1"># COMPAS mesh</span>
+<span class="c1"># ==============================================================================</span>
+
+<span class="n">mesh</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">mesh_to_compas</span><span class="p">()</span>
+
+<span class="c1"># ==============================================================================</span>
 <span class="c1"># Viz</span>
 <span class="c1"># ==============================================================================</span>
 
-<span class="n">viewer</span> <span class="o">=</span> <span class="n">App</span><span class="p">()</span>
-<span class="n">viewer</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">mesh_to_compas</span><span class="p">())</span>
+<span class="n">viewer</span> <span class="o">=</span> <span class="n">App</span><span class="p">(</span><span class="n">width</span><span class="o">=</span><span class="mi">1600</span><span class="p">,</span> <span class="n">height</span><span class="o">=</span><span class="mi">900</span><span class="p">)</span>
 
-<span class="n">viewer</span><span class="o">.</span><span class="n">add</span><span class="p">(</span>
-    <span class="n">Arrow</span><span class="p">(</span>
-        <span class="n">Point</span><span class="p">(</span><span class="o">*</span> <span class="n">plate</span><span class="o">.</span><span class="n">vertex_coordinates</span><span class="p">(</span><span class="n">poa</span><span class="p">))</span> <span class="o">+</span> <span class="n">Vector</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span> <span class="n">Vector</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">),</span>
-        <span class="n">body_width</span><span class="o">=</span><span class="mf">0.03</span>
-    <span class="p">),</span>
-    <span class="n">facecolor</span><span class="o">=</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
-<span class="p">)</span>
+<span class="n">viewer</span><span class="o">.</span><span class="n">view</span><span class="o">.</span><span class="n">camera</span><span class="o">.</span><span class="n">rz</span> <span class="o">=</span> <span class="mi">0</span>
+<span class="n">viewer</span><span class="o">.</span><span class="n">view</span><span class="o">.</span><span class="n">camera</span><span class="o">.</span><span class="n">rx</span> <span class="o">=</span> <span class="o">-</span><span class="mi">55</span>
+<span class="n">viewer</span><span class="o">.</span><span class="n">view</span><span class="o">.</span><span class="n">camera</span><span class="o">.</span><span class="n">tx</span> <span class="o">=</span> <span class="o">-</span><span class="mi">5</span>
+<span class="n">viewer</span><span class="o">.</span><span class="n">view</span><span class="o">.</span><span class="n">camera</span><span class="o">.</span><span class="n">ty</span> <span class="o">=</span> <span class="o">-</span><span class="mi">2</span>
+<span class="n">viewer</span><span class="o">.</span><span class="n">view</span><span class="o">.</span><span class="n">camera</span><span class="o">.</span><span class="n">distance</span> <span class="o">=</span> <span class="mi">10</span>
+
+<span class="n">viewer</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">mesh</span><span class="p">)</span>
+
+<span class="n">point</span> <span class="o">=</span> <span class="n">Point</span><span class="p">(</span><span class="o">*</span> <span class="n">plate</span><span class="o">.</span><span class="n">vertex_coordinates</span><span class="p">(</span><span class="n">poa</span><span class="p">))</span> <span class="o">+</span> <span class="n">Vector</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+<span class="n">vector</span> <span class="o">=</span> <span class="n">Vector</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">load</span> <span class="o">=</span> <span class="n">Arrow</span><span class="p">(</span><span class="n">point</span><span class="p">,</span> <span class="n">vector</span><span class="p">,</span> <span class="n">body_width</span><span class="o">=</span><span class="mf">0.03</span><span class="p">)</span>
+
+<span class="n">viewer</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">load</span><span class="p">,</span> <span class="n">facecolor</span><span class="o">=</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">))</span>
 
 <span class="n">viewer</span><span class="o">.</span><span class="n">run</span><span class="p">()</span>
 </code></pre></div>
@@ -184,8 +195,9 @@
 <li class="nav-item active"><a class="nav-link reference internal" href="../examples.html">Examples</a><ul class="nav flex-column active">
 <li class="nav-item"><a class="nav-link reference internal" href="csg.html">CSG Modelling</a></li>
 <li class="nav-item active"><a class="nav-link active current reference internal" href="#">FE Meshes: Point load on plate</a></li>
+<li class="nav-item"><a class="nav-link reference internal" href="quads.html">Quad Remeshing</a></li>
 <li class="nav-item"><a class="nav-link reference internal" href="remeshing.html">Mesh Remeshing</a></li>
-<li class="nav-item"><a class="nav-link reference internal" href="triangulation.html">Shape Triangulation</a></li>
+<li class="nav-item"><a class="nav-link reference internal" href="tets.html">Shape Tetrahedralisation</a></li>
 </ul>
 </li>
 <li class="nav-item"><a class="nav-link reference internal" href="../api.html">API Reference</a></li>
@@ -222,10 +234,10 @@
       
 
       
-        <a href="remeshing.html" title="Mesh Remeshing" class="nav-link footer-link float-end text-right d-flex w-50" rel="next">
+        <a href="quads.html" title="Quad Remeshing" class="nav-link footer-link float-end text-right d-flex w-50" rel="next">
           <div class="nav-title footer-link flex-grow-1 align-self-center">
             <div class="nav-direction small font-weight-light">Next</div>
-            Mesh Remeshing
+            Quad Remeshing
           </div>
           <div class="nav-button p-2 m-2"><i class="fas fa-arrow-right"></i></div>
         </a>
