@@ -97,10 +97,8 @@
 <img alt="../_images/plate.png" class="figure-img img-fluid" src="../_images/plate.png" />
 </figure>
 <div class="language-python notranslate"><div class="highlight"><pre><code><span></span><span class="kn">from</span> <span class="nn">random</span> <span class="kn">import</span> <span class="n">choice</span>
-<span class="kn">import</span> <span class="nn">compas</span>
 <span class="kn">from</span> <span class="nn">compas.geometry</span> <span class="kn">import</span> <span class="n">Point</span><span class="p">,</span> <span class="n">Vector</span>
 <span class="kn">from</span> <span class="nn">compas.datastructures</span> <span class="kn">import</span> <span class="n">Mesh</span><span class="p">,</span> <span class="n">mesh_thicken</span>
-<span class="kn">from</span> <span class="nn">compas.utilities</span> <span class="kn">import</span> <span class="n">geometric_key_xy</span>
 <span class="kn">from</span> <span class="nn">compas_gmsh.models</span> <span class="kn">import</span> <span class="n">MeshModel</span>
 <span class="kn">from</span> <span class="nn">compas_view2.app</span> <span class="kn">import</span> <span class="n">App</span>
 <span class="kn">from</span> <span class="nn">compas_view2.shapes</span> <span class="kn">import</span> <span class="n">Arrow</span>
@@ -109,7 +107,7 @@
 <span class="c1"># Make a plate mesh</span>
 <span class="c1"># ==============================================================================</span>
 
-<span class="n">mesh</span> <span class="o">=</span> <span class="n">Mesh</span><span class="o">.</span><span class="n">from_obj</span><span class="p">(</span><span class="n">compas</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;faces.obj&quot;</span><span class="p">))</span>
+<span class="n">mesh</span> <span class="o">=</span> <span class="n">Mesh</span><span class="o">.</span><span class="n">from_meshgrid</span><span class="p">(</span><span class="n">dx</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">nx</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>
 <span class="n">plate</span> <span class="o">=</span> <span class="n">mesh_thicken</span><span class="p">(</span><span class="n">mesh</span><span class="p">,</span> <span class="mf">0.3</span><span class="p">)</span>
 
 <span class="c1"># ==============================================================================</span>
@@ -119,34 +117,34 @@
 <span class="n">poa</span> <span class="o">=</span> <span class="n">choice</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="n">mesh</span><span class="o">.</span><span class="n">vertices</span><span class="p">())</span> <span class="o">-</span> <span class="nb">set</span><span class="p">(</span><span class="n">mesh</span><span class="o">.</span><span class="n">vertices_on_boundary</span><span class="p">())))</span>
 
 <span class="c1"># ==============================================================================</span>
-<span class="c1"># Set target sizes at load vertex and on boundaries and corners</span>
-<span class="c1"># ==============================================================================</span>
-
-<span class="n">vertex_target</span> <span class="o">=</span> <span class="p">{</span><span class="n">poa</span><span class="p">:</span> <span class="mf">0.02</span><span class="p">}</span>
-<span class="n">vertex_target</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="n">vertex</span><span class="p">:</span> <span class="mf">0.2</span> <span class="k">for</span> <span class="n">vertex</span> <span class="ow">in</span> <span class="n">mesh</span><span class="o">.</span><span class="n">vertices_on_boundary</span><span class="p">()})</span>
-<span class="n">vertex_target</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="n">vertex</span><span class="p">:</span> <span class="mf">0.02</span> <span class="k">for</span> <span class="n">vertex</span> <span class="ow">in</span> <span class="n">mesh</span><span class="o">.</span><span class="n">vertices_where</span><span class="p">({</span><span class="s1">&#39;vertex_degree&#39;</span><span class="p">:</span> <span class="mi">2</span><span class="p">})})</span>
-
-<span class="k">for</span> <span class="n">u</span> <span class="ow">in</span> <span class="nb">list</span><span class="p">(</span><span class="n">vertex_target</span><span class="p">):</span>
-    <span class="n">a</span> <span class="o">=</span> <span class="n">geometric_key_xy</span><span class="p">(</span><span class="n">mesh</span><span class="o">.</span><span class="n">vertex_coordinates</span><span class="p">(</span><span class="n">u</span><span class="p">))</span>
-    <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">plate</span><span class="o">.</span><span class="n">vertices</span><span class="p">():</span>
-        <span class="n">b</span> <span class="o">=</span> <span class="n">geometric_key_xy</span><span class="p">(</span><span class="n">plate</span><span class="o">.</span><span class="n">vertex_coordinates</span><span class="p">(</span><span class="n">v</span><span class="p">))</span>
-        <span class="k">if</span> <span class="n">b</span> <span class="o">==</span> <span class="n">a</span><span class="p">:</span>
-            <span class="n">vertex_target</span><span class="p">[</span><span class="n">v</span><span class="p">]</span> <span class="o">=</span> <span class="n">vertex_target</span><span class="p">[</span><span class="n">u</span><span class="p">]</span>
-
-<span class="c1"># ==============================================================================</span>
 <span class="c1"># GMSH model</span>
 <span class="c1"># ==============================================================================</span>
 
-<span class="n">model</span> <span class="o">=</span> <span class="n">MeshModel</span><span class="o">.</span><span class="n">from_mesh</span><span class="p">(</span><span class="n">plate</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s2">&quot;test&quot;</span><span class="p">,</span> <span class="n">vertex_length</span><span class="o">=</span><span class="n">vertex_target</span><span class="p">)</span>
+<span class="n">model</span> <span class="o">=</span> <span class="n">MeshModel</span><span class="o">.</span><span class="n">from_mesh</span><span class="p">(</span><span class="n">plate</span><span class="p">,</span> <span class="n">targetlength</span><span class="o">=</span><span class="mf">1.0</span><span class="p">)</span>
 
+<span class="n">model</span><span class="o">.</span><span class="n">mesh_targetlength_at_vertex</span><span class="p">(</span><span class="n">poa</span><span class="p">,</span> <span class="mf">0.01</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">vertex</span> <span class="ow">in</span> <span class="n">mesh</span><span class="o">.</span><span class="n">vertices_where</span><span class="p">({</span><span class="s1">&#39;vertex_degree&#39;</span><span class="p">:</span> <span class="mi">2</span><span class="p">}):</span>
+    <span class="n">model</span><span class="o">.</span><span class="n">mesh_targetlength_at_vertex</span><span class="p">(</span><span class="n">vertex</span><span class="p">,</span> <span class="mf">0.05</span><span class="p">)</span>
+
+<span class="c1"># model.heal()</span>
 <span class="n">model</span><span class="o">.</span><span class="n">generate_mesh</span><span class="p">()</span>
-<span class="n">model</span><span class="o">.</span><span class="n">optimize_mesh</span><span class="p">(</span><span class="n">niter</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
+<span class="c1"># model.optimize_mesh(niter=10)</span>
+<span class="c1"># model.recombine_mesh()</span>
 
 <span class="c1"># ==============================================================================</span>
 <span class="c1"># COMPAS mesh</span>
 <span class="c1"># ==============================================================================</span>
 
 <span class="n">mesh</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">mesh_to_compas</span><span class="p">()</span>
+
+<span class="n">lengths</span> <span class="o">=</span> <span class="p">[</span><span class="n">mesh</span><span class="o">.</span><span class="n">edge_length</span><span class="p">(</span><span class="o">*</span><span class="n">edge</span><span class="p">)</span> <span class="k">for</span> <span class="n">edge</span> <span class="ow">in</span> <span class="n">mesh</span><span class="o">.</span><span class="n">edges</span><span class="p">()]</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="n">mesh</span><span class="o">.</span><span class="n">is_valid</span><span class="p">())</span>
+<span class="nb">print</span><span class="p">(</span><span class="nb">min</span><span class="p">(</span><span class="n">lengths</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="nb">max</span><span class="p">(</span><span class="n">lengths</span><span class="p">))</span>
+
+<span class="n">omesh</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">mesh_to_openmesh</span><span class="p">()</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">omesh</span><span class="p">)</span>
 
 <span class="c1"># ==============================================================================</span>
 <span class="c1"># Viz</span>
@@ -162,10 +160,12 @@
 
 <span class="n">viewer</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">mesh</span><span class="p">)</span>
 
-<span class="n">point</span> <span class="o">=</span> <span class="n">Point</span><span class="p">(</span><span class="o">*</span> <span class="n">plate</span><span class="o">.</span><span class="n">vertex_coordinates</span><span class="p">(</span><span class="n">poa</span><span class="p">))</span> <span class="o">+</span> <span class="n">Vector</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+<span class="n">poa</span> <span class="o">=</span> <span class="n">Point</span><span class="p">(</span><span class="o">*</span> <span class="n">plate</span><span class="o">.</span><span class="n">vertex_coordinates</span><span class="p">(</span><span class="n">poa</span><span class="p">))</span>
+<span class="n">start</span> <span class="o">=</span> <span class="n">poa</span> <span class="o">+</span> <span class="n">Vector</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
 <span class="n">vector</span> <span class="o">=</span> <span class="n">Vector</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span>
-<span class="n">load</span> <span class="o">=</span> <span class="n">Arrow</span><span class="p">(</span><span class="n">point</span><span class="p">,</span> <span class="n">vector</span><span class="p">,</span> <span class="n">body_width</span><span class="o">=</span><span class="mf">0.03</span><span class="p">)</span>
+<span class="n">load</span> <span class="o">=</span> <span class="n">Arrow</span><span class="p">(</span><span class="n">start</span><span class="p">,</span> <span class="n">vector</span><span class="p">,</span> <span class="n">body_width</span><span class="o">=</span><span class="mf">0.03</span><span class="p">)</span>
 
+<span class="n">viewer</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">poa</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="mi">20</span><span class="p">)</span>
 <span class="n">viewer</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">load</span><span class="p">,</span> <span class="n">facecolor</span><span class="o">=</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">))</span>
 
 <span class="n">viewer</span><span class="o">.</span><span class="n">run</span><span class="p">()</span>

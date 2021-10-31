@@ -23,7 +23,7 @@
   
 
   
-    <link rel="prev" title="Model.refine_mesh" href="compas_gmsh.models.Model.refine_mesh.html" />
+    <link rel="prev" title="Model.synchronize" href="compas_gmsh.models.Model.synchronize.html" />
   
 
   <script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-MML-AM_CHTML"></script>
@@ -99,7 +99,7 @@
 <h1>ShapeModel</h1>
 <dl class="py class">
 <dt class="sig sig-object py" id="compas_gmsh.models.ShapeModel">
-<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">compas_gmsh.models.</span></span><span class="sig-name descname"><span class="pre">ShapeModel</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><span class="pre">str</span></a><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><span class="pre">bool</span></a></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mesh_algorithm</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">compas_gmsh.options.MeshAlgorithm</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">MeshAlgorithm.FrontalDelaunay</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/compas-dev/compas_gmsh/blob/main/src/compas_gmsh/models/shape.py#L12"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">compas_gmsh.models.</span></span><span class="sig-name descname"><span class="pre">ShapeModel</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><span class="pre">str</span></a><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><span class="pre">bool</span></a></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mesh_algorithm</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">compas_gmsh.options.MeshAlgorithm</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">MeshAlgorithm.Automatic</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/compas-dev/compas_gmsh/blob/main/src/compas_gmsh/models/shape.py#L10"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
 <dd><p>Bases: <a class="reference internal" href="compas_gmsh.models.Model.html#compas_gmsh.models.Model" title="compas_gmsh.models.model.Model"><code class="xref py py-class docutils literal notranslate"><span class="pre">compas_gmsh.models.model.Model</span></code></a></p>
 <p>Model for shape combinations.</p>
 <p class="rubric">Methods</p>
@@ -118,20 +118,20 @@
 <tr class="row-odd"><td><p><a class="reference internal" href="compas_gmsh.models.ShapeModel.add_sphere.html#compas_gmsh.models.ShapeModel.add_sphere" title="compas_gmsh.models.ShapeModel.add_sphere"><code class="xref py py-obj docutils literal notranslate"><span class="pre">add_sphere</span></code></a>(sphere)</p></td>
 <td><p>Add a sphere to the model.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="compas_gmsh.models.ShapeModel.boolean_difference.html#compas_gmsh.models.ShapeModel.boolean_difference" title="compas_gmsh.models.ShapeModel.boolean_difference"><code class="xref py py-obj docutils literal notranslate"><span class="pre">boolean_difference</span></code></a>(A, B)</p></td>
-<td><p>Boolean difference of two shapes.</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="compas_gmsh.models.ShapeModel.boolean_difference.html#compas_gmsh.models.ShapeModel.boolean_difference" title="compas_gmsh.models.ShapeModel.boolean_difference"><code class="xref py py-obj docutils literal notranslate"><span class="pre">boolean_difference</span></code></a>(A, B[, remove_objects, ...])</p></td>
+<td><p>Boolean difference of two sets of shapes.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="compas_gmsh.models.ShapeModel.boolean_intersection.html#compas_gmsh.models.ShapeModel.boolean_intersection" title="compas_gmsh.models.ShapeModel.boolean_intersection"><code class="xref py py-obj docutils literal notranslate"><span class="pre">boolean_intersection</span></code></a>(A, B)</p></td>
-<td><p>Boolean intersection of two shapes.</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="compas_gmsh.models.ShapeModel.boolean_fragment.html#compas_gmsh.models.ShapeModel.boolean_fragment" title="compas_gmsh.models.ShapeModel.boolean_fragment"><code class="xref py py-obj docutils literal notranslate"><span class="pre">boolean_fragment</span></code></a>(A, B[, remove_objects, ...])</p></td>
+<td><p>Boolean fragment of two sets of shapes.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="compas_gmsh.models.ShapeModel.boolean_union.html#compas_gmsh.models.ShapeModel.boolean_union" title="compas_gmsh.models.ShapeModel.boolean_union"><code class="xref py py-obj docutils literal notranslate"><span class="pre">boolean_union</span></code></a>(A, B)</p></td>
-<td><p>Boolean union of two shapes.</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="compas_gmsh.models.ShapeModel.boolean_intersection.html#compas_gmsh.models.ShapeModel.boolean_intersection" title="compas_gmsh.models.ShapeModel.boolean_intersection"><code class="xref py py-obj docutils literal notranslate"><span class="pre">boolean_intersection</span></code></a>(A, B[, remove_objects, ...])</p></td>
+<td><p>Boolean intersection of two sets of shapes.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="compas_gmsh.models.ShapeModel.generate_mesh.html#compas_gmsh.models.ShapeModel.generate_mesh" title="compas_gmsh.models.ShapeModel.generate_mesh"><code class="xref py py-obj docutils literal notranslate"><span class="pre">generate_mesh</span></code></a>([dim, verbose, algorithm])</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="compas_gmsh.models.ShapeModel.boolean_union.html#compas_gmsh.models.ShapeModel.boolean_union" title="compas_gmsh.models.ShapeModel.boolean_union"><code class="xref py py-obj docutils literal notranslate"><span class="pre">boolean_union</span></code></a>(A, B[, remove_objects, ...])</p></td>
+<td><p>Boolean union of two sets of shapes.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="compas_gmsh.models.ShapeModel.generate_mesh.html#compas_gmsh.models.ShapeModel.generate_mesh" title="compas_gmsh.models.ShapeModel.generate_mesh"><code class="xref py py-obj docutils literal notranslate"><span class="pre">generate_mesh</span></code></a>([dim])</p></td>
 <td><p>Generate a mesh of the current model.</p></td>
-</tr>
-<tr class="row-even"><td><p><a class="reference internal" href="compas_gmsh.models.ShapeModel.info.html#compas_gmsh.models.ShapeModel.info" title="compas_gmsh.models.ShapeModel.info"><code class="xref py py-obj docutils literal notranslate"><span class="pre">info</span></code></a>()</p></td>
-<td><p>Print information about the current model.</p></td>
 </tr>
 <tr class="row-odd"><td><p><a class="reference internal" href="compas_gmsh.models.ShapeModel.mesh_to_compas.html#compas_gmsh.models.ShapeModel.mesh_to_compas" title="compas_gmsh.models.ShapeModel.mesh_to_compas"><code class="xref py py-obj docutils literal notranslate"><span class="pre">mesh_to_compas</span></code></a>()</p></td>
 <td><p>Convert the model mesh to a COMPAS mesh data structure.</p></td>
@@ -142,17 +142,23 @@
 <tr class="row-odd"><td><p><a class="reference internal" href="compas_gmsh.models.ShapeModel.mesh_to_tets.html#compas_gmsh.models.ShapeModel.mesh_to_tets" title="compas_gmsh.models.ShapeModel.mesh_to_tets"><code class="xref py py-obj docutils literal notranslate"><span class="pre">mesh_to_tets</span></code></a>()</p></td>
 <td><p>Convert the model mesh to a COMPAS mesh data structure.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="compas_gmsh.models.ShapeModel.mesh_to_volmesh.html#compas_gmsh.models.ShapeModel.mesh_to_volmesh" title="compas_gmsh.models.ShapeModel.mesh_to_volmesh"><code class="xref py py-obj docutils literal notranslate"><span class="pre">mesh_to_volmesh</span></code></a>()</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="compas_gmsh.models.ShapeModel.mesh_to_vertices_and_faces.html#compas_gmsh.models.ShapeModel.mesh_to_vertices_and_faces" title="compas_gmsh.models.ShapeModel.mesh_to_vertices_and_faces"><code class="xref py py-obj docutils literal notranslate"><span class="pre">mesh_to_vertices_and_faces</span></code></a>()</p></td>
 <td><p>Convert the model mesh to a COMPAS mesh data structure.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="compas_gmsh.models.ShapeModel.optimize_mesh.html#compas_gmsh.models.ShapeModel.optimize_mesh" title="compas_gmsh.models.ShapeModel.optimize_mesh"><code class="xref py py-obj docutils literal notranslate"><span class="pre">optimize_mesh</span></code></a>([algo, niter])</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="compas_gmsh.models.ShapeModel.mesh_to_volmesh.html#compas_gmsh.models.ShapeModel.mesh_to_volmesh" title="compas_gmsh.models.ShapeModel.mesh_to_volmesh"><code class="xref py py-obj docutils literal notranslate"><span class="pre">mesh_to_volmesh</span></code></a>()</p></td>
+<td><p>Convert the model mesh to a COMPAS mesh data structure.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="compas_gmsh.models.ShapeModel.optimize_mesh.html#compas_gmsh.models.ShapeModel.optimize_mesh" title="compas_gmsh.models.ShapeModel.optimize_mesh"><code class="xref py py-obj docutils literal notranslate"><span class="pre">optimize_mesh</span></code></a>([algo, niter])</p></td>
 <td><p>Optimize the model mesh using the specified method.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="compas_gmsh.models.ShapeModel.recombine_mesh.html#compas_gmsh.models.ShapeModel.recombine_mesh" title="compas_gmsh.models.ShapeModel.recombine_mesh"><code class="xref py py-obj docutils literal notranslate"><span class="pre">recombine_mesh</span></code></a>()</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="compas_gmsh.models.ShapeModel.recombine_mesh.html#compas_gmsh.models.ShapeModel.recombine_mesh" title="compas_gmsh.models.ShapeModel.recombine_mesh"><code class="xref py py-obj docutils literal notranslate"><span class="pre">recombine_mesh</span></code></a>()</p></td>
 <td><p>Recombine the mesh into quadrilateral faces.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="compas_gmsh.models.ShapeModel.refine_mesh.html#compas_gmsh.models.ShapeModel.refine_mesh" title="compas_gmsh.models.ShapeModel.refine_mesh"><code class="xref py py-obj docutils literal notranslate"><span class="pre">refine_mesh</span></code></a>()</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="compas_gmsh.models.ShapeModel.refine_mesh.html#compas_gmsh.models.ShapeModel.refine_mesh" title="compas_gmsh.models.ShapeModel.refine_mesh"><code class="xref py py-obj docutils literal notranslate"><span class="pre">refine_mesh</span></code></a>()</p></td>
 <td><p>Refine the model mesh by uniformly splitting the edges.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="compas_gmsh.models.ShapeModel.synchronize.html#compas_gmsh.models.ShapeModel.synchronize" title="compas_gmsh.models.ShapeModel.synchronize"><code class="xref py py-obj docutils literal notranslate"><span class="pre">synchronize</span></code></a>()</p></td>
+<td><p></p></td>
 </tr>
 </tbody>
 </table>
@@ -211,11 +217,11 @@
   <footer class="compas-footer">
     <nav class="nav p-2">
       
-        <a href="compas_gmsh.models.Model.refine_mesh.html" title="Model.refine_mesh" class="nav-link footer-link float-start text-left d-flex w-50" rel="prev">
+        <a href="compas_gmsh.models.Model.synchronize.html" title="Model.synchronize" class="nav-link footer-link float-start text-left d-flex w-50" rel="prev">
           <div class="nav-button p-2 m-2"><i class="fas fa-arrow-left"></i></div>
           <div class="nav-title flex-grow-1 align-self-center">
             <div class="nav-direction small font-weight-light">Previous</div>
-            Model.refine_mesh
+            Model.synchronize
           </div>
         </a>
       

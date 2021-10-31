@@ -23,7 +23,7 @@
   
 
   
-    <link rel="prev" title="MeshModel.refine_mesh" href="compas_gmsh.models.MeshModel.refine_mesh.html" />
+    <link rel="prev" title="MeshModel.synchronize" href="compas_gmsh.models.MeshModel.synchronize.html" />
   
 
   <script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-MML-AM_CHTML"></script>
@@ -126,19 +126,19 @@ At every level of the tree, there can be only one operation.</p></li>
 <tr class="row-even"><td><p><a class="reference internal" href="compas_gmsh.models.CSGModel.compute_tree.html#compas_gmsh.models.CSGModel.compute_tree" title="compas_gmsh.models.CSGModel.compute_tree"><code class="xref py py-obj docutils literal notranslate"><span class="pre">compute_tree</span></code></a>()</p></td>
 <td><p>Comute the compound shape resulting from the operations on shape primitives in the tree.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="compas_gmsh.models.CSGModel.generate_mesh.html#compas_gmsh.models.CSGModel.generate_mesh" title="compas_gmsh.models.CSGModel.generate_mesh"><code class="xref py py-obj docutils literal notranslate"><span class="pre">generate_mesh</span></code></a>([dim, verbose, algorithm])</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="compas_gmsh.models.CSGModel.generate_mesh.html#compas_gmsh.models.CSGModel.generate_mesh" title="compas_gmsh.models.CSGModel.generate_mesh"><code class="xref py py-obj docutils literal notranslate"><span class="pre">generate_mesh</span></code></a>([dim])</p></td>
 <td><p>Generate a mesh of the current model.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="compas_gmsh.models.CSGModel.info.html#compas_gmsh.models.CSGModel.info" title="compas_gmsh.models.CSGModel.info"><code class="xref py py-obj docutils literal notranslate"><span class="pre">info</span></code></a>()</p></td>
-<td><p>Print information about the current model.</p></td>
-</tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="compas_gmsh.models.CSGModel.mesh_to_compas.html#compas_gmsh.models.CSGModel.mesh_to_compas" title="compas_gmsh.models.CSGModel.mesh_to_compas"><code class="xref py py-obj docutils literal notranslate"><span class="pre">mesh_to_compas</span></code></a>()</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="compas_gmsh.models.CSGModel.mesh_to_compas.html#compas_gmsh.models.CSGModel.mesh_to_compas" title="compas_gmsh.models.CSGModel.mesh_to_compas"><code class="xref py py-obj docutils literal notranslate"><span class="pre">mesh_to_compas</span></code></a>()</p></td>
 <td><p>Convert the model mesh to a COMPAS mesh data structure.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="compas_gmsh.models.CSGModel.mesh_to_openmesh.html#compas_gmsh.models.CSGModel.mesh_to_openmesh" title="compas_gmsh.models.CSGModel.mesh_to_openmesh"><code class="xref py py-obj docutils literal notranslate"><span class="pre">mesh_to_openmesh</span></code></a>()</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="compas_gmsh.models.CSGModel.mesh_to_openmesh.html#compas_gmsh.models.CSGModel.mesh_to_openmesh" title="compas_gmsh.models.CSGModel.mesh_to_openmesh"><code class="xref py py-obj docutils literal notranslate"><span class="pre">mesh_to_openmesh</span></code></a>()</p></td>
 <td><p>Convert the model mesh to a COMPAS mesh data structure.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="compas_gmsh.models.CSGModel.mesh_to_tets.html#compas_gmsh.models.CSGModel.mesh_to_tets" title="compas_gmsh.models.CSGModel.mesh_to_tets"><code class="xref py py-obj docutils literal notranslate"><span class="pre">mesh_to_tets</span></code></a>()</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="compas_gmsh.models.CSGModel.mesh_to_tets.html#compas_gmsh.models.CSGModel.mesh_to_tets" title="compas_gmsh.models.CSGModel.mesh_to_tets"><code class="xref py py-obj docutils literal notranslate"><span class="pre">mesh_to_tets</span></code></a>()</p></td>
+<td><p>Convert the model mesh to a COMPAS mesh data structure.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="compas_gmsh.models.CSGModel.mesh_to_vertices_and_faces.html#compas_gmsh.models.CSGModel.mesh_to_vertices_and_faces" title="compas_gmsh.models.CSGModel.mesh_to_vertices_and_faces"><code class="xref py py-obj docutils literal notranslate"><span class="pre">mesh_to_vertices_and_faces</span></code></a>()</p></td>
 <td><p>Convert the model mesh to a COMPAS mesh data structure.</p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="compas_gmsh.models.CSGModel.mesh_to_volmesh.html#compas_gmsh.models.CSGModel.mesh_to_volmesh" title="compas_gmsh.models.CSGModel.mesh_to_volmesh"><code class="xref py py-obj docutils literal notranslate"><span class="pre">mesh_to_volmesh</span></code></a>()</p></td>
@@ -152,6 +152,9 @@ At every level of the tree, there can be only one operation.</p></li>
 </tr>
 <tr class="row-odd"><td><p><a class="reference internal" href="compas_gmsh.models.CSGModel.refine_mesh.html#compas_gmsh.models.CSGModel.refine_mesh" title="compas_gmsh.models.CSGModel.refine_mesh"><code class="xref py py-obj docutils literal notranslate"><span class="pre">refine_mesh</span></code></a>()</p></td>
 <td><p>Refine the model mesh by uniformly splitting the edges.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="compas_gmsh.models.CSGModel.synchronize.html#compas_gmsh.models.CSGModel.synchronize" title="compas_gmsh.models.CSGModel.synchronize"><code class="xref py py-obj docutils literal notranslate"><span class="pre">synchronize</span></code></a>()</p></td>
+<td><p></p></td>
 </tr>
 </tbody>
 </table>
@@ -210,11 +213,11 @@ At every level of the tree, there can be only one operation.</p></li>
   <footer class="compas-footer">
     <nav class="nav p-2">
       
-        <a href="compas_gmsh.models.MeshModel.refine_mesh.html" title="MeshModel.refine_mesh" class="nav-link footer-link float-start text-left d-flex w-50" rel="prev">
+        <a href="compas_gmsh.models.MeshModel.synchronize.html" title="MeshModel.synchronize" class="nav-link footer-link float-start text-left d-flex w-50" rel="prev">
           <div class="nav-button p-2 m-2"><i class="fas fa-arrow-left"></i></div>
           <div class="nav-title flex-grow-1 align-self-center">
             <div class="nav-direction small font-weight-light">Previous</div>
-            MeshModel.refine_mesh
+            MeshModel.synchronize
           </div>
         </a>
       
