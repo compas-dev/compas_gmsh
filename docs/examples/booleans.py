@@ -32,20 +32,17 @@ cylz = Cylinder((XY, 0.7 * R), 3 * R)
 
 model = ShapeModel(name="booleans")
 
-model.lmin = 0.2
-model.lmax = 0.2
+model.mesh_lmin = 0.2
+model.mesh_lmax = 0.2
 
 model.boolean_difference(
     model.boolean_intersection(
-        model.add_sphere(sphere),
-        model.add_box(box)
+        [model.add_sphere(sphere)],
+        [model.add_box(box)]
     ),
     model.boolean_union(
-        model.add_cylinder(cylz),
-        model.boolean_union(
-            model.add_cylinder(cylx),
-            model.add_cylinder(cyly)
-        )
+        [model.add_cylinder(cylz)],
+        [model.add_cylinder(cylx), model.add_cylinder(cyly)]
     )
 )
 
