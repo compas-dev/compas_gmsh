@@ -16,8 +16,8 @@ model = ShapeModel(name="trimesh")
 
 model.add_sphere(sphere)
 
-model.lmin = 0.1
-model.lmax = 0.2
+model.mesh_lmin = 0.1
+model.mesh_lmax = 0.2
 
 model.generate_mesh()
 

@@ -23,29 +23,12 @@ class Model:
         self._mesh_algorithm = None
         self.verbose = verbose
         self.mesh_algorithm = mesh_algorithm
+        self.model = gmsh.model
         self.mesh = gmsh.model.mesh
-        self.factory = gmsh.model.occ
+        self.occ = gmsh.model.occ
 
     def __del__(self):
         gmsh.finalize()
-
-    @property
-    def lmin(self) -> float:
-        """Minimum edge length for meshing."""
-        gmsh.option.getNumber("Mesh.CharacteristicLengthMin")
-
-    @lmin.setter
-    def lmin(self, value: float):
-        gmsh.option.setNumber("Mesh.CharacteristicLengthMin", value)
-
-    @property
-    def lmax(self) -> float:
-        """Maximum edge length for meshing."""
-        gmsh.option.getNumber("Mesh.CharacteristicLengthMax")
-
-    @lmax.setter
-    def lmax(self, value: float):
-        gmsh.option.setNumber("Mesh.CharacteristicLengthMax", value)
 
     @property
     def verbose(self) -> bool:
@@ -56,6 +39,51 @@ class Model:
         self._verbose = bool(value)
         gmsh.option.setNumber("General.Terminal", int(value))
 
+    # ==============================================================================
+    # Model
+    # ==============================================================================
+
+    @property
+    def points(self):
+        return self.model.getEntities(0)
+
+    @property
+    def lines(self):
+        return self.model.getEntities(1)
+
+    @property
+    def surfaces(self):
+        return self.model.getEntities(2)
+
+    @property
+    def volumes(self):
+        return self.model.getEntities(3)
+
+    def synchronize(self):
+        self.occ.synchronize()
+
+    # ==============================================================================
+    # Meshing
+    # ==============================================================================
+
+    @property
+    def mesh_lmin(self) -> float:
+        """Minimum edge length for meshing."""
+        gmsh.option.getNumber("Mesh.CharacteristicLengthMin")
+
+    @mesh_lmin.setter
+    def mesh_lmin(self, value: float):
+        gmsh.option.setNumber("Mesh.CharacteristicLengthMin", value)
+
+    @property
+    def mesh_lmax(self) -> float:
+        """Maximum edge length for meshing."""
+        gmsh.option.getNumber("Mesh.CharacteristicLengthMax")
+
+    @mesh_lmax.setter
+    def mesh_lmax(self, value: float):
+        gmsh.option.setNumber("Mesh.CharacteristicLengthMax", value)
+
     @property
     def mesh_algorithm(self) -> MeshAlgorithm:
         return self._mesh_algorithm
@@ -65,33 +93,12 @@ class Model:
         self._mesh_algorithm = algo.value
         gmsh.option.setNumber("Mesh.Algorithm", algo.value)
 
-    def info(self) -> None:
-        """Print information about the current model."""
-        types = self.mesh.getElementTypes()
-        for number in types:
-            props = self.mesh.getElementProperties(number)
-            name = props[0]
-            dim = props[1]
-            order = props[2]
-            number_of_nodes = props[3]
-            local_node_coords = props[4]
-            number_of_primary_nodes = props[5]
-            print(name)
-            print('--', number)
-            print('--', dim)
-            print('--', order)
-            print('--', number_of_nodes)
-            print('--', local_node_coords)
-            print('--', number_of_primary_nodes)
-
     def generate_mesh(self,
                       dim: int = 2,
-                      verbose: bool = False,
                       algorithm: MeshAlgorithm = MeshAlgorithm.FrontalDelaunay) -> None:
         """Generate a mesh of the current model."""
-        self.verbose = verbose
+        self.occ.synchronize()
         self.mesh_algorithm = algorithm
-        self.factory.synchronize()
         self.mesh.generate(dim)
 
     def refine_mesh(self) -> None:
@@ -102,15 +109,16 @@ class Model:
                       algo: Optional[OptimizationAlgorithm] = None,
                       niter: int = 1) -> None:
         """Optimize the model mesh using the specified method."""
-        if algo:
-            algo = algo.value
-        else:
-            algo = ""
+        algo = "" if not algo else algo.value
         self.mesh.optimize(algo, niter=niter)
 
     def recombine_mesh(self) -> None:
         """Recombine the mesh into quadrilateral faces."""
         self.mesh.recombine()
+
+    # ==============================================================================
+    # Export
+    # ==============================================================================
 
     def mesh_to_compas(self) -> Mesh:
         """Convert the model mesh to a COMPAS mesh data structure."""

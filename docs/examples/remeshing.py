@@ -1,6 +1,6 @@
 from math import radians
 import compas
-from compas.geometry import Point, Translation, Rotation, Scale
+from compas.geometry import Point, Line, Translation, Rotation, Scale
 from compas.datastructures import Mesh
 from compas_gmsh.models import MeshModel
 from compas_view2.app import App
@@ -9,7 +9,7 @@ from compas_view2.app import App
 # Input
 # ==============================================================================
 
-mesh = Mesh.from_obj(compas.get('tubemesh.obj'))
+mesh = Mesh.from_json(compas.get('tubemesh.json'))
 
 centroid = Point(* mesh.centroid())
 vector = Point(0, 0, 0) - centroid
@@ -25,13 +25,16 @@ mesh.transform(S * R * T)
 # GMSH model
 # ==============================================================================
 
-model = MeshModel.from_mesh(mesh, 1.0, name='tubemesh')
+model = MeshModel.from_mesh(mesh, name='tubemesh')
 
-model.lmin = 0.1
-model.lmax = 0.2
+for vertex in list(mesh.vertices())[:10]:
+    model.vertex_target(vertex, 0.05)
+
+for vertex in list(mesh.vertices())[10:]:
+    model.vertex_target(vertex, 0.5)
 
 model.generate_mesh()
-model.optimize_mesh()
+model.optimize_mesh(niter=10)
 
 # ==============================================================================
 # COMPAS mesh
@@ -50,5 +53,14 @@ viewer.view.camera.tx = -1
 viewer.view.camera.ty = 0
 
 viewer.add(mesh)
+
+for u, v in mesh.edges():
+    a = mesh.vertex_coordinates(u)
+    b = mesh.vertex_coordinates(v)
+
+    if mesh.halfedge[u][v] is None:
+        viewer.add(Line(a, b), linewidth=10, color=(1, 0, 0))
+    elif mesh.halfedge[v][u] is None:
+        viewer.add(Line(a, b), linewidth=10, color=(1, 0, 0))
 
 viewer.run()

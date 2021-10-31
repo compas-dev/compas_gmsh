@@ -37,15 +37,12 @@ model.lmax = 0.2
 
 model.boolean_difference(
     model.boolean_intersection(
-        model.add_sphere(sphere),
-        model.add_box(box)
+        [model.add_sphere(sphere)],
+        [model.add_box(box)]
     ),
     model.boolean_union(
-        model.add_cylinder(cylz),
-        model.boolean_union(
-            model.add_cylinder(cylx),
-            model.add_cylinder(cyly)
-        )
+        [model.add_cylinder(cylz)],
+        [model.add_cylinder(cylx), model.add_cylinder(cyly)]
     )
 )
 

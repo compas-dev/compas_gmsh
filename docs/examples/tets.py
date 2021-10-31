@@ -1,4 +1,5 @@
 from compas.geometry import Sphere, Translation, centroid_points
+from compas.utilities import geometric_key
 from compas_view2.app import App
 from compas_view2.objects import Collection
 from compas_gmsh.models import ShapeModel
@@ -27,6 +28,41 @@ model.generate_mesh(3)
 # ==============================================================================
 
 tets = model.mesh_to_tets()
+shell = model.mesh_to_compas()
+
+# ==============================================================================
+# Boundary lookup
+# ==============================================================================
+
+centroid_face = {}
+for face in shell.faces():
+    centroid_face[geometric_key(shell.face_centroid(face))] = face
+
+bottom_exterior = []
+bottom_interior = []
+
+top_exterior = []
+top_interior = []
+
+bottom, top = [], []
+for tet in tets:
+    centroid = centroid_points(tet.vertices)
+    if centroid[2] < 0:
+        bottom.append(tet)
+    else:
+        top.append(tet)
+
+for tet in bottom:
+    if any(geometric_key(centroid_points([tet.vertices[index] for index in face])) in centroid_face for face in tet.faces):
+        bottom_exterior.append(tet)
+    else:
+        bottom_interior.append(tet)
+
+for tet in top:
+    if any(geometric_key(centroid_points([tet.vertices[index] for index in face])) in centroid_face for face in tet.faces):
+        top_exterior.append(tet)
+    else:
+        top_interior.append(tet)
 
 # ==============================================================================
 # Visualization with viewer
@@ -40,15 +76,6 @@ viewer.view.camera.tx = 0
 viewer.view.camera.ty = 0
 viewer.view.camera.distance = 7
 
-bottom, top = [], []
-
-for tet in tets:
-    centroid = centroid_points(tet.vertices)
-    if centroid[2] < 0:
-        bottom.append(tet)
-    else:
-        top.append(tet)
-
 T = Translation.from_vector([0, 0, 0.5])
 for tet in top:
     tet.transform(T)
@@ -57,7 +84,12 @@ T = Translation.from_vector([0, 0, -0.5])
 for tet in bottom:
     tet.transform(T)
 
-viewer.add(Collection(bottom), facecolor=(1, 0, 0))
-viewer.add(Collection(top), facecolor=(0, 1, 0))
+viewer.add(Collection(bottom_exterior), facecolor=(1, 0, 0))
+viewer.add(Collection(bottom_interior))
+
+viewer.add(Collection(top_exterior), facecolor=(0, 1, 0))
+viewer.add(Collection(top_interior))
+
+# viewer.add(shell)
 
 viewer.run()
