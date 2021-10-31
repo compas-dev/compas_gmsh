@@ -1,4 +1,4 @@
-from typing import List, Optional
+from typing import Tuple, List, Dict, Optional
 
 import sys
 import gmsh
@@ -16,7 +16,7 @@ class Model:
     def __init__(self,
                  name: Optional[str] = None,
                  verbose: bool = False,
-                 mesh_algorithm: MeshAlgorithm = MeshAlgorithm.FrontalDelaunay) -> None:
+                 mesh_algorithm: MeshAlgorithm = MeshAlgorithm.Automatic) -> None:
         gmsh.initialize(sys.argv)
         gmsh.model.add(name or f'{self.__class__.__name__}')
         self._verbose = False
@@ -93,12 +93,9 @@ class Model:
         self._mesh_algorithm = algo.value
         gmsh.option.setNumber("Mesh.Algorithm", algo.value)
 
-    def generate_mesh(self,
-                      dim: int = 2,
-                      algorithm: MeshAlgorithm = MeshAlgorithm.FrontalDelaunay) -> None:
+    def generate_mesh(self, dim: int = 2) -> None:
         """Generate a mesh of the current model."""
         self.occ.synchronize()
-        self.mesh_algorithm = algorithm
         self.mesh.generate(dim)
 
     def refine_mesh(self) -> None:
@@ -106,11 +103,10 @@ class Model:
         self.mesh.refine()
 
     def optimize_mesh(self,
-                      algo: Optional[OptimizationAlgorithm] = None,
+                      algo: OptimizationAlgorithm = OptimizationAlgorithm.Default,
                       niter: int = 1) -> None:
         """Optimize the model mesh using the specified method."""
-        algo = "" if not algo else algo.value
-        self.mesh.optimize(algo, niter=niter)
+        self.mesh.optimize(algo.value, niter=niter)
 
     def recombine_mesh(self) -> None:
         """Recombine the mesh into quadrilateral faces."""
@@ -120,14 +116,15 @@ class Model:
     # Export
     # ==============================================================================
 
-    def mesh_to_compas(self) -> Mesh:
+    def mesh_to_vertices_and_faces(self) -> Tuple[Dict[int, List[float]], List[List[int]]]:
         """Convert the model mesh to a COMPAS mesh data structure."""
         nodes = self.mesh.getNodes()
         node_tags = nodes[0]
         node_coords = nodes[1].reshape((-1, 3), order='C')
-        xyz = {}
+        vertices = {}
         for tag, coords in zip(node_tags, node_coords):
-            xyz[int(tag)] = coords
+            vertices[int(tag)] = coords
+
         elements = self.mesh.getElements()
         faces = []
         for etype, etags, ntags in zip(*elements):
@@ -144,16 +141,32 @@ class Model:
                     a, b, c, d = ntags[i * n: i * n + n]
                     faces.append([a, b, c, d])
 
-        return Mesh.from_vertices_and_faces(xyz, faces)
+        return vertices, faces
+
+    def mesh_to_compas(self) -> Mesh:
+        """Convert the model mesh to a COMPAS mesh data structure."""
+        vertices, faces = self.mesh_to_vertices_and_faces()
+        return Mesh.from_vertices_and_faces(vertices, faces)
 
     def mesh_to_openmesh(self) -> Mesh:
         """Convert the model mesh to a COMPAS mesh data structure."""
         try:
-            import openmesh as om
+            import openmesh as om  # noqa: F401
         except ImportError:
             print('OpenMesh is not installed. Install using `pip install openmesh`.')
             raise
-        om.TriMesh()
+        vertices, faces = self.mesh_to_vertices_and_faces()
+        if len(faces[0]) == 3:
+            mesh = om.TriMesh()
+        elif len(faces[0]) == 4:
+            mesh = om.PolyMesh()
+        vertex_index = {}
+        for vertex in vertices:
+            index = mesh.add_vertex(vertices[vertex])
+            vertex_index[vertex] = index
+        for face in faces:
+            mesh.add_face(* [vertex_index[vertex] for vertex in face])
+        return mesh
 
     def mesh_to_volmesh(self) -> Mesh:
         """Convert the model mesh to a COMPAS mesh data structure."""

@@ -12,11 +12,13 @@ class MeshModel(Model):
     @classmethod
     def from_mesh(cls: 'MeshModel',
                   mesh: Mesh,
-                  name: str = 'Mesh') -> None:
+                  name: str = 'Mesh',
+                  targetlength: float = 1.0) -> None:
         model = cls(name)
+        model.vertex_tag = {}
         for vertex in mesh.vertices():
             point = mesh.vertex_coordinates(vertex)
-            model.vertex_tag[vertex] = model.occ.addPoint(*point)
+            model.vertex_tag[vertex] = model.occ.addPoint(*point, targetlength)
         for face in mesh.faces():
             loop = []
             for u, v in mesh.face_halfedges(face):
@@ -24,13 +26,12 @@ class MeshModel(Model):
                 loop.append(tag)
             tag = model.occ.addCurveLoop(loop)
             model.occ.addSurfaceFilling(tag)
-        model.heal()
         return model
 
     def heal(self):
         self.occ.synchronize()
         self.occ.healShapes()
 
-    def vertex_target(self, vertex, target):
+    def mesh_targetlength_at_vertex(self, vertex, target):
         tag = self.vertex_tag[vertex]
         self.occ.mesh.setSize([(0, tag)], target)

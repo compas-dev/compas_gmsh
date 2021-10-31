@@ -32,8 +32,8 @@ cylz = Cylinder((XY, 0.7 * R), 3 * R)
 
 model = ShapeModel(name="booleans")
 
-model.lmin = 0.2
-model.lmax = 0.2
+model.mesh_lmin = 0.2
+model.mesh_lmax = 0.2
 
 model.boolean_difference(
     model.boolean_intersection(

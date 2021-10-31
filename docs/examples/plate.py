@@ -1,8 +1,6 @@
 from random import choice
-import compas
 from compas.geometry import Point, Vector
 from compas.datastructures import Mesh, mesh_thicken
-from compas.utilities import geometric_key_xy
 from compas_gmsh.models import MeshModel
 from compas_view2.app import App
 from compas_view2.shapes import Arrow
@@ -11,7 +9,7 @@ from compas_view2.shapes import Arrow
 # Make a plate mesh
 # ==============================================================================
 
-mesh = Mesh.from_obj(compas.get("faces.obj"))
+mesh = Mesh.from_meshgrid(dx=10, nx=5)
 plate = mesh_thicken(mesh, 0.3)
 
 # ==============================================================================
@@ -24,33 +22,31 @@ poa = choice(list(set(mesh.vertices()) - set(mesh.vertices_on_boundary())))
 # GMSH model
 # ==============================================================================
 
-model = MeshModel.from_mesh(plate, name="test")
+model = MeshModel.from_mesh(plate, targetlength=1.0)
 
-model.heal()
+model.mesh_targetlength_at_vertex(poa, 0.01)
+for vertex in mesh.vertices_where({'vertex_degree': 2}):
+    model.mesh_targetlength_at_vertex(vertex, 0.05)
 
-vertex_target = {poa: 0.02}
-# vertex_target.update({vertex: 0.2 for vertex in mesh.vertices_on_boundary()})
-# vertex_target.update({vertex: 0.02 for vertex in mesh.vertices_where({'vertex_degree': 2})})
-
-# for u in list(vertex_target):
-#     a = geometric_key_xy(mesh.vertex_coordinates(u))
-#     for v in plate.vertices():
-#         b = geometric_key_xy(plate.vertex_coordinates(v))
-#         if b == a:
-#             vertex_target[v] = vertex_target[u]
-
-for vertex in vertex_target:
-    model.vertex_target(vertex, vertex_target[vertex])
-
+# model.heal()
 model.generate_mesh()
-model.optimize_mesh(niter=10)
+# model.optimize_mesh(niter=10)
+# model.recombine_mesh()
 
 # ==============================================================================
 # COMPAS mesh
 # ==============================================================================
 
 mesh = model.mesh_to_compas()
+
+lengths = [mesh.edge_length(*edge) for edge in mesh.edges()]
+
 print(mesh.is_valid())
+print(min(lengths))
+print(max(lengths))
+
+omesh = model.mesh_to_openmesh()
+print(omesh)
 
 # ==============================================================================
 # Viz
@@ -66,10 +62,12 @@ viewer.view.camera.distance = 10
 
 viewer.add(mesh)
 
-point = Point(* plate.vertex_coordinates(poa)) + Vector(0, 0, 1)
+poa = Point(* plate.vertex_coordinates(poa))
+start = poa + Vector(0, 0, 1)
 vector = Vector(0, 0, -1)
-load = Arrow(point, vector, body_width=0.03)
+load = Arrow(start, vector, body_width=0.03)
 
+viewer.add(poa, size=20)
 viewer.add(load, facecolor=(1, 0, 0))
 
 viewer.run()

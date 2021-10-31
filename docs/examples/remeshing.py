@@ -25,13 +25,12 @@ mesh.transform(S * R * T)
 # GMSH model
 # ==============================================================================
 
-model = MeshModel.from_mesh(mesh, name='tubemesh')
+model = MeshModel.from_mesh(mesh, name='tubemesh', targetlength=0.3)
 
-for vertex in list(mesh.vertices())[:10]:
-    model.vertex_target(vertex, 0.05)
+model.heal()
 
-for vertex in list(mesh.vertices())[10:]:
-    model.vertex_target(vertex, 0.5)
+for vertex in mesh.vertex_sample(size=10):
+    model.mesh_targetlength_at_vertex(vertex, 0.01)
 
 model.generate_mesh()
 model.optimize_mesh(niter=10)

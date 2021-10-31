@@ -13,6 +13,7 @@ class MeshAlgorithm(Enum):
 
 
 class OptimizationAlgorithm(Enum):
+    Default = ""
     Gmsh = "Gmsh"
     Netgen = "Netgen"
     HighOrder = "HighOrder"

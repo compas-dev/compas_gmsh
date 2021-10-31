@@ -28,8 +28,8 @@ sphere = Sphere(P, 1.25 * R)
 
 model = ShapeModel(name="booleans")
 
-model.lmin = 0.2
-model.lmax = 0.2
+model.mesh_lmin = 0.2
+model.mesh_lmax = 0.2
 
 model.boolean_fragment(
     [model.add_sphere(sphere)],
@@ -45,8 +45,6 @@ model.optimize_mesh()
 # ==============================================================================
 
 # mesh = model.mesh_to_compas()
-
-print(model.model.getEntities())
 
 # mesh.transform(Translation.from_vector([4 * R, 0, 0]))
 
