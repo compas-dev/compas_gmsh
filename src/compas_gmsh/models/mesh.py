@@ -18,20 +18,20 @@ class MeshModel(Model):
         model.vertex_tag = {}
         for vertex in mesh.vertices():
             point = mesh.vertex_coordinates(vertex)
-            model.vertex_tag[vertex] = model.occ.addPoint(*point, targetlength)
+            model.vertex_tag[vertex] = model.occ.add_point(*point, targetlength)
         for face in mesh.faces():
             loop = []
             for u, v in mesh.face_halfedges(face):
-                tag = model.occ.addLine(model.vertex_tag[u], model.vertex_tag[v])
+                tag = model.occ.add_line(model.vertex_tag[u], model.vertex_tag[v])
                 loop.append(tag)
-            tag = model.occ.addCurveLoop(loop)
-            model.occ.addSurfaceFilling(tag)
+            tag = model.occ.add_curve_loop(loop)
+            model.occ.add_surface_filling(tag)
         return model
 
     def heal(self):
         self.occ.synchronize()
-        self.occ.healShapes()
+        self.occ.heal_shapes()
 
     def mesh_targetlength_at_vertex(self, vertex, target):
         tag = self.vertex_tag[vertex]
-        self.occ.mesh.setSize([(0, tag)], target)
+        self.occ.mesh.set_size([(0, tag)], target)

@@ -20,14 +20,14 @@ class ShapeModel(Model):
         vector = normal.scaled(H)
         x0, y0, z0 = start
         dx, dy, dz = vector
-        tag = self.occ.addCylinder(x0, y0, z0, dx, dy, dz, R)
+        tag = self.occ.add_cylinder(x0, y0, z0, dx, dy, dz, R)
         return 3, tag
 
     def add_sphere(self, sphere: Sphere) -> Tuple[int, int]:
         """Add a sphere to the model."""
         x, y, z = sphere.point
         R = sphere.radius
-        tag = self.occ.addSphere(x, y, z, R)
+        tag = self.occ.add_sphere(x, y, z, R)
         return 3, tag
 
     def add_box(self, box: Box) -> Tuple[int, int]:
@@ -36,7 +36,7 @@ class ShapeModel(Model):
         x = x0 - 0.5 * box.xsize
         y = y0 - 0.5 * box.ysize
         z = z0 - 0.5 * box.zsize
-        tag = self.occ.addBox(x, y, z, box.xsize, box.ysize, box.zsize)
+        tag = self.occ.add_box(x, y, z, box.xsize, box.ysize, box.zsize)
         return 3, tag
 
     def boolean_intersection(self,

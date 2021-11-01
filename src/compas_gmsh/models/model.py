@@ -37,7 +37,7 @@ class Model:
     @verbose.setter
     def verbose(self, value: bool) -> None:
         self._verbose = bool(value)
-        gmsh.option.setNumber("General.Terminal", int(value))
+        gmsh.option.set_number("General.Terminal", int(value))
 
     # ==============================================================================
     # Model
@@ -45,19 +45,19 @@ class Model:
 
     @property
     def points(self):
-        return self.model.getEntities(0)
+        return self.model.get_entities(0)
 
     @property
     def lines(self):
-        return self.model.getEntities(1)
+        return self.model.get_entities(1)
 
     @property
     def surfaces(self):
-        return self.model.getEntities(2)
+        return self.model.get_entities(2)
 
     @property
     def volumes(self):
-        return self.model.getEntities(3)
+        return self.model.get_entities(3)
 
     def synchronize(self):
         self.occ.synchronize()
@@ -69,20 +69,20 @@ class Model:
     @property
     def mesh_lmin(self) -> float:
         """Minimum edge length for meshing."""
-        gmsh.option.getNumber("Mesh.CharacteristicLengthMin")
+        gmsh.option.get_number("Mesh.CharacteristicLengthMin")
 
     @mesh_lmin.setter
     def mesh_lmin(self, value: float):
-        gmsh.option.setNumber("Mesh.CharacteristicLengthMin", value)
+        gmsh.option.set_number("Mesh.CharacteristicLengthMin", value)
 
     @property
     def mesh_lmax(self) -> float:
         """Maximum edge length for meshing."""
-        gmsh.option.getNumber("Mesh.CharacteristicLengthMax")
+        gmsh.option.get_number("Mesh.CharacteristicLengthMax")
 
     @mesh_lmax.setter
     def mesh_lmax(self, value: float):
-        gmsh.option.setNumber("Mesh.CharacteristicLengthMax", value)
+        gmsh.option.set_number("Mesh.CharacteristicLengthMax", value)
 
     @property
     def mesh_algorithm(self) -> MeshAlgorithm:
@@ -91,7 +91,7 @@ class Model:
     @mesh_algorithm.setter
     def mesh_algorithm(self, algo: MeshAlgorithm) -> None:
         self._mesh_algorithm = algo.value
-        gmsh.option.setNumber("Mesh.Algorithm", algo.value)
+        gmsh.option.set_number("Mesh.Algorithm", algo.value)
 
     def generate_mesh(self, dim: int = 2) -> None:
         """Generate a mesh of the current model."""
@@ -118,26 +118,26 @@ class Model:
 
     def mesh_to_vertices_and_faces(self) -> Tuple[Dict[int, List[float]], List[List[int]]]:
         """Convert the model mesh to a COMPAS mesh data structure."""
-        nodes = self.mesh.getNodes()
+        nodes = self.mesh.get_nodes()
         node_tags = nodes[0]
         node_coords = nodes[1].reshape((-1, 3), order='C')
         vertices = {}
         for tag, coords in zip(node_tags, node_coords):
             vertices[int(tag)] = coords
 
-        elements = self.mesh.getElements()
+        elements = self.mesh.get_elements()
         faces = []
         for etype, etags, ntags in zip(*elements):
             if etype == 2:
                 # triangle
                 for i, etag in enumerate(etags):
-                    n = self.mesh.getElementProperties(etype)[3]
+                    n = self.mesh.get_element_properties(etype)[3]
                     a, b, c = ntags[i * n: i * n + n]
                     faces.append([a, b, c])
             elif etype == 3:
                 # quad
                 for i, etag in enumerate(etags):
-                    n = self.mesh.getElementProperties(etype)[3]
+                    n = self.mesh.get_element_properties(etype)[3]
                     a, b, c, d = ntags[i * n: i * n + n]
                     faces.append([a, b, c, d])
 
@@ -174,19 +174,19 @@ class Model:
 
     def mesh_to_tets(self) -> List[Polyhedron]:
         """Convert the model mesh to a COMPAS mesh data structure."""
-        nodes = self.mesh.getNodes()
+        nodes = self.mesh.get_nodes()
         node_tags = nodes[0]
         node_coords = nodes[1].reshape((-1, 3), order='C')
         xyz = {}
         for tag, coords in zip(node_tags, node_coords):
             xyz[int(tag)] = coords
-        elements = self.mesh.getElements()
+        elements = self.mesh.get_elements()
         tets = []
         for etype, etags, ntags in zip(*elements):
             if etype == 4:
                 # tetrahedron
                 for i, etag in enumerate(etags):
-                    n = self.mesh.getElementProperties(etype)[3]
+                    n = self.mesh.get_element_properties(etype)[3]
                     vertices = [xyz[index] for index in ntags[i * n: i * n + n]]
                     faces = [
                         [0, 1, 2],
