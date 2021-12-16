@@ -54,8 +54,8 @@ print(mesh.is_valid())
 print(min(lengths))
 print(max(lengths))
 
-omesh = model.mesh_to_openmesh()
-print(omesh)
+# omesh = model.mesh_to_openmesh()
+# print(omesh)
 
 # ==============================================================================
 # Viz
