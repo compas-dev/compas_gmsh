@@ -8,12 +8,12 @@ from compas.datastructures import Mesh
 
 from compas_gmsh.options import MeshAlgorithm
 from compas_gmsh.options import OptimizationAlgorithm
-from compas_gmsh.options import RecombinationAlgorithm
+# from compas_gmsh.options import RecombinationAlgorithm
 
 
 class Model:
     """Base model for mesh generation.
-    
+
     Parameters
     ----------
     name : str, optional
@@ -46,7 +46,7 @@ class Model:
             @property
             def algorithm(self) -> MeshAlgorithm:
                 return gmsh.option.get_number("Mesh.Algorithm")
- 
+
             @algorithm.setter
             def algorithm(self, algo: MeshAlgorithm) -> None:
                 gmsh.option.set_number("Mesh.Algorithm", algo.value)
@@ -144,7 +144,6 @@ class Model:
                 gmsh.option.set_number('Mesh.MinimumCurveNodes', value)
 
         mesh = MeshOptions()
-
 
     def __init__(self,
                  name: Optional[str] = None,
