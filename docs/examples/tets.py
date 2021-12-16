@@ -18,8 +18,7 @@ model = ShapeModel(name="tets")
 
 model.add_sphere(sphere)
 
-model.mesh_lmin = 0.1
-model.mesh_lmax = 0.2
+model.options.mesh.lmax = 0.2
 
 model.generate_mesh(3)
 

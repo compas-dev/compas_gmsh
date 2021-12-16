@@ -19,8 +19,8 @@ b2 = Box(Frame(b1.vertices[6], Vector.Xaxis(), Vector.Yaxis()), 1, 1, 1)
 
 model = ShapeModel(name="booleans")
 
-model.mesh_lmin = 0.2
-model.mesh_lmax = 0.2
+model.options.mesh.lmin = 0.2
+model.options.mesh.lmax = 0.2
 
 model.boolean_fragment(
     [model.add_box(b1)],
@@ -28,12 +28,14 @@ model.boolean_fragment(
 )
 
 model.generate_mesh(2)
-model.refine_mesh()
 model.optimize_mesh()
 
 # ==============================================================================
 # Fragments
 # ==============================================================================
+
+# this needs to be integrated in the lib
+# PRs very welcome! :)
 
 nodes = model.mesh.get_nodes()
 node_tags = nodes[0]

@@ -29,7 +29,7 @@ model = MeshModel.from_mesh(mesh, name='tubemesh', targetlength=0.3)
 
 model.heal()
 
-for vertex in mesh.vertex_sample(size=10):
+for vertex in mesh.vertex_sample(size=30):
     model.mesh_targetlength_at_vertex(vertex, 0.01)
 
 model.generate_mesh()

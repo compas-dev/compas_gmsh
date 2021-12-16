@@ -39,13 +39,11 @@ tree = {
 
 model = CSGModel(tree, name="csg")
 
-model.mesh_lmin = 0.2
-model.mesh_lmax = 0.2
+model.options.mesh.lmax = 0.1
 
 model.compute_tree()
 
 model.generate_mesh()
-model.refine_mesh()
 model.optimize_mesh()
 
 # ==============================================================================

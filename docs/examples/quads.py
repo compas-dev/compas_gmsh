@@ -18,8 +18,7 @@ model = ShapeModel(name="quads")
 
 model.add_sphere(sphere)
 
-model.mesh_lmin = 0.05
-model.mesh_lmax = 0.1
+model.options.mesh.lmax = 0.1
 
 model.generate_mesh()
 model.recombine_mesh()

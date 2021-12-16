@@ -46,8 +46,9 @@ model.boolean_difference(
     )
 )
 
+model.options.mesh.meshsize_max = 0.1
+
 model.generate_mesh()
-model.refine_mesh()
 model.optimize_mesh()
 
 # ==============================================================================

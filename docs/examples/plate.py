@@ -1,6 +1,7 @@
 from random import choice
 from compas.geometry import Point, Vector
 from compas.datastructures import Mesh, mesh_thicken
+from compas.utilities import geometric_key_xy
 from compas_gmsh.models import MeshModel
 from compas_view2.app import App
 from compas_view2.shapes import Arrow
@@ -22,11 +23,19 @@ poa = choice(list(set(mesh.vertices()) - set(mesh.vertices_on_boundary())))
 # GMSH model
 # ==============================================================================
 
-model = MeshModel.from_mesh(plate, targetlength=1.0)
+model = MeshModel.from_mesh(plate, targetlength=2.0)
 
 model.mesh_targetlength_at_vertex(poa, 0.01)
+
+for vertex in mesh.vertices_on_boundary():
+    a = geometric_key_xy(mesh.vertex_coordinates(vertex))
+    for vertex in plate.vertices():
+        b = geometric_key_xy(plate.vertex_coordinates(vertex))
+        if a == b:
+            model.mesh_targetlength_at_vertex(vertex, 0.1)
+
 for vertex in mesh.vertices_where({'vertex_degree': 2}):
-    model.mesh_targetlength_at_vertex(vertex, 0.05)
+    model.mesh_targetlength_at_vertex(vertex, 0.01)
 
 # model.heal()
 model.generate_mesh()
