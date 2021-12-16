@@ -8,21 +8,151 @@ from compas.datastructures import Mesh
 
 from compas_gmsh.options import MeshAlgorithm
 from compas_gmsh.options import OptimizationAlgorithm
+from compas_gmsh.options import RecombinationAlgorithm
 
 
 class Model:
-    """Base model for mesh generation."""
+    """Base model for mesh generation.
+    
+    Parameters
+    ----------
+    name : str, optional
+        The name of the model.
+    verbose, bool, optional
+        Flag indicating if output should be printed to the terminal.
+
+    Examples
+    --------
+    .. code-block:: python
+
+        pass
+    """
+
+    # gmsh.option.set_number('Mesh.MeshSizeFromCurvatureIsotropic', 0)
+    # gmsh.option.set_number('Mesh.OptimizeNetgen', 0)
+    # gmsh.option.set_number('Mesh.QuadsRemeshingBoldness', 0.66)
+    # gmsh.option.set_number('Mesh.RecombineOptimizeTopology', 5)
+    # gmsh.option.set_number('Mesh.RefineSteps', 10)
+    # gmsh.option.set_number('Mesh.Smoothing', 1)
+    # gmsh.option.set_number('Mesh.SmoothNormals', 0)
+    # gmsh.option.set_number('Mesh.SmoothRatio', 1.8)
+    # gmsh.option.set_number('Mesh.SubdivisionAlgorithm', 0)
+    # gmsh.option.set_number('Mesh.ToleranceEdgeLength', 0)
+    # gmsh.option.set_number('Mesh.ToleranceInitialDelaunay', 1e-12)
+
+    class options:
+        class MeshOptions:
+
+            @property
+            def algorithm(self) -> MeshAlgorithm:
+                return gmsh.option.get_number("Mesh.Algorithm")
+ 
+            @algorithm.setter
+            def algorithm(self, algo: MeshAlgorithm) -> None:
+                gmsh.option.set_number("Mesh.Algorithm", algo.value)
+
+            @property
+            def lmin(self) -> float:
+                """Minimum characteristic edge length for meshing."""
+                gmsh.option.get_number("Mesh.CharacteristicLengthMin")
+
+            @lmin.setter
+            def lmin(self, value: float):
+                gmsh.option.set_number("Mesh.CharacteristicLengthMin", value)
+
+            @property
+            def lmax(self) -> float:
+                """Maximum characteristic edge length for meshing."""
+                gmsh.option.get_number("Mesh.CharacteristicLengthMax")
+
+            @lmax.setter
+            def lmax(self, value: float):
+                gmsh.option.set_number("Mesh.CharacteristicLengthMax", value)
+
+            @property
+            def mesh_only_empty(self) -> bool:
+                """Mesh only parts without existing mesh."""
+                return bool(gmsh.option.get_number('Mesh.MeshOnlyEmpty'))
+
+            @mesh_only_empty.setter
+            def mesh_only_empty(self, value: bool):
+                gmsh.option.set_number('Mesh.MeshOnlyEmpty', int(value))
+
+            @property
+            def meshsize_extend_from_boundary(self) -> bool:
+                """Compute mesh size from the boundary inwards."""
+                return bool(gmsh.option.get_number('Mesh.MeshSizeExtendFromBoundary'))
+
+            @meshsize_extend_from_boundary.setter
+            def meshsize_extend_from_boundary(self, value: bool):
+                gmsh.option.set_number('Mesh.MeshSizeExtendFromBoundary', int(value))
+
+            @property
+            def meshsize_min(self) -> float:
+                """Minimum size of mesh elements."""
+                return gmsh.option.get_number('Mesh.MeshSizeMin')
+
+            @meshsize_min.setter
+            def meshsize_min(self, value: float):
+                gmsh.option.set_number('Mesh.MeshSizeMin', value)
+
+            @property
+            def meshsize_max(self) -> float:
+                """Maximum size of mesh elements."""
+                return gmsh.option.get_number('Mesh.MeshSizeMax')
+
+            @meshsize_max.setter
+            def meshsize_max(self, value: float):
+                gmsh.option.set_number('Mesh.MeshSizeMax', value)
+
+            # combine in to MeshSizeMethod?
+
+            @property
+            def meshsize_from_curvature(self) -> bool:
+                """Define mesh size based on curvature."""
+                return bool(gmsh.option.get_number('Mesh.MeshSizeFromCurvature'))
+
+            @meshsize_from_curvature.setter
+            def meshsize_from_curvature(self, value: bool):
+                gmsh.option.set_number('Mesh.MeshSizeFromCurvature', int(value))
+
+            @property
+            def meshsize_from_points(self) -> bool:
+                """Define mesh size based values assigned to points."""
+                return bool(gmsh.option.get_number('Mesh.MeshSizeFromPoints'))
+
+            @meshsize_from_points.setter
+            def meshsize_from_points(self, value: bool):
+                gmsh.option.set_number('Mesh.MeshSizeFromPoints', int(value))
+
+            @property
+            def min_nodes_circle(self) -> float:
+                """Minimum number of nodes for discretising a circle."""
+                return int(gmsh.option.get_number('Mesh.MinimumCircleNodes'))
+
+            @min_nodes_circle.setter
+            def min_nodes_circle(self, value: float):
+                gmsh.option.set_number('Mesh.MinimumCircleNodes', value)
+
+            @property
+            def min_nodes_curve(self) -> float:
+                """Minimum number of nodes for discretising a curve."""
+                return int(gmsh.option.get_number('Mesh.MinimumCurveNodes'))
+
+            @min_nodes_curve.setter
+            def min_nodes_curve(self, value: float):
+                gmsh.option.set_number('Mesh.MinimumCurveNodes', value)
+
+        mesh = MeshOptions()
+
 
     def __init__(self,
                  name: Optional[str] = None,
-                 verbose: bool = False,
-                 mesh_algorithm: MeshAlgorithm = MeshAlgorithm.Automatic) -> None:
+                 verbose: bool = False) -> None:
         gmsh.initialize(sys.argv)
         gmsh.model.add(name or f'{self.__class__.__name__}')
         self._verbose = False
-        self._mesh_algorithm = None
         self.verbose = verbose
-        self.mesh_algorithm = mesh_algorithm
         self.model = gmsh.model
         self.mesh = gmsh.model.mesh
         self.occ = gmsh.model.occ
@@ -65,33 +195,6 @@ class Model:
     # ==============================================================================
     # Meshing
     # ==============================================================================
-
-    @property
-    def mesh_lmin(self) -> float:
-        """Minimum edge length for meshing."""
-        gmsh.option.get_number("Mesh.CharacteristicLengthMin")
-
-    @mesh_lmin.setter
-    def mesh_lmin(self, value: float):
-        gmsh.option.set_number("Mesh.CharacteristicLengthMin", value)
-
-    @property
-    def mesh_lmax(self) -> float:
-        """Maximum edge length for meshing."""
-        gmsh.option.get_number("Mesh.CharacteristicLengthMax")
-
-    @mesh_lmax.setter
-    def mesh_lmax(self, value: float):
-        gmsh.option.set_number("Mesh.CharacteristicLengthMax", value)
-
-    @property
-    def mesh_algorithm(self) -> MeshAlgorithm:
-        return self._mesh_algorithm
-
-    @mesh_algorithm.setter
-    def mesh_algorithm(self, algo: MeshAlgorithm) -> None:
-        self._mesh_algorithm = algo.value
-        gmsh.option.set_number("Mesh.Algorithm", algo.value)
 
     def generate_mesh(self, dim: int = 2) -> None:
         """Generate a mesh of the current model."""
