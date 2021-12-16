@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <title>Index - COMPAS GMSH 0.2.3 documentation</title>
+  <title>Index - COMPAS GMSH 0.3.0 documentation</title>
 
 
   <meta charset="utf-8" />
@@ -45,7 +45,7 @@
         <li class="nav-item nav-versions dropdown">
           <a class="nav-item nav-link dropdown-toggle mr-md-2" href="#" id="bd-versions" data-toggle="dropdown"
             aria-haspopup="true" aria-expanded="false">
-            0.2.3
+            0.3.0
           </a>
           <div id="doc_version_list" class="dropdown-menu dropdown-menu-md-right" aria-labelledby="bd-versions"></div>
         </li>
@@ -143,13 +143,20 @@
           <li><a href="api/compas_gmsh.interop.html#module-compas_gmsh.interop">module</a>
 </li>
         </ul></li>
-    </ul></td>
-    <td><ul>
         <li>
     compas_gmsh.models
 
         <ul>
           <li><a href="api/compas_gmsh.models.html#module-compas_gmsh.models">module</a>
+</li>
+        </ul></li>
+    </ul></td>
+    <td><ul>
+        <li>
+    compas_gmsh.options
+
+        <ul>
+          <li><a href="api/compas_gmsh.options.html#module-compas_gmsh.options">module</a>
 </li>
         </ul></li>
         <li><a href="api/generated/compas_gmsh.models.CSGModel.compute_tree.html#compas_gmsh.models.CSGModel.compute_tree">compute_tree() (compas_gmsh.models.CSGModel method)</a>
@@ -234,8 +241,6 @@
           <li><a href="api/generated/compas_gmsh.models.ShapeModel.mesh_to_tets.html#compas_gmsh.models.ShapeModel.mesh_to_tets">(compas_gmsh.models.ShapeModel method)</a>
 </li>
         </ul></li>
-    </ul></td>
-    <td><ul>
         <li><a href="api/generated/compas_gmsh.models.CSGModel.mesh_to_vertices_and_faces.html#compas_gmsh.models.CSGModel.mesh_to_vertices_and_faces">mesh_to_vertices_and_faces() (compas_gmsh.models.CSGModel method)</a>
 
         <ul>
@@ -246,6 +251,8 @@
           <li><a href="api/generated/compas_gmsh.models.ShapeModel.mesh_to_vertices_and_faces.html#compas_gmsh.models.ShapeModel.mesh_to_vertices_and_faces">(compas_gmsh.models.ShapeModel method)</a>
 </li>
         </ul></li>
+    </ul></td>
+    <td><ul>
         <li><a href="api/generated/compas_gmsh.models.CSGModel.mesh_to_volmesh.html#compas_gmsh.models.CSGModel.mesh_to_volmesh">mesh_to_volmesh() (compas_gmsh.models.CSGModel method)</a>
 
         <ul>
@@ -269,6 +276,8 @@
           <li><a href="api/compas_gmsh.interop.html#module-compas_gmsh.interop">compas_gmsh.interop</a>
 </li>
           <li><a href="api/compas_gmsh.models.html#module-compas_gmsh.models">compas_gmsh.models</a>
+</li>
+          <li><a href="api/compas_gmsh.options.html#module-compas_gmsh.options">compas_gmsh.options</a>
 </li>
         </ul></li>
     </ul></td>
@@ -424,7 +433,7 @@
   <script type="text/javascript">
   var DOCUMENTATION_OPTIONS = {
   URL_ROOT          : '',
-  VERSION           : '0.2.3',
+  VERSION           : '0.3.0',
   COLLAPSE_INDEX    : false,
   FILE_SUFFIX       : '.html',
   HAS_SOURCE        : 'false',
@@ -464,6 +473,8 @@
   if (url) {
     $.get(url, res=>{
       var lines = res.match(/[^\r\n]+/g);
+      lines.sort( (a, b) => a.localeCompare(b, undefined, { numeric:true }) );
+      lines.reverse();
       lines.forEach(version => {
         $("#doc_version_list").append("<a class=\"dropdown-item\" href=\""+ docs_site + version + "\">" + version + "</a>");
       });

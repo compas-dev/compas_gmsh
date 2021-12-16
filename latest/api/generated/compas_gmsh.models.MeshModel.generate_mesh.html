@@ -19,11 +19,11 @@
   <link rel="stylesheet" type="text/css" href="../../_static/css/compas-reference.css" />
 
   
-    <link rel="next" title="MeshModel.heal" href="compas_gmsh.models.MeshModel.heal.html" />
+    <link rel="next" title="MeshModel.mesh_to_compas" href="compas_gmsh.models.MeshModel.mesh_to_compas.html" />
   
 
   
-    <link rel="prev" title="MeshModel.from_mesh" href="compas_gmsh.models.MeshModel.from_mesh.html" />
+    <link rel="prev" title="MeshModel.mesh_targetlength_at_vertex" href="compas_gmsh.models.MeshModel.mesh_targetlength_at_vertex.html" />
   
 
   <script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-MML-AM_CHTML"></script>
@@ -50,7 +50,7 @@
         <li class="nav-item nav-versions dropdown">
           <a class="nav-item nav-link dropdown-toggle mr-md-2" href="#" id="bd-versions" data-toggle="dropdown"
             aria-haspopup="true" aria-expanded="false">
-            0.2.3
+            0.3.0
           </a>
           <div id="doc_version_list" class="dropdown-menu dropdown-menu-md-right" aria-labelledby="bd-versions"></div>
         </li>
@@ -101,7 +101,7 @@
 <h1>MeshModel.generate_mesh</h1>
 <dl class="py method">
 <dt class="sig sig-object py" id="compas_gmsh.models.MeshModel.generate_mesh">
-<span class="sig-prename descclassname"><span class="pre">MeshModel.</span></span><span class="sig-name descname"><span class="pre">generate_mesh</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dim</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><span class="pre">int</span></a></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">2</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.10)"><span class="pre">None</span></a></span></span><a class="reference external" href="https://github.com/compas-dev/compas_gmsh/blob/main/src/compas_gmsh/models/mesh.py#L96"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<span class="sig-prename descclassname"><span class="pre">MeshModel.</span></span><span class="sig-name descname"><span class="pre">generate_mesh</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dim</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><span class="pre">int</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">2</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.10)"><span class="pre">None</span></a></span></span><a class="reference external" href="https://github.com/compas-dev/compas_gmsh/blob/main/src/compas_gmsh/models/mesh.py#L198"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
 <dd><p>Generate a mesh of the current model.</p>
 </dd></dl>
 
@@ -131,6 +131,7 @@
 <li class="nav-item active"><a class="nav-link reference internal" href="../compas_gmsh.html">compas_gmsh</a><ul class="nav flex-column active">
 <li class="nav-item"><a class="nav-link reference internal" href="../compas_gmsh.interop.html">compas_gmsh.interop</a></li>
 <li class="nav-item active"><a class="nav-link reference internal" href="../compas_gmsh.models.html">compas_gmsh.models</a></li>
+<li class="nav-item"><a class="nav-link reference internal" href="../compas_gmsh.options.html">compas_gmsh.interop</a></li>
 </ul>
 </li>
 </ul>
@@ -158,20 +159,20 @@
   <footer class="compas-footer">
     <nav class="nav p-2">
       
-        <a href="compas_gmsh.models.MeshModel.from_mesh.html" title="MeshModel.from_mesh" class="nav-link footer-link float-start text-left d-flex w-50" rel="prev">
+        <a href="compas_gmsh.models.MeshModel.mesh_targetlength_at_vertex.html" title="MeshModel.mesh_targetlength_at_vertex" class="nav-link footer-link float-start text-left d-flex w-50" rel="prev">
           <div class="nav-button p-2 m-2"><i class="fas fa-arrow-left"></i></div>
           <div class="nav-title flex-grow-1 align-self-center">
             <div class="nav-direction small font-weight-light">Previous</div>
-            MeshModel.from_mesh
+            MeshModel.mesh_targetlength_at_vertex
           </div>
         </a>
       
 
       
-        <a href="compas_gmsh.models.MeshModel.heal.html" title="MeshModel.heal" class="nav-link footer-link float-end text-right d-flex w-50" rel="next">
+        <a href="compas_gmsh.models.MeshModel.mesh_to_compas.html" title="MeshModel.mesh_to_compas" class="nav-link footer-link float-end text-right d-flex w-50" rel="next">
           <div class="nav-title footer-link flex-grow-1 align-self-center">
             <div class="nav-direction small font-weight-light">Next</div>
-            MeshModel.heal
+            MeshModel.mesh_to_compas
           </div>
           <div class="nav-button p-2 m-2"><i class="fas fa-arrow-right"></i></div>
         </a>
@@ -214,7 +215,7 @@
   <script type="text/javascript">
   var DOCUMENTATION_OPTIONS = {
   URL_ROOT          : '',
-  VERSION           : '0.2.3',
+  VERSION           : '0.3.0',
   COLLAPSE_INDEX    : false,
   FILE_SUFFIX       : '.html',
   HAS_SOURCE        : 'false',
@@ -254,6 +255,8 @@
   if (url) {
     $.get(url, res=>{
       var lines = res.match(/[^\r\n]+/g);
+      lines.sort( (a, b) => a.localeCompare(b, undefined, { numeric:true }) );
+      lines.reverse();
       lines.forEach(version => {
         $("#doc_version_list").append("<a class=\"dropdown-item\" href=\""+ docs_site + version + "\">" + version + "</a>");
       });

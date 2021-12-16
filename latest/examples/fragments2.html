@@ -50,7 +50,7 @@
         <li class="nav-item nav-versions dropdown">
           <a class="nav-item nav-link dropdown-toggle mr-md-2" href="#" id="bd-versions" data-toggle="dropdown"
             aria-haspopup="true" aria-expanded="false">
-            0.2.3
+            0.3.0
           </a>
           <div id="doc_version_list" class="dropdown-menu dropdown-menu-md-right" aria-labelledby="bd-versions"></div>
         </li>
@@ -117,8 +117,8 @@
 
 <span class="n">model</span> <span class="o">=</span> <span class="n">ShapeModel</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">&quot;booleans&quot;</span><span class="p">)</span>
 
-<span class="n">model</span><span class="o">.</span><span class="n">mesh_lmin</span> <span class="o">=</span> <span class="mf">0.2</span>
-<span class="n">model</span><span class="o">.</span><span class="n">mesh_lmax</span> <span class="o">=</span> <span class="mf">0.2</span>
+<span class="n">model</span><span class="o">.</span><span class="n">options</span><span class="o">.</span><span class="n">mesh</span><span class="o">.</span><span class="n">lmin</span> <span class="o">=</span> <span class="mf">0.2</span>
+<span class="n">model</span><span class="o">.</span><span class="n">options</span><span class="o">.</span><span class="n">mesh</span><span class="o">.</span><span class="n">lmax</span> <span class="o">=</span> <span class="mf">0.2</span>
 
 <span class="n">model</span><span class="o">.</span><span class="n">boolean_fragment</span><span class="p">(</span>
     <span class="p">[</span><span class="n">model</span><span class="o">.</span><span class="n">add_box</span><span class="p">(</span><span class="n">b1</span><span class="p">)],</span>
@@ -126,12 +126,14 @@
 <span class="p">)</span>
 
 <span class="n">model</span><span class="o">.</span><span class="n">generate_mesh</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
-<span class="n">model</span><span class="o">.</span><span class="n">refine_mesh</span><span class="p">()</span>
 <span class="n">model</span><span class="o">.</span><span class="n">optimize_mesh</span><span class="p">()</span>
 
 <span class="c1"># ==============================================================================</span>
 <span class="c1"># Fragments</span>
 <span class="c1"># ==============================================================================</span>
+
+<span class="c1"># this needs to be integrated in the lib</span>
+<span class="c1"># PRs very welcome! :)</span>
 
 <span class="n">nodes</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">mesh</span><span class="o">.</span><span class="n">get_nodes</span><span class="p">()</span>
 <span class="n">node_tags</span> <span class="o">=</span> <span class="n">nodes</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
@@ -296,7 +298,7 @@
   <script type="text/javascript">
   var DOCUMENTATION_OPTIONS = {
   URL_ROOT          : '',
-  VERSION           : '0.2.3',
+  VERSION           : '0.3.0',
   COLLAPSE_INDEX    : false,
   FILE_SUFFIX       : '.html',
   HAS_SOURCE        : 'false',
@@ -336,6 +338,8 @@
   if (url) {
     $.get(url, res=>{
       var lines = res.match(/[^\r\n]+/g);
+      lines.sort( (a, b) => a.localeCompare(b, undefined, { numeric:true }) );
+      lines.reverse();
       lines.forEach(version => {
         $("#doc_version_list").append("<a class=\"dropdown-item\" href=\""+ docs_site + version + "\">" + version + "</a>");
       });

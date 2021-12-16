@@ -48,7 +48,7 @@
         <li class="nav-item nav-versions dropdown">
           <a class="nav-item nav-link dropdown-toggle mr-md-2" href="#" id="bd-versions" data-toggle="dropdown"
             aria-haspopup="true" aria-expanded="false">
-            0.2.3
+            0.3.0
           </a>
           <div id="doc_version_list" class="dropdown-menu dropdown-menu-md-right" aria-labelledby="bd-versions"></div>
         </li>
@@ -116,6 +116,7 @@ which is an open source 3D finite element mesh generator with a built-in CAD eng
 <li class="toctree-l2"><a class="reference internal" href="api/compas_gmsh.html">compas_gmsh</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="api/compas_gmsh.interop.html">compas_gmsh.interop</a></li>
 <li class="toctree-l3"><a class="reference internal" href="api/compas_gmsh.models.html">compas_gmsh.models</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/compas_gmsh.options.html">compas_gmsh.interop</a></li>
 </ul>
 </li>
 </ul>
@@ -221,7 +222,7 @@ which is an open source 3D finite element mesh generator with a built-in CAD eng
   <script type="text/javascript">
   var DOCUMENTATION_OPTIONS = {
   URL_ROOT          : '',
-  VERSION           : '0.2.3',
+  VERSION           : '0.3.0',
   COLLAPSE_INDEX    : false,
   FILE_SUFFIX       : '.html',
   HAS_SOURCE        : 'false',
@@ -261,6 +262,8 @@ which is an open source 3D finite element mesh generator with a built-in CAD eng
   if (url) {
     $.get(url, res=>{
       var lines = res.match(/[^\r\n]+/g);
+      lines.sort( (a, b) => a.localeCompare(b, undefined, { numeric:true }) );
+      lines.reverse();
       lines.forEach(version => {
         $("#doc_version_list").append("<a class=\"dropdown-item\" href=\""+ docs_site + version + "\">" + version + "</a>");
       });

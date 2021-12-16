@@ -50,7 +50,7 @@
         <li class="nav-item nav-versions dropdown">
           <a class="nav-item nav-link dropdown-toggle mr-md-2" href="#" id="bd-versions" data-toggle="dropdown"
             aria-haspopup="true" aria-expanded="false">
-            0.2.3
+            0.3.0
           </a>
           <div id="doc_version_list" class="dropdown-menu dropdown-menu-md-right" aria-labelledby="bd-versions"></div>
         </li>
@@ -99,9 +99,33 @@
 <h1>MeshModel</h1>
 <dl class="py class">
 <dt class="sig sig-object py" id="compas_gmsh.models.MeshModel">
-<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">compas_gmsh.models.</span></span><span class="sig-name descname"><span class="pre">MeshModel</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/compas-dev/compas_gmsh/blob/main/src/compas_gmsh/models/mesh.py#L5"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">compas_gmsh.models.</span></span><span class="sig-name descname"><span class="pre">MeshModel</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/compas-dev/compas_gmsh/blob/main/src/compas_gmsh/models/mesh.py#L5"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
 <dd><p>Bases: <a class="reference internal" href="compas_gmsh.models.Model.html#compas_gmsh.models.Model" title="compas_gmsh.models.model.Model"><code class="xref py py-class docutils literal notranslate"><span class="pre">compas_gmsh.models.model.Model</span></code></a></p>
 <p>Model for mesh (re)meshing.</p>
+<p class="rubric">Inherited Attributes</p>
+<table class="longtable docutils align-default">
+<colgroup>
+<col style="width: 10%" />
+<col style="width: 90%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">lines</span></code></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">points</span></code></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">surfaces</span></code></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">verbose</span></code></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">volumes</span></code></p></td>
+<td><p></p></td>
+</tr>
+</tbody>
+</table>
 <p class="rubric">Methods</p>
 <table class="longtable docutils align-default">
 <colgroup>
@@ -109,43 +133,52 @@
 <col style="width: 90%" />
 </colgroup>
 <tbody>
-<tr class="row-odd"><td><p><a class="reference internal" href="compas_gmsh.models.MeshModel.from_mesh.html#compas_gmsh.models.MeshModel.from_mesh" title="compas_gmsh.models.MeshModel.from_mesh"><code class="xref py py-obj docutils literal notranslate"><span class="pre">from_mesh</span></code></a>(mesh[, name, targetlength])</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="compas_gmsh.models.MeshModel.from_mesh.html#compas_gmsh.models.MeshModel.from_mesh" title="compas_gmsh.models.MeshModel.from_mesh"><code class="xref py py-obj docutils literal notranslate"><span class="pre">from_mesh</span></code></a></p></td>
 <td><p></p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="compas_gmsh.models.MeshModel.generate_mesh.html#compas_gmsh.models.MeshModel.generate_mesh" title="compas_gmsh.models.MeshModel.generate_mesh"><code class="xref py py-obj docutils literal notranslate"><span class="pre">generate_mesh</span></code></a>([dim])</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="compas_gmsh.models.MeshModel.heal.html#compas_gmsh.models.MeshModel.heal" title="compas_gmsh.models.MeshModel.heal"><code class="xref py py-obj docutils literal notranslate"><span class="pre">heal</span></code></a></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="compas_gmsh.models.MeshModel.mesh_targetlength_at_vertex.html#compas_gmsh.models.MeshModel.mesh_targetlength_at_vertex" title="compas_gmsh.models.MeshModel.mesh_targetlength_at_vertex"><code class="xref py py-obj docutils literal notranslate"><span class="pre">mesh_targetlength_at_vertex</span></code></a></p></td>
+<td><p></p></td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Inherited Methods</p>
+<table class="longtable docutils align-default">
+<colgroup>
+<col style="width: 10%" />
+<col style="width: 90%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="compas_gmsh.models.MeshModel.generate_mesh.html#compas_gmsh.models.MeshModel.generate_mesh" title="compas_gmsh.models.MeshModel.generate_mesh"><code class="xref py py-obj docutils literal notranslate"><span class="pre">generate_mesh</span></code></a></p></td>
 <td><p>Generate a mesh of the current model.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="compas_gmsh.models.MeshModel.heal.html#compas_gmsh.models.MeshModel.heal" title="compas_gmsh.models.MeshModel.heal"><code class="xref py py-obj docutils literal notranslate"><span class="pre">heal</span></code></a>()</p></td>
-<td><p></p></td>
-</tr>
-<tr class="row-even"><td><p><a class="reference internal" href="compas_gmsh.models.MeshModel.mesh_targetlength_at_vertex.html#compas_gmsh.models.MeshModel.mesh_targetlength_at_vertex" title="compas_gmsh.models.MeshModel.mesh_targetlength_at_vertex"><code class="xref py py-obj docutils literal notranslate"><span class="pre">mesh_targetlength_at_vertex</span></code></a>(vertex, target)</p></td>
-<td><p></p></td>
-</tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="compas_gmsh.models.MeshModel.mesh_to_compas.html#compas_gmsh.models.MeshModel.mesh_to_compas" title="compas_gmsh.models.MeshModel.mesh_to_compas"><code class="xref py py-obj docutils literal notranslate"><span class="pre">mesh_to_compas</span></code></a>()</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="compas_gmsh.models.MeshModel.mesh_to_compas.html#compas_gmsh.models.MeshModel.mesh_to_compas" title="compas_gmsh.models.MeshModel.mesh_to_compas"><code class="xref py py-obj docutils literal notranslate"><span class="pre">mesh_to_compas</span></code></a></p></td>
 <td><p>Convert the model mesh to a COMPAS mesh data structure.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="compas_gmsh.models.MeshModel.mesh_to_openmesh.html#compas_gmsh.models.MeshModel.mesh_to_openmesh" title="compas_gmsh.models.MeshModel.mesh_to_openmesh"><code class="xref py py-obj docutils literal notranslate"><span class="pre">mesh_to_openmesh</span></code></a>()</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="compas_gmsh.models.MeshModel.mesh_to_openmesh.html#compas_gmsh.models.MeshModel.mesh_to_openmesh" title="compas_gmsh.models.MeshModel.mesh_to_openmesh"><code class="xref py py-obj docutils literal notranslate"><span class="pre">mesh_to_openmesh</span></code></a></p></td>
 <td><p>Convert the model mesh to a COMPAS mesh data structure.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="compas_gmsh.models.MeshModel.mesh_to_tets.html#compas_gmsh.models.MeshModel.mesh_to_tets" title="compas_gmsh.models.MeshModel.mesh_to_tets"><code class="xref py py-obj docutils literal notranslate"><span class="pre">mesh_to_tets</span></code></a>()</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="compas_gmsh.models.MeshModel.mesh_to_tets.html#compas_gmsh.models.MeshModel.mesh_to_tets" title="compas_gmsh.models.MeshModel.mesh_to_tets"><code class="xref py py-obj docutils literal notranslate"><span class="pre">mesh_to_tets</span></code></a></p></td>
 <td><p>Convert the model mesh to a COMPAS mesh data structure.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="compas_gmsh.models.MeshModel.mesh_to_vertices_and_faces.html#compas_gmsh.models.MeshModel.mesh_to_vertices_and_faces" title="compas_gmsh.models.MeshModel.mesh_to_vertices_and_faces"><code class="xref py py-obj docutils literal notranslate"><span class="pre">mesh_to_vertices_and_faces</span></code></a>()</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="compas_gmsh.models.MeshModel.mesh_to_vertices_and_faces.html#compas_gmsh.models.MeshModel.mesh_to_vertices_and_faces" title="compas_gmsh.models.MeshModel.mesh_to_vertices_and_faces"><code class="xref py py-obj docutils literal notranslate"><span class="pre">mesh_to_vertices_and_faces</span></code></a></p></td>
 <td><p>Convert the model mesh to a COMPAS mesh data structure.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="compas_gmsh.models.MeshModel.mesh_to_volmesh.html#compas_gmsh.models.MeshModel.mesh_to_volmesh" title="compas_gmsh.models.MeshModel.mesh_to_volmesh"><code class="xref py py-obj docutils literal notranslate"><span class="pre">mesh_to_volmesh</span></code></a>()</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="compas_gmsh.models.MeshModel.mesh_to_volmesh.html#compas_gmsh.models.MeshModel.mesh_to_volmesh" title="compas_gmsh.models.MeshModel.mesh_to_volmesh"><code class="xref py py-obj docutils literal notranslate"><span class="pre">mesh_to_volmesh</span></code></a></p></td>
 <td><p>Convert the model mesh to a COMPAS mesh data structure.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="compas_gmsh.models.MeshModel.optimize_mesh.html#compas_gmsh.models.MeshModel.optimize_mesh" title="compas_gmsh.models.MeshModel.optimize_mesh"><code class="xref py py-obj docutils literal notranslate"><span class="pre">optimize_mesh</span></code></a>([algo, niter])</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="compas_gmsh.models.MeshModel.optimize_mesh.html#compas_gmsh.models.MeshModel.optimize_mesh" title="compas_gmsh.models.MeshModel.optimize_mesh"><code class="xref py py-obj docutils literal notranslate"><span class="pre">optimize_mesh</span></code></a></p></td>
 <td><p>Optimize the model mesh using the specified method.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="compas_gmsh.models.MeshModel.recombine_mesh.html#compas_gmsh.models.MeshModel.recombine_mesh" title="compas_gmsh.models.MeshModel.recombine_mesh"><code class="xref py py-obj docutils literal notranslate"><span class="pre">recombine_mesh</span></code></a>()</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="compas_gmsh.models.MeshModel.recombine_mesh.html#compas_gmsh.models.MeshModel.recombine_mesh" title="compas_gmsh.models.MeshModel.recombine_mesh"><code class="xref py py-obj docutils literal notranslate"><span class="pre">recombine_mesh</span></code></a></p></td>
 <td><p>Recombine the mesh into quadrilateral faces.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="compas_gmsh.models.MeshModel.refine_mesh.html#compas_gmsh.models.MeshModel.refine_mesh" title="compas_gmsh.models.MeshModel.refine_mesh"><code class="xref py py-obj docutils literal notranslate"><span class="pre">refine_mesh</span></code></a>()</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="compas_gmsh.models.MeshModel.refine_mesh.html#compas_gmsh.models.MeshModel.refine_mesh" title="compas_gmsh.models.MeshModel.refine_mesh"><code class="xref py py-obj docutils literal notranslate"><span class="pre">refine_mesh</span></code></a></p></td>
 <td><p>Refine the model mesh by uniformly splitting the edges.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="compas_gmsh.models.MeshModel.synchronize.html#compas_gmsh.models.MeshModel.synchronize" title="compas_gmsh.models.MeshModel.synchronize"><code class="xref py py-obj docutils literal notranslate"><span class="pre">synchronize</span></code></a>()</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="compas_gmsh.models.MeshModel.synchronize.html#compas_gmsh.models.MeshModel.synchronize" title="compas_gmsh.models.MeshModel.synchronize"><code class="xref py py-obj docutils literal notranslate"><span class="pre">synchronize</span></code></a></p></td>
 <td><p></p></td>
 </tr>
 </tbody>
@@ -178,6 +211,7 @@
 <li class="nav-item active"><a class="nav-link reference internal" href="../compas_gmsh.html">compas_gmsh</a><ul class="nav flex-column active">
 <li class="nav-item"><a class="nav-link reference internal" href="../compas_gmsh.interop.html">compas_gmsh.interop</a></li>
 <li class="nav-item active"><a class="nav-link reference internal" href="../compas_gmsh.models.html">compas_gmsh.models</a></li>
+<li class="nav-item"><a class="nav-link reference internal" href="../compas_gmsh.options.html">compas_gmsh.interop</a></li>
 </ul>
 </li>
 </ul>
@@ -193,7 +227,9 @@
       <div class="d-none d-xl-block col-xl-2 compas-toc" role="toc">
         
         <ul class="nav flex-column" id="compas-toc">
-<li class="nav-item"><a class="nav-link reference internal" href="#">MeshModel</a></li>
+<li class="nav-item"><a class="nav-link reference internal" href="#">MeshModel</a><ul class="nav flex-column">
+</ul>
+</li>
 </ul>
 
       </div>
@@ -261,7 +297,7 @@
   <script type="text/javascript">
   var DOCUMENTATION_OPTIONS = {
   URL_ROOT          : '',
-  VERSION           : '0.2.3',
+  VERSION           : '0.3.0',
   COLLAPSE_INDEX    : false,
   FILE_SUFFIX       : '.html',
   HAS_SOURCE        : 'false',
@@ -301,6 +337,8 @@
   if (url) {
     $.get(url, res=>{
       var lines = res.match(/[^\r\n]+/g);
+      lines.sort( (a, b) => a.localeCompare(b, undefined, { numeric:true }) );
+      lines.reverse();
       lines.forEach(version => {
         $("#doc_version_list").append("<a class=\"dropdown-item\" href=\""+ docs_site + version + "\">" + version + "</a>");
       });
