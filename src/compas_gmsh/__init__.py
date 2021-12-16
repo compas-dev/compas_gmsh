@@ -10,6 +10,7 @@ compas_gmsh
 
     compas_gmsh.interop
     compas_gmsh.models
+    compas_gmsh.options
 
 """
 

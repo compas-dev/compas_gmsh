@@ -1,3 +1,22 @@
+"""
+********************************************************************************
+compas_gmsh.interop
+********************************************************************************
+
+.. currentmodule:: compas_gmsh.interop
+
+
+Enumerations
+============
+
+.. autosummary::
+    :toctree: generated/
+    :nosignatures:
+
+    MeshAlgorithm
+    OptimizationAlgorithm
+
+"""
 from enum import Enum
 
 
@@ -22,3 +41,10 @@ class OptimizationAlgorithm(Enum):
     Laplace2D = "Laplace2D"
     Relocate2D = "Relocate2D"
     Relocate3D = "Relocate3D"
+
+
+class RecombinationAlgorithm(Enum):
+    Simple = 0
+    Blossom = 1
+    SimpleFullQuad = 2
+    BlossomFullQuad = 3
