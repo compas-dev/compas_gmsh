@@ -29,7 +29,7 @@ jobs:
 
       - name: build
         run: |
-          conda install compas python-gmsh -y
+          conda install compas -y
           pip install -r requirements-dev.txt
           invoke docs
 
