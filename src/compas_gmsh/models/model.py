@@ -8,6 +8,7 @@ from compas.datastructures import Mesh
 
 from compas_gmsh.options import MeshAlgorithm
 from compas_gmsh.options import OptimizationAlgorithm
+
 # from compas_gmsh.options import RecombinationAlgorithm
 
 
@@ -42,7 +43,6 @@ class Model:
 
     class options:
         class MeshOptions:
-
             @property
             def algorithm(self) -> MeshAlgorithm:
                 return gmsh.option.get_number("Mesh.Algorithm")
@@ -72,84 +72,82 @@ class Model:
             @property
             def mesh_only_empty(self) -> bool:
                 """Mesh only parts without existing mesh."""
-                return bool(gmsh.option.get_number('Mesh.MeshOnlyEmpty'))
+                return bool(gmsh.option.get_number("Mesh.MeshOnlyEmpty"))
 
             @mesh_only_empty.setter
             def mesh_only_empty(self, value: bool):
-                gmsh.option.set_number('Mesh.MeshOnlyEmpty', int(value))
+                gmsh.option.set_number("Mesh.MeshOnlyEmpty", int(value))
 
             @property
             def meshsize_extend_from_boundary(self) -> bool:
                 """Compute mesh size from the boundary inwards."""
-                return bool(gmsh.option.get_number('Mesh.MeshSizeExtendFromBoundary'))
+                return bool(gmsh.option.get_number("Mesh.MeshSizeExtendFromBoundary"))
 
             @meshsize_extend_from_boundary.setter
             def meshsize_extend_from_boundary(self, value: bool):
-                gmsh.option.set_number('Mesh.MeshSizeExtendFromBoundary', int(value))
+                gmsh.option.set_number("Mesh.MeshSizeExtendFromBoundary", int(value))
 
             @property
             def meshsize_min(self) -> float:
                 """Minimum size of mesh elements."""
-                return gmsh.option.get_number('Mesh.MeshSizeMin')
+                return gmsh.option.get_number("Mesh.MeshSizeMin")
 
             @meshsize_min.setter
             def meshsize_min(self, value: float):
-                gmsh.option.set_number('Mesh.MeshSizeMin', value)
+                gmsh.option.set_number("Mesh.MeshSizeMin", value)
 
             @property
             def meshsize_max(self) -> float:
                 """Maximum size of mesh elements."""
-                return gmsh.option.get_number('Mesh.MeshSizeMax')
+                return gmsh.option.get_number("Mesh.MeshSizeMax")
 
             @meshsize_max.setter
             def meshsize_max(self, value: float):
-                gmsh.option.set_number('Mesh.MeshSizeMax', value)
+                gmsh.option.set_number("Mesh.MeshSizeMax", value)
 
             # combine in to MeshSizeMethod?
 
             @property
             def meshsize_from_curvature(self) -> bool:
                 """Define mesh size based on curvature."""
-                return bool(gmsh.option.get_number('Mesh.MeshSizeFromCurvature'))
+                return bool(gmsh.option.get_number("Mesh.MeshSizeFromCurvature"))
 
             @meshsize_from_curvature.setter
             def meshsize_from_curvature(self, value: bool):
-                gmsh.option.set_number('Mesh.MeshSizeFromCurvature', int(value))
+                gmsh.option.set_number("Mesh.MeshSizeFromCurvature", int(value))
 
             @property
             def meshsize_from_points(self) -> bool:
                 """Define mesh size based values assigned to points."""
-                return bool(gmsh.option.get_number('Mesh.MeshSizeFromPoints'))
+                return bool(gmsh.option.get_number("Mesh.MeshSizeFromPoints"))
 
             @meshsize_from_points.setter
             def meshsize_from_points(self, value: bool):
-                gmsh.option.set_number('Mesh.MeshSizeFromPoints', int(value))
+                gmsh.option.set_number("Mesh.MeshSizeFromPoints", int(value))
 
             @property
             def min_nodes_circle(self) -> float:
                 """Minimum number of nodes for discretising a circle."""
-                return int(gmsh.option.get_number('Mesh.MinimumCircleNodes'))
+                return int(gmsh.option.get_number("Mesh.MinimumCircleNodes"))
 
             @min_nodes_circle.setter
             def min_nodes_circle(self, value: float):
-                gmsh.option.set_number('Mesh.MinimumCircleNodes', value)
+                gmsh.option.set_number("Mesh.MinimumCircleNodes", value)
 
             @property
             def min_nodes_curve(self) -> float:
                 """Minimum number of nodes for discretising a curve."""
-                return int(gmsh.option.get_number('Mesh.MinimumCurveNodes'))
+                return int(gmsh.option.get_number("Mesh.MinimumCurveNodes"))
 
             @min_nodes_curve.setter
             def min_nodes_curve(self, value: float):
-                gmsh.option.set_number('Mesh.MinimumCurveNodes', value)
+                gmsh.option.set_number("Mesh.MinimumCurveNodes", value)
 
         mesh = MeshOptions()
 
-    def __init__(self,
-                 name: Optional[str] = None,
-                 verbose: bool = False) -> None:
+    def __init__(self, name: Optional[str] = None, verbose: bool = False) -> None:
         gmsh.initialize(sys.argv)
-        gmsh.model.add(name or f'{self.__class__.__name__}')
+        gmsh.model.add(name or f"{self.__class__.__name__}")
         self._verbose = False
         self.verbose = verbose
         self.model = gmsh.model
@@ -167,6 +165,22 @@ class Model:
     def verbose(self, value: bool) -> None:
         self._verbose = bool(value)
         gmsh.option.set_number("General.Terminal", int(value))
+
+    # ==============================================================================
+    # Constructors
+    # ==============================================================================
+
+    @classmethod
+    def from_step(cls, filename: str) -> "Model":
+        """Construc a model from the data contained in a STEP file."""
+        model = cls()
+        gmsh.open(filename)
+        return model
+
+    @classmethod
+    def from_brep(cls, brep) -> "Model":
+        """Construct a model from  a BRep."""
+        pass
 
     # ==============================================================================
     # Model
@@ -204,9 +218,11 @@ class Model:
         """Refine the model mesh by uniformly splitting the edges."""
         self.mesh.refine()
 
-    def optimize_mesh(self,
-                      algo: OptimizationAlgorithm = OptimizationAlgorithm.Default,
-                      niter: int = 1) -> None:
+    def optimize_mesh(
+        self,
+        algo: OptimizationAlgorithm = OptimizationAlgorithm.Default,
+        niter: int = 1,
+    ) -> None:
         """Optimize the model mesh using the specified method."""
         self.mesh.optimize(algo.value, niter=niter)
 
@@ -218,11 +234,13 @@ class Model:
     # Export
     # ==============================================================================
 
-    def mesh_to_vertices_and_faces(self) -> Tuple[Dict[int, List[float]], List[List[int]]]:
+    def mesh_to_vertices_and_faces(
+        self,
+    ) -> Tuple[Dict[int, List[float]], List[List[int]]]:
         """Convert the model mesh to a COMPAS mesh data structure."""
         nodes = self.mesh.get_nodes()
         node_tags = nodes[0]
-        node_coords = nodes[1].reshape((-1, 3), order='C')
+        node_coords = nodes[1].reshape((-1, 3), order="C")
         vertices = {}
         for tag, coords in zip(node_tags, node_coords):
             vertices[int(tag)] = coords
@@ -234,13 +252,13 @@ class Model:
                 # triangle
                 for i, etag in enumerate(etags):
                     n = self.mesh.get_element_properties(etype)[3]
-                    a, b, c = ntags[i * n: i * n + n]
+                    a, b, c = ntags[i * n : i * n + n]
                     faces.append([a, b, c])
             elif etype == 3:
                 # quad
                 for i, etag in enumerate(etags):
                     n = self.mesh.get_element_properties(etype)[3]
-                    a, b, c, d = ntags[i * n: i * n + n]
+                    a, b, c, d = ntags[i * n : i * n + n]
                     faces.append([a, b, c, d])
 
         return vertices, faces
@@ -255,7 +273,7 @@ class Model:
         try:
             import openmesh as om  # noqa: F401
         except ImportError:
-            print('OpenMesh is not installed. Install using `pip install openmesh`.')
+            print("OpenMesh is not installed. Install using `pip install openmesh`.")
             raise
         vertices, faces = self.mesh_to_vertices_and_faces()
         if len(faces[0]) == 3:
@@ -267,7 +285,7 @@ class Model:
             index = mesh.add_vertex(vertices[vertex])
             vertex_index[vertex] = index
         for face in faces:
-            mesh.add_face(* [vertex_index[vertex] for vertex in face])
+            mesh.add_face(*[vertex_index[vertex] for vertex in face])
         return mesh
 
     def mesh_to_volmesh(self) -> Mesh:
@@ -278,7 +296,7 @@ class Model:
         """Convert the model mesh to a COMPAS mesh data structure."""
         nodes = self.mesh.get_nodes()
         node_tags = nodes[0]
-        node_coords = nodes[1].reshape((-1, 3), order='C')
+        node_coords = nodes[1].reshape((-1, 3), order="C")
         xyz = {}
         for tag, coords in zip(node_tags, node_coords):
             xyz[int(tag)] = coords
@@ -289,11 +307,7 @@ class Model:
                 # tetrahedron
                 for i, etag in enumerate(etags):
                     n = self.mesh.get_element_properties(etype)[3]
-                    vertices = [xyz[index] for index in ntags[i * n: i * n + n]]
-                    faces = [
-                        [0, 1, 2],
-                        [0, 2, 3],
-                        [1, 3, 2],
-                        [0, 3, 1]]
+                    vertices = [xyz[index] for index in ntags[i * n : i * n + n]]
+                    faces = [[0, 1, 2], [0, 2, 3], [1, 3, 2], [0, 3, 1]]
                     tets.append(Polyhedron(vertices, faces))
         return tets
