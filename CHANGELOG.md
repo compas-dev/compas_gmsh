@@ -9,24 +9,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
-### Changed
-
-### Removed
-
-
-## Unreleased
-
-### Added
-
-### Changed
-
-### Removed
-
-
-## Unreleased
-
-### Added
-
 * Added `compas_gmsh.models.Model.options.mesh.algorithm`.
 * Added `compas_gmsh.models.Model.options.mesh.lmin`.
 * Added `compas_gmsh.models.Model.options.mesh.lmax`.
@@ -38,6 +20,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 * Added `compas_gmsh.models.Model.options.mesh.meshsize_from_points`.
 * Added `compas_gmsh.models.Model.options.mesh.min_nodes_circle`.
 * Added `compas_gmsh.models.Model.options.mesh.min_nodes_curve`.
+* Added `compas_gmsh.models.Model.from_step`.
 
 ### Changed
 
