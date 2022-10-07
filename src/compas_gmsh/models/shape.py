@@ -8,7 +8,9 @@ from compas_gmsh.models.model import Model
 
 
 class ShapeModel(Model):
-    """Model for shape combinations."""
+    """
+    Model for shape combinations.
+    """
 
     def add_cylinder(self, cylinder: Cylinder) -> Tuple[int, int]:
         """Add a cylinder to the model."""
@@ -39,12 +41,15 @@ class ShapeModel(Model):
         tag = self.occ.add_box(x, y, z, box.xsize, box.ysize, box.zsize)
         return 3, tag
 
-    def boolean_intersection(self,
-                             A: List[Tuple[int, int]],
-                             B: List[Tuple[int, int]],
-                             remove_objects: bool = True,
-                             remove_tools: bool = True) -> List[Tuple[int, int]]:
-        """Boolean intersection of two sets of shapes.
+    def boolean_intersection(
+        self,
+        A: List[Tuple[int, int]],
+        B: List[Tuple[int, int]],
+        remove_objects: bool = True,
+        remove_tools: bool = True,
+    ) -> List[Tuple[int, int]]:
+        """
+        Boolean intersection of two sets of shapes.
 
         Parameters
         ----------
@@ -62,17 +67,23 @@ class ShapeModel(Model):
         -----
         The *objects* are the shapes to which the boolean operation should be applied.
         The *tools* are the shapes used to perform the operation.
+
         """
-        result = self.occ.intersect(A, B, removeObject=remove_objects, removeTool=remove_tools)
+        result = self.occ.intersect(
+            A, B, removeObject=remove_objects, removeTool=remove_tools
+        )
         dimtags = result[0]
         return dimtags
 
-    def boolean_union(self,
-                      A: List[Tuple[int, int]],
-                      B: List[Tuple[int, int]],
-                      remove_objects: bool = True,
-                      remove_tools: bool = True) -> List[Tuple[int, int]]:
-        """Boolean union of two sets of shapes.
+    def boolean_union(
+        self,
+        A: List[Tuple[int, int]],
+        B: List[Tuple[int, int]],
+        remove_objects: bool = True,
+        remove_tools: bool = True,
+    ) -> List[Tuple[int, int]]:
+        """
+        Boolean union of two sets of shapes.
 
         Parameters
         ----------
@@ -90,17 +101,23 @@ class ShapeModel(Model):
         -----
         The *objects* are the shapes to which the boolean operation should be applied.
         The *tools* are the shapes used to perform the operation.
+
         """
-        result = self.occ.fuse(A, B, removeObject=remove_objects, removeTool=remove_tools)
+        result = self.occ.fuse(
+            A, B, removeObject=remove_objects, removeTool=remove_tools
+        )
         dimtags = result[0]
         return dimtags
 
-    def boolean_difference(self,
-                           A: List[Tuple[int, int]],
-                           B: List[Tuple[int, int]],
-                           remove_objects: bool = True,
-                           remove_tools: bool = True) -> List[Tuple[int, int]]:
-        """Boolean difference of two sets of shapes.
+    def boolean_difference(
+        self,
+        A: List[Tuple[int, int]],
+        B: List[Tuple[int, int]],
+        remove_objects: bool = True,
+        remove_tools: bool = True,
+    ) -> List[Tuple[int, int]]:
+        """
+        Boolean difference of two sets of shapes.
 
         Parameters
         ----------
@@ -118,17 +135,23 @@ class ShapeModel(Model):
         -----
         The *objects* are the shapes to which the boolean operation should be applied.
         The *tools* are the shapes used to perform the operation.
+
         """
-        result = self.occ.cut(A, B, removeObject=remove_objects, removeTool=remove_tools)
+        result = self.occ.cut(
+            A, B, removeObject=remove_objects, removeTool=remove_tools
+        )
         dimtags = result[0]
         return dimtags
 
-    def boolean_fragment(self,
-                         A: List[Tuple[int, int]],
-                         B: List[Tuple[int, int]],
-                         remove_objects: bool = True,
-                         remove_tools: bool = True) -> List[Tuple[int, int]]:
-        """Boolean fragment of two sets of shapes.
+    def boolean_fragment(
+        self,
+        A: List[Tuple[int, int]],
+        B: List[Tuple[int, int]],
+        remove_objects: bool = True,
+        remove_tools: bool = True,
+    ) -> List[Tuple[int, int]]:
+        """
+        Boolean fragment of two sets of shapes.
 
         Parameters
         ----------
@@ -146,7 +169,10 @@ class ShapeModel(Model):
         -----
         The *objects* are the shapes to which the boolean operation should be applied.
         The *tools* are the shapes used to perform the operation.
+
         """
-        result = self.occ.fragment(A, B, removeObject=remove_objects, removeTool=remove_tools)
+        result = self.occ.fragment(
+            A, B, removeObject=remove_objects, removeTool=remove_tools
+        )
         dimtags = result[0]
         return dimtags

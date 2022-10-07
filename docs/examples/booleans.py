@@ -71,11 +71,11 @@ viewer.view.camera.tx = -2 * R
 viewer.view.camera.ty = 1
 viewer.view.camera.distance = 12
 
-viewer.add(sphere, u=32, v=32, opacity=0.5, color=(1, 0, 0))
-viewer.add(box, opacity=0.5, color=(0, 1, 0))
-viewer.add(cylx, u=32, opacity=0.5, color=(0, 0, 1))
-viewer.add(cyly, u=32, opacity=0.5, color=(0, 0, 1))
-viewer.add(cylz, u=32, opacity=0.5, color=(0, 0, 1))
+viewer.add(sphere, u=32, v=32, opacity=0.5, facecolor=(1, 0, 0))
+viewer.add(box, opacity=0.5, facecolor=(0, 1, 0))
+viewer.add(cylx, u=32, opacity=0.5, facecolor=(0, 0, 1))
+viewer.add(cyly, u=32, opacity=0.5, facecolor=(0, 0, 1))
+viewer.add(cylz, u=32, opacity=0.5, facecolor=(0, 0, 1))
 
 viewer.add(mesh)
 viewer.run()

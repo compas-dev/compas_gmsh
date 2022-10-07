@@ -1,4 +1,7 @@
-from typing import Tuple, List, Dict, Optional
+from typing import Tuple
+from typing import List
+from typing import Dict
+from typing import Optional
 
 import sys
 import gmsh
@@ -13,7 +16,8 @@ from compas_gmsh.options import OptimizationAlgorithm
 
 
 class Model:
-    """Base model for mesh generation.
+    """
+    Base model for mesh generation.
 
     Parameters
     ----------
@@ -22,11 +26,6 @@ class Model:
     verbose, bool, optional
         Flag indicating if output should be printed to the terminal.
 
-    Examples
-    --------
-    .. code-block:: python
-
-        pass
     """
 
     # gmsh.option.set_number('Mesh.MeshSizeFromCurvatureIsotropic', 0)
@@ -172,14 +171,18 @@ class Model:
 
     @classmethod
     def from_step(cls, filename: str) -> "Model":
-        """Construc a model from the data contained in a STEP file."""
+        """
+        Construc a model from the data contained in a STEP file.
+        """
         model = cls()
         gmsh.open(filename)
         return model
 
     @classmethod
     def from_brep(cls, brep) -> "Model":
-        """Construct a model from  a BRep."""
+        """
+        Construct a model from  a BRep.
+        """
         pass
 
     # ==============================================================================
@@ -210,12 +213,16 @@ class Model:
     # ==============================================================================
 
     def generate_mesh(self, dim: int = 2) -> None:
-        """Generate a mesh of the current model."""
+        """
+        Generate a mesh of the current model.
+        """
         self.occ.synchronize()
         self.mesh.generate(dim)
 
     def refine_mesh(self) -> None:
-        """Refine the model mesh by uniformly splitting the edges."""
+        """
+        Refine the model mesh by uniformly splitting the edges.
+        """
         self.mesh.refine()
 
     def optimize_mesh(
@@ -223,11 +230,15 @@ class Model:
         algo: OptimizationAlgorithm = OptimizationAlgorithm.Default,
         niter: int = 1,
     ) -> None:
-        """Optimize the model mesh using the specified method."""
+        """
+        Optimize the model mesh using the specified method.
+        """
         self.mesh.optimize(algo.value, niter=niter)
 
     def recombine_mesh(self) -> None:
-        """Recombine the mesh into quadrilateral faces."""
+        """
+        Recombine the mesh into quadrilateral faces.
+        """
         self.mesh.recombine()
 
     # ==============================================================================
@@ -237,7 +248,9 @@ class Model:
     def mesh_to_vertices_and_faces(
         self,
     ) -> Tuple[Dict[int, List[float]], List[List[int]]]:
-        """Convert the model mesh to a COMPAS mesh data structure."""
+        """
+        Convert the model mesh to a COMPAS mesh data structure.
+        """
         nodes = self.mesh.get_nodes()
         node_tags = nodes[0]
         node_coords = nodes[1].reshape((-1, 3), order="C")
@@ -264,12 +277,16 @@ class Model:
         return vertices, faces
 
     def mesh_to_compas(self) -> Mesh:
-        """Convert the model mesh to a COMPAS mesh data structure."""
+        """
+        Convert the model mesh to a COMPAS mesh data structure.
+        """
         vertices, faces = self.mesh_to_vertices_and_faces()
         return Mesh.from_vertices_and_faces(vertices, faces)
 
     def mesh_to_openmesh(self) -> Mesh:
-        """Convert the model mesh to a COMPAS mesh data structure."""
+        """
+        Convert the model mesh to a COMPAS mesh data structure.
+        """
         try:
             import openmesh as om  # noqa: F401
         except ImportError:
@@ -289,11 +306,15 @@ class Model:
         return mesh
 
     def mesh_to_volmesh(self) -> Mesh:
-        """Convert the model mesh to a COMPAS mesh data structure."""
+        """
+        Convert the model mesh to a COMPAS mesh data structure.
+        """
         pass
 
     def mesh_to_tets(self) -> List[Polyhedron]:
-        """Convert the model mesh to a COMPAS mesh data structure."""
+        """
+        Convert the model mesh to a COMPAS mesh data structure.
+        """
         nodes = self.mesh.get_nodes()
         node_tags = nodes[0]
         node_coords = nodes[1].reshape((-1, 3), order="C")

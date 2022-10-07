@@ -71,8 +71,8 @@ viewer.view.camera.tx = 0
 viewer.view.camera.ty = 0
 viewer.view.camera.distance = 10
 
-viewer.add(b1, opacity=0.7, color=(1, 0, 0), linewidth=2)
-viewer.add(b2, opacity=0.7, color=(0, 1, 0), linewidth=2)
+viewer.add(b1, opacity=0.7, facecolor=(1, 0, 0), linewidth=2)
+viewer.add(b2, opacity=0.7, facecolor=(0, 1, 0), linewidth=2)
 
 T2 = Translation.from_vector([3, 0, 0])
 

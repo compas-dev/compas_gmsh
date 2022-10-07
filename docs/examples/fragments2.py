@@ -22,10 +22,7 @@ model = ShapeModel(name="booleans")
 model.options.mesh.lmin = 0.2
 model.options.mesh.lmax = 0.2
 
-model.boolean_fragment(
-    [model.add_box(b1)],
-    [model.add_box(b2)]
-)
+model.boolean_fragment([model.add_box(b1)], [model.add_box(b2)])
 
 model.generate_mesh(2)
 model.optimize_mesh()
@@ -39,7 +36,7 @@ model.optimize_mesh()
 
 nodes = model.mesh.get_nodes()
 node_tags = nodes[0]
-node_coords = nodes[1].reshape((-1, 3), order='C')
+node_coords = nodes[1].reshape((-1, 3), order="C")
 vertices = {}
 for tag, coords in zip(node_tags, node_coords):
     vertices[int(tag)] = coords
@@ -52,7 +49,7 @@ for dimtag in model.model.get_entities(2):
     for etype, etags, ntags in zip(*elements):
         for i, etag in enumerate(etags):
             n = model.mesh.get_element_properties(etype)[3]
-            faces.append(ntags[i * n: i * n + n])
+            faces.append(ntags[i * n : i * n + n])
     mesh = Mesh.from_vertices_and_faces(vertices, faces)
     mesh.remove_unused_vertices()
     fragments.append(mesh)
@@ -69,20 +66,25 @@ viewer.view.camera.tx = 0
 viewer.view.camera.ty = 0
 viewer.view.camera.distance = 10
 
-viewer.add(b1, opacity=0.7, color=(1, 0, 0), linewidth=2)
-viewer.add(b2, opacity=0.7, color=(0, 1, 0), linewidth=2)
+viewer.add(b1, opacity=0.7, facecolor=(1, 0, 0), linewidth=2)
+viewer.add(b2, opacity=0.7, facecolor=(0, 1, 0), linewidth=2)
 
 T2 = Translation.from_vector([3, 0, 0])
 
 point = Point(0, 0, 0)
 for mesh in fragments:
-    centroid = Point(* mesh.centroid())
+    centroid = Point(*mesh.centroid())
     vector = centroid - point
     T1 = Translation.from_vector(vector * 0.2)
 
     mesh.transform(T2 * T1)
 
-    viewer.add(mesh, show_edges=False)
-    viewer.add(Polyline(mesh.vertices_attributes('xyz', keys=list(mesh.vertices_on_boundary()))), linewidth=2)
+    viewer.add(mesh, show_lines=False)
+    viewer.add(
+        Polyline(
+            mesh.vertices_attributes("xyz", keys=list(mesh.vertices_on_boundary()))
+        ),
+        linewidth=2,
+    )
 
 viewer.run()

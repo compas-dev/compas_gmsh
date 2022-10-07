@@ -58,8 +58,8 @@ for u, v in mesh.edges():
     b = mesh.vertex_coordinates(v)
 
     if mesh.halfedge[u][v] is None:
-        viewer.add(Line(a, b), linewidth=10, color=(1, 0, 0))
+        viewer.add(Line(a, b), linewidth=10, linecolor=(1, 0, 0))
     elif mesh.halfedge[v][u] is None:
-        viewer.add(Line(a, b), linewidth=10, color=(1, 0, 0))
+        viewer.add(Line(a, b), linewidth=10, linecolor=(1, 0, 0))
 
 viewer.run()

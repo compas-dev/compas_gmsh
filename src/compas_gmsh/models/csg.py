@@ -40,11 +40,7 @@ def add_box(self, box: Box) -> Tuple[int, int]:
     return 3, tag
 
 
-_SHAPE_FUNC = {
-    Box: add_box,
-    Sphere: add_sphere,
-    Cylinder: add_cylinder
-}
+_SHAPE_FUNC = {Box: add_box, Sphere: add_sphere, Cylinder: add_cylinder}
 
 
 class CSGModel(Model):
@@ -54,11 +50,19 @@ class CSGModel(Model):
     ----------
     tree : dict
         The CSG tree as a dictionary mapping operations to operands.
-        The operations have to be one of `{'union', 'intersection', 'difference'}`.
+        The operations have to be one of ``{"union", "intersection", "difference"}``.
         The operands have to be lists of shapes or lists of dicts that are CSG trees themselves.
         At every level of the tree, there can be only one operation.
     name : str
         The name of the model.
+
+    Attributes
+    ----------
+    tree : dict
+        The CSG tree as a dictionary mapping operations to operands.
+        The operations have to be one of ``{"union", "intersection", "difference"}``.
+        The operands have to be lists of shapes or lists of dicts that are CSG trees themselves.
+        At every level of the tree, there can be only one operation.
 
     """
 
@@ -69,24 +73,19 @@ class CSGModel(Model):
 
     @property
     def tree(self) -> dict:
-        """dict :
-        The CSG tree as a dictionary mapping operations to operands.
-        The operations have to be one of `{'union', 'intersection', 'difference'}`.
-        The operands have to be lists of shapes or lists of dicts that are CSG trees themselves.
-        At every level of the tree, there can be only one operation.
-        """
         return self._tree
 
     @tree.setter
     def tree(self, tree: dict) -> None:
         def check(tree: dict) -> None:
             if len(tree) > 1:
-                raise Exception('The tree can only have 1 operation per level.')
+                raise Exception("The tree can only have 1 operation per level.")
             operation = next(iter(tree))
             operands = tree[operation]
             for operand in operands:
                 if isinstance(operand, dict):
                     check(operand)
+
         try:
             check(tree)
         except Exception:
@@ -95,7 +94,8 @@ class CSGModel(Model):
             self._tree = tree
 
     def add(self, shape: compas.geometry.Shape) -> Tuple[int, int]:
-        """Add a shape to the underlying OCC model.
+        """
+        Add a shape to the underlying OCC model.
 
         Parameters
         ----------
@@ -104,17 +104,26 @@ class CSGModel(Model):
 
         Returns
         -------
-        tuple(int, int)
+        tuple[int, int]
             A "dimtag", a dimension and a tag that together uniquely identify the shape in the OCC model.
+
         """
         stype = type(shape)
         if stype not in _SHAPE_FUNC:
-            raise Exception(f'Shape type is not supported: {stype}')
+            raise Exception(f"Shape type is not supported: {stype}")
         dimtag = _SHAPE_FUNC[type(shape)](self, shape)
         return dimtag
 
     def compute_tree(self) -> None:
-        """Comute the compound shape resulting from the operations on shape primitives in the tree."""
+        """
+        Comute the compound shape resulting from the operations on shape primitives in the tree.
+
+        Returns
+        -------
+        None
+
+        """
+
         def walk(tree: dict) -> List[Tuple[int, int]]:
             operation = next(iter(tree))
             operands = tree[operation]
@@ -127,15 +136,15 @@ class CSGModel(Model):
                 else:
                     operands[index] = self.add(operand)
 
-            if operation == 'union':
+            if operation == "union":
                 result = self.occ.fuse(operands[:-1], operands[-1:])
                 return result[0][0]
 
-            if operation == 'difference':
+            if operation == "difference":
                 result = self.occ.cut(operands[:-1], operands[-1:])
                 return result[0][0]
 
-            if operation == 'intersection':
+            if operation == "intersection":
                 result = self.occ.intersect(operands[:-1], operands[-1:])
                 return result[0][0]
 

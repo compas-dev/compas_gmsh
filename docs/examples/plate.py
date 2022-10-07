@@ -76,7 +76,7 @@ start = poa + Vector(0, 0, 1)
 vector = Vector(0, 0, -1)
 load = Arrow(start, vector, body_width=0.03)
 
-viewer.add(poa, size=20)
+viewer.add(poa, pointsize=20)
 viewer.add(load, facecolor=(1, 0, 0))
 
 viewer.run()
