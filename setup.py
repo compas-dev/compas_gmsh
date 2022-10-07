@@ -28,7 +28,7 @@ optional_requirements = {}
 
 setup(
     name="compas_gmsh",
-    version="0.4.0",
+    version="0.4.1",
     description="COMPAS friendly binding for GMSH",
     long_description=long_description,
     long_description_content_type="text/markdown",
