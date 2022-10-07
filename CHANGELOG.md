@@ -9,6 +9,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+### Changed
+
+### Removed
+
+
+## Unreleased
+
+### Added
+
 * Added `compas_gmsh.models.Model.options.mesh.algorithm`.
 * Added `compas_gmsh.models.Model.options.mesh.lmin`.
 * Added `compas_gmsh.models.Model.options.mesh.lmax`.
