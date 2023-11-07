@@ -4,7 +4,7 @@ from compas.geometry import Cylinder
 from compas.geometry import Sphere
 from compas.geometry import Box
 
-from compas_gmsh.models.model import Model
+from .model import Model
 
 
 class ShapeModel(Model):
@@ -58,7 +58,7 @@ class ShapeModel(Model):
         B : tuple
             The *dimtags* of the *tool* shapes.
 
-        Results
+        Returns
         -------
         list of tuple
             The dimtags of the resulting shapes.
@@ -92,7 +92,7 @@ class ShapeModel(Model):
         B : tuple
             The *dimtags* of the *tool* shapes.
 
-        Results
+        Returns
         -------
         list of tuple
             The dimtags of the resulting shapes.
@@ -126,7 +126,7 @@ class ShapeModel(Model):
         B : tuple
             The *dimtags* of the *tool* shapes.
 
-        Results
+        Returns
         -------
         list of tuple
             The dimtags of the resulting shapes.
@@ -160,7 +160,7 @@ class ShapeModel(Model):
         B : tuple
             The *dimtags* of the *tool* shapes.
 
-        Results
+        Returns
         -------
         list of tuple
             The dimtags of the resulting shapes.

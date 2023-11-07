@@ -1,22 +1,3 @@
-"""
-********************************************************************************
-compas_gmsh.interop
-********************************************************************************
-
-.. currentmodule:: compas_gmsh.interop
-
-
-Enumerations
-============
-
-.. autosummary::
-    :toctree: generated/
-    :nosignatures:
-
-    MeshAlgorithm
-    OptimizationAlgorithm
-
-"""
 from enum import Enum
 
 

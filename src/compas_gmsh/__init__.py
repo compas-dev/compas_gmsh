@@ -1,19 +1,3 @@
-"""
-********************************************************************************
-compas_gmsh
-********************************************************************************
-
-.. currentmodule:: compas_gmsh
-
-.. toctree::
-    :maxdepth: 1
-
-    compas_gmsh.interop
-    compas_gmsh.models
-    compas_gmsh.options
-
-"""
-
 from __future__ import print_function
 
 import os

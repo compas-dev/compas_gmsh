@@ -1,5 +1,5 @@
 from compas.datastructures import Mesh
-from compas_gmsh.models.model import Model
+from .model import Model
 
 
 class MeshModel(Model):

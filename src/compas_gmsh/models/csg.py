@@ -1,11 +1,12 @@
 from typing import Tuple
 from typing import List
-from compas_gmsh.models.model import Model
 
 import compas.geometry
 from compas.geometry import Box
 from compas.geometry import Sphere
 from compas.geometry import Cylinder
+
+from .model import Model
 
 
 def add_cylinder(self, cylinder: Cylinder) -> Tuple[int, int]:
