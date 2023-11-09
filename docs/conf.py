@@ -299,6 +299,7 @@ html_theme_options["navbar_start"] = [
 
 html_theme_options["navbar_end"] = [
     "version-switcher",
+    "theme-switcher",
     "navbar-icon-links",
 ]
 
@@ -316,6 +317,7 @@ html_context = {
     "github_repo": "compas_gmsh",
     "github_version": "main",
     "doc_path": "docs",
+    "default_theme": "light",
 }
 
 html_static_path = ["_static"]
