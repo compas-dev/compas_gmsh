@@ -1,6 +1,8 @@
-/* .bd-main {
-    flex-basis: 80%;
-} */
+html[data-theme="light"] {
+    --pst-color-primary: #0092d2;
+    --pst-color-info: #0092d2;
+    --pst-color-text-muted: #888;
+}
 
 .bd-article-container h1 {
     color: #0092d2;
@@ -12,5 +14,16 @@
 }
 
 .navbar-brand .logo__image {
-    height: 48px !important;
+    height: 36px !important;
+}
+
+.bd-header {
+    box-shadow: none;
+    border-bottom: 1px solid var(--pst-color-shadow);
+}
+
+.bd-sidebar-primary div#rtd-footer-container {
+    bottom: 0 !important;
+    margin: 0 !important;
+    display: none;
 }
