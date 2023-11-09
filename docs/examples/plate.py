@@ -48,7 +48,7 @@ model.generate_mesh()
 
 mesh = model.mesh_to_compas()
 
-lengths = [mesh.edge_length(*edge) for edge in mesh.edges()]
+lengths = [mesh.edge_length(edge) for edge in mesh.edges()]
 
 print(mesh.is_valid())
 print(min(lengths))

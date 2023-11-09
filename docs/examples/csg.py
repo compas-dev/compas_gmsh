@@ -1,4 +1,4 @@
-from compas.geometry import Point, Vector, Plane
+from compas.geometry import Frame
 from compas.geometry import Sphere, Cylinder, Box
 from compas.geometry import Translation
 
@@ -11,20 +11,12 @@ from compas_gmsh.models import CSGModel
 
 R = 1.4
 
-P = Point(0, 0, 0)
-X = Vector(1, 0, 0)
-Y = Vector(0, 1, 0)
-Z = Vector(0, 0, 1)
-YZ = Plane(P, X)
-ZX = Plane(P, Y)
-XY = Plane(P, Z)
+box = Box(2 * R)
+sphere = Sphere(radius=1.25 * R)
 
-box = Box.from_width_height_depth(2 * R, 2 * R, 2 * R)
-sphere = Sphere(P, 1.25 * R)
-
-cylx = Cylinder((YZ, 0.7 * R), 3 * R)
-cyly = Cylinder((ZX, 0.7 * R), 3 * R)
-cylz = Cylinder((XY, 0.7 * R), 3 * R)
+cylx = Cylinder(radius=0.7 * R, height=3 * R, frame=Frame.worldYZ())
+cyly = Cylinder(radius=0.7 * R, height=3 * R, frame=Frame.worldZX())
+cylz = Cylinder(radius=0.7 * R, height=3 * R, frame=Frame.worldXY())
 
 # ==============================================================================
 # CSG Model
@@ -42,7 +34,6 @@ model = CSGModel(tree, name="csg")
 model.options.mesh.lmax = 0.1
 
 model.compute_tree()
-
 model.generate_mesh()
 model.optimize_mesh()
 
@@ -66,11 +57,11 @@ viewer.view.camera.tx = -2 * R
 viewer.view.camera.ty = 1
 viewer.view.camera.distance = 12
 
-viewer.add(sphere, u=32, v=32, opacity=0.5, facecolor=(1, 0, 0))
-viewer.add(box, opacity=0.5, facecolor=(0, 1, 0))
-viewer.add(cylx, u=32, opacity=0.5, facecolor=(0, 0, 1))
-viewer.add(cyly, u=32, opacity=0.5, facecolor=(0, 0, 1))
-viewer.add(cylz, u=32, opacity=0.5, facecolor=(0, 0, 1))
+viewer.add(sphere.to_brep(), opacity=0.5, facecolor=(1, 0, 0))
+viewer.add(box.to_brep(), opacity=0.5, facecolor=(0, 1, 0))
+viewer.add(cylx.to_brep(), opacity=0.5, facecolor=(0, 0, 1))
+viewer.add(cyly.to_brep(), opacity=0.5, facecolor=(0, 0, 1))
+viewer.add(cylz.to_brep(), opacity=0.5, facecolor=(0, 0, 1))
 
 viewer.add(mesh)
 viewer.run()

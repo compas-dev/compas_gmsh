@@ -14,3 +14,16 @@ Enumerations
 
     MeshAlgorithm
     OptimizationAlgorithm
+    RecombinationAlgorithm
+    MeshSizeExtendFromBoundary
+
+
+Classes
+=======
+
+.. autosummary::
+    :toctree: generated/
+    :nosignatures:
+
+    MeshOptions
+

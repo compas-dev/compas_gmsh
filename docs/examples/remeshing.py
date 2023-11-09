@@ -9,7 +9,7 @@ from compas_view2.app import App
 # Input
 # ==============================================================================
 
-mesh = Mesh.from_json(compas.get('tubemesh.json'))
+mesh = Mesh.from_obj(compas.get('tubemesh.obj'))
 
 centroid = Point(* mesh.centroid())
 vector = Point(0, 0, 0) - centroid

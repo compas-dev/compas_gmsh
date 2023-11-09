@@ -247,7 +247,7 @@ replace(html5.HTML5Translator)
 
 # -- Options for HTML output ----------------------------------------------
 
-html_theme = "sphinx_book_theme"
+html_theme = "pydata_sphinx_theme"
 html_logo = "_static/compas_icon.png"
 html_title = "COMPAS Gmsh"
 html_favicon = "_static/compas.ico"
@@ -260,11 +260,31 @@ html_theme_options = {
         "image_light": "_static/compas_icon.png",
         "image_dark": "_static/compas_icon_white.png",
     },
+    "switcher": {
+        "json_url": "https://raw.githubusercontent.com/compas-dev/compas_gmsh/gh-pages/versions.json",
+        "version_match": version,
+    },
+    "check_switcher": False,
+    "show_nav_level": 1,
 }
+
+html_theme_options["icon_links"] = [
+    {
+        "name": "GitHub",
+        "url": "https://github.com/compas-dev/compas_gmsh",
+        "icon": "fa-brands fa-github",
+        "type": "fontawesome",
+    }
+]
+
+html_theme_options["navbar_start"] = [
+    "navbar-logo",
+    "version-switcher",
+]
+
 
 html_sidebars = {
     "**": [
-        "navbar-logo.html",
         "sbt-sidebar-nav.html",
         "compas-sidebar-footer.html",
     ]

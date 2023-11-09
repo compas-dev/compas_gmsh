@@ -1,8 +1,8 @@
 ********************************************************************************
-compas_gmsh.interop
+compas_gmsh.conversions
 ********************************************************************************
 
-.. currentmodule:: compas_gmsh.interop
+.. currentmodule:: compas_gmsh.conversions
 
 
 Classes

@@ -10,8 +10,8 @@ from compas_gmsh.models import ShapeModel
 # Geometry
 # ==============================================================================
 
-b1 = Box(Frame.worldXY(), 1, 1, 1)
-b2 = Box(Frame(b1.vertices[6], Vector.Xaxis(), Vector.Yaxis()), 1, 1, 1)
+b1 = Box(1)
+b2 = Box(1, 1, 1, frame=Frame(b1.vertices[6], Vector.Xaxis(), Vector.Yaxis()))
 
 # ==============================================================================
 # CSG Model

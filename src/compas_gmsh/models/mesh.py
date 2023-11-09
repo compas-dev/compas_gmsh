@@ -34,9 +34,10 @@ class MeshModel(Model):
 
         """
         model = cls(name)
+        model.mesh = mesh
         model.vertex_tag = {}
-        for vertex in mesh.vertices():
-            point = mesh.vertex_coordinates(vertex)
+        for vertex in model.mesh.vertices():
+            point = model.mesh.vertex_coordinates(vertex)
             model.vertex_tag[vertex] = model.occ.add_point(*point, targetlength)
         for face in mesh.faces():
             loop = []
@@ -77,3 +78,13 @@ class MeshModel(Model):
         """
         tag = self.vertex_tag[vertex]
         self.occ.mesh.set_size([(0, tag)], target)
+
+    def read_options_from_attributes(self) -> None:
+        """Read the model options from the attributes of the mesh data structure.
+
+        Returns
+        -------
+        None
+
+        """
+        pass
