@@ -4,13 +4,13 @@ html[data-theme="light"] {
     --pst-color-text-muted: #888;
 }
 
-.bd-article-container h1 {
-    color: #0092d2;
+body {
+    line-height: 1.75;
+    font-weight: 300;
 }
 
-#rtd-footer-container {
-    height: 0px;
-    display: none;
+.bd-article-container h1 {
+    color: #0092d2;
 }
 
 .navbar-brand .logo__image {
@@ -22,7 +22,8 @@ html[data-theme="light"] {
     border-bottom: 1px solid var(--pst-color-shadow);
 }
 
-.bd-sidebar-primary div#rtd-footer-container {
+#rtd-footer-container {
+    height: 0px;
     bottom: 0 !important;
     margin: 0 !important;
     display: none;
