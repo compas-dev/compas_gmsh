@@ -28,3 +28,4 @@ Table of Contents
    examples
    api
    license
+   acknowledgements

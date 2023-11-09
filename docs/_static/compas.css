@@ -4,10 +4,6 @@ html[data-theme="light"] {
     --pst-color-text-muted: #888;
 }
 
-/* .bd-main {
-    flex-basis: 80%;
-} */
-
 .bd-article-container h1 {
     color: #0092d2;
 }
@@ -31,7 +27,3 @@ html[data-theme="light"] {
     margin: 0 !important;
     display: none;
 }
-
-/* .bd-sidebar-primary {
-    width: 20%;
-} */
