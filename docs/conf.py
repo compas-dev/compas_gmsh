@@ -265,7 +265,11 @@ html_theme_options = {
         "version_match": version,
     },
     "check_switcher": False,
+    "navigation_depth": 3,
     "show_nav_level": 1,
+    "show_toc_level": 2,
+    "pygment_light_style": "default",
+    "pygment_dark_style": "monokai",
 }
 
 html_theme_options["icon_links"] = [
@@ -274,12 +278,28 @@ html_theme_options["icon_links"] = [
         "url": "https://github.com/compas-dev/compas_gmsh",
         "icon": "fa-brands fa-github",
         "type": "fontawesome",
-    }
+    },
+    {
+        "name": "Discourse",
+        "url": "http://forum.compas-framework.org/",
+        "icon": "fa-brands fa-discourse",
+        "type": "fontawesome",
+    },
+    {
+        "name": "PyPI",
+        "url": "https://pypi.org/project/compas-gmsh/",
+        "icon": "fa-brands fa-python",
+        "type": "fontawesome",
+    },
 ]
 
 html_theme_options["navbar_start"] = [
     "navbar-logo",
+]
+
+html_theme_options["navbar_end"] = [
     "version-switcher",
+    "navbar-icon-links",
 ]
 
 
