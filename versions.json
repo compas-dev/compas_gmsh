@@ -2,7 +2,7 @@
     {
         "name": "latest",
         "version": "unreleased",
-        "url": "https://compas.dev/compas/latest/"
+        "url": "https://compas.dev/compas_gmsh/latest/"
     },
     {
         "name": "v0.4.1 (stable)",
