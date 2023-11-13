@@ -1,39 +1,39 @@
-from math import radians
+from random import choice
 import compas
-from compas.geometry import Point, Line, Translation, Rotation, Scale
 from compas.datastructures import Mesh
+from compas.topology import astar_shortest_path
 from compas_gmsh.models import MeshModel
+from compas_gmsh.options import MeshAlgorithm
 from compas_view2.app import App
 
 # ==============================================================================
 # Input
 # ==============================================================================
 
-mesh = Mesh.from_obj(compas.get('tubemesh.obj'))
+mesh = Mesh.from_obj(compas.get("tubemesh.obj"))
 
-centroid = Point(* mesh.centroid())
-vector = Point(0, 0, 0) - centroid
-vector.z = 0
+# =============================================================================
+# Target lengths
+# =============================================================================
 
-T = Translation.from_vector(vector)
-R = Rotation.from_axis_and_angle([0, 0, 1], radians(105))
-S = Scale.from_factors([0.3, 0.3, 0.3])
+targetlength = {vertex: 1.0 for vertex in mesh.vertices()}
 
-mesh.transform(S * R * T)
+corners = list(mesh.vertices_where({"vertex_degree": 2}))
+
+start = choice(list(set(mesh.vertices()) - set(mesh.vertices_on_boundary())))
+end = choice(corners)
+
+for vertex in astar_shortest_path(mesh, start, end):
+    targetlength[vertex] = 0.05
 
 # ==============================================================================
 # GMSH model
 # ==============================================================================
 
-model = MeshModel.from_mesh(mesh, name='tubemesh', targetlength=0.3)
-
-model.heal()
-
-for vertex in mesh.vertex_sample(size=30):
-    model.mesh_targetlength_at_vertex(vertex, 0.01)
+model = MeshModel.from_mesh(mesh, name="tubemesh", targetlength=targetlength)
+model.options.mesh.algorithm = MeshAlgorithm.FrontalDelaunay
 
 model.generate_mesh()
-model.optimize_mesh(niter=10)
 
 # ==============================================================================
 # COMPAS mesh
@@ -42,24 +42,12 @@ model.optimize_mesh(niter=10)
 mesh = model.mesh_to_compas()
 
 # ==============================================================================
-# Visualization with viewer
+# Visualize
 # ==============================================================================
 
 viewer = App(width=1600, height=900)
-
-viewer.view.camera.rx = -75
-viewer.view.camera.tx = -1
-viewer.view.camera.ty = 0
+viewer.view.camera.position = [1, -5, 1]
+viewer.view.camera.look_at([1, 5, 0])
 
 viewer.add(mesh)
-
-for u, v in mesh.edges():
-    a = mesh.vertex_coordinates(u)
-    b = mesh.vertex_coordinates(v)
-
-    if mesh.halfedge[u][v] is None:
-        viewer.add(Line(a, b), linewidth=10, linecolor=(1, 0, 0))
-    elif mesh.halfedge[v][u] is None:
-        viewer.add(Line(a, b), linewidth=10, linecolor=(1, 0, 0))
-
 viewer.run()

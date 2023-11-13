@@ -15,11 +15,9 @@ sphere = Sphere(2)
 # ==============================================================================
 
 model = ShapeModel(name="tets")
-
-model.add_sphere(sphere)
-
 model.options.mesh.lmax = 0.2
 
+model.add_sphere(sphere)
 model.generate_mesh(3)
 
 # ==============================================================================
@@ -32,6 +30,8 @@ shell = model.mesh_to_compas()
 # ==============================================================================
 # Boundary lookup
 # ==============================================================================
+
+# replace by model method
 
 centroid_face = {}
 for face in shell.faces():
@@ -52,13 +52,21 @@ for tet in tets:
         top.append(tet)
 
 for tet in bottom:
-    if any(geometric_key(centroid_points([tet.vertices[index] for index in face])) in centroid_face for face in tet.faces):
+    if any(
+        geometric_key(centroid_points([tet.vertices[index] for index in face]))
+        in centroid_face
+        for face in tet.faces
+    ):
         bottom_exterior.append(tet)
     else:
         bottom_interior.append(tet)
 
 for tet in top:
-    if any(geometric_key(centroid_points([tet.vertices[index] for index in face])) in centroid_face for face in tet.faces):
+    if any(
+        geometric_key(centroid_points([tet.vertices[index] for index in face]))
+        in centroid_face
+        for face in tet.faces
+    ):
         top_exterior.append(tet)
     else:
         top_interior.append(tet)
@@ -68,12 +76,8 @@ for tet in top:
 # ==============================================================================
 
 viewer = App(width=1600, height=900)
-
-viewer.view.camera.rz = 0
-viewer.view.camera.rx = -85
-viewer.view.camera.tx = 0
-viewer.view.camera.ty = 0
-viewer.view.camera.distance = 7
+viewer.view.camera.position = [0, -8, 0]
+viewer.view.camera.look_at([0, 0, 0])
 
 T = Translation.from_vector([0, 0, 0.5])
 for tet in top:
