@@ -64,7 +64,7 @@
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="Shape Tetrahedralisation" href="tets.html" />
-    <link rel="prev" title="Quad Recombination" href="quads.html" />
+    <link rel="prev" title="FE Meshes: Point load on plate" href="plate.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   </head>
@@ -481,12 +481,7 @@ document.write(`
 <li class="toctree-l1"><a class="reference internal" href="../installation.html">Installation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../tutorial.html">Tutorial</a></li>
 <li class="toctree-l1 current active has-children"><a class="reference internal" href="../examples.html">Examples</a><input checked="" class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-1"><i class="fa-solid fa-chevron-down"></i></label><ul class="current">
-<li class="toctree-l2"><a class="reference internal" href="csg.html">CSG Modelling</a></li>
-<li class="toctree-l2"><a class="reference internal" href="fragments2.html">Boolean Fragments 2D</a></li>
-<li class="toctree-l2"><a class="reference internal" href="fragments3.html">Boolean Fragments 3D</a></li>
-<li class="toctree-l2"><a class="reference internal" href="multi.html">Generate Multiple Meshes</a></li>
 <li class="toctree-l2"><a class="reference internal" href="plate.html">FE Meshes: Point load on plate</a></li>
-<li class="toctree-l2"><a class="reference internal" href="quads.html">Quad Recombination</a></li>
 <li class="toctree-l2 current active"><a class="current reference internal" href="#">Mesh Remeshing</a></li>
 <li class="toctree-l2"><a class="reference internal" href="tets.html">Shape Tetrahedralisation</a></li>
 </ul>
@@ -580,42 +575,42 @@ document.write(`
 <figure class="figure align-default">
 <img alt="../_images/remeshing.png" class="figure-img img-fluid" src="../_images/remeshing.png" />
 </figure>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">math</span> <span class="kn">import</span> <span class="n">radians</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">random</span> <span class="kn">import</span> <span class="n">choice</span>
 <span class="kn">import</span> <span class="nn">compas</span>
-<span class="kn">from</span> <span class="nn">compas.geometry</span> <span class="kn">import</span> <span class="n">Point</span><span class="p">,</span> <span class="n">Line</span><span class="p">,</span> <span class="n">Translation</span><span class="p">,</span> <span class="n">Rotation</span><span class="p">,</span> <span class="n">Scale</span>
 <span class="kn">from</span> <span class="nn">compas.datastructures</span> <span class="kn">import</span> <span class="n">Mesh</span>
+<span class="kn">from</span> <span class="nn">compas.topology</span> <span class="kn">import</span> <span class="n">astar_shortest_path</span>
 <span class="kn">from</span> <span class="nn">compas_gmsh.models</span> <span class="kn">import</span> <span class="n">MeshModel</span>
+<span class="kn">from</span> <span class="nn">compas_gmsh.options</span> <span class="kn">import</span> <span class="n">MeshAlgorithm</span>
 <span class="kn">from</span> <span class="nn">compas_view2.app</span> <span class="kn">import</span> <span class="n">App</span>
 
 <span class="c1"># ==============================================================================</span>
 <span class="c1"># Input</span>
 <span class="c1"># ==============================================================================</span>
 
-<span class="n">mesh</span> <span class="o">=</span> <span class="n">Mesh</span><span class="o">.</span><span class="n">from_obj</span><span class="p">(</span><span class="n">compas</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;tubemesh.obj&#39;</span><span class="p">))</span>
+<span class="n">mesh</span> <span class="o">=</span> <span class="n">Mesh</span><span class="o">.</span><span class="n">from_obj</span><span class="p">(</span><span class="n">compas</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;tubemesh.obj&quot;</span><span class="p">))</span>
 
-<span class="n">centroid</span> <span class="o">=</span> <span class="n">Point</span><span class="p">(</span><span class="o">*</span> <span class="n">mesh</span><span class="o">.</span><span class="n">centroid</span><span class="p">())</span>
-<span class="n">vector</span> <span class="o">=</span> <span class="n">Point</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span> <span class="o">-</span> <span class="n">centroid</span>
-<span class="n">vector</span><span class="o">.</span><span class="n">z</span> <span class="o">=</span> <span class="mi">0</span>
+<span class="c1"># =============================================================================</span>
+<span class="c1"># Target lengths</span>
+<span class="c1"># =============================================================================</span>
 
-<span class="n">T</span> <span class="o">=</span> <span class="n">Translation</span><span class="o">.</span><span class="n">from_vector</span><span class="p">(</span><span class="n">vector</span><span class="p">)</span>
-<span class="n">R</span> <span class="o">=</span> <span class="n">Rotation</span><span class="o">.</span><span class="n">from_axis_and_angle</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="n">radians</span><span class="p">(</span><span class="mi">105</span><span class="p">))</span>
-<span class="n">S</span> <span class="o">=</span> <span class="n">Scale</span><span class="o">.</span><span class="n">from_factors</span><span class="p">([</span><span class="mf">0.3</span><span class="p">,</span> <span class="mf">0.3</span><span class="p">,</span> <span class="mf">0.3</span><span class="p">])</span>
+<span class="n">targetlength</span> <span class="o">=</span> <span class="p">{</span><span class="n">vertex</span><span class="p">:</span> <span class="mf">1.0</span> <span class="k">for</span> <span class="n">vertex</span> <span class="ow">in</span> <span class="n">mesh</span><span class="o">.</span><span class="n">vertices</span><span class="p">()}</span>
 
-<span class="n">mesh</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">S</span> <span class="o">*</span> <span class="n">R</span> <span class="o">*</span> <span class="n">T</span><span class="p">)</span>
+<span class="n">corners</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">mesh</span><span class="o">.</span><span class="n">vertices_where</span><span class="p">({</span><span class="s2">&quot;vertex_degree&quot;</span><span class="p">:</span> <span class="mi">2</span><span class="p">}))</span>
+
+<span class="n">start</span> <span class="o">=</span> <span class="n">choice</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="n">mesh</span><span class="o">.</span><span class="n">vertices</span><span class="p">())</span> <span class="o">-</span> <span class="nb">set</span><span class="p">(</span><span class="n">mesh</span><span class="o">.</span><span class="n">vertices_on_boundary</span><span class="p">())))</span>
+<span class="n">end</span> <span class="o">=</span> <span class="n">choice</span><span class="p">(</span><span class="n">corners</span><span class="p">)</span>
+
+<span class="k">for</span> <span class="n">vertex</span> <span class="ow">in</span> <span class="n">astar_shortest_path</span><span class="p">(</span><span class="n">mesh</span><span class="p">,</span> <span class="n">start</span><span class="p">,</span> <span class="n">end</span><span class="p">):</span>
+    <span class="n">targetlength</span><span class="p">[</span><span class="n">vertex</span><span class="p">]</span> <span class="o">=</span> <span class="mf">0.05</span>
 
 <span class="c1"># ==============================================================================</span>
 <span class="c1"># GMSH model</span>
 <span class="c1"># ==============================================================================</span>
 
-<span class="n">model</span> <span class="o">=</span> <span class="n">MeshModel</span><span class="o">.</span><span class="n">from_mesh</span><span class="p">(</span><span class="n">mesh</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s1">&#39;tubemesh&#39;</span><span class="p">,</span> <span class="n">targetlength</span><span class="o">=</span><span class="mf">0.3</span><span class="p">)</span>
-
-<span class="n">model</span><span class="o">.</span><span class="n">heal</span><span class="p">()</span>
-
-<span class="k">for</span> <span class="n">vertex</span> <span class="ow">in</span> <span class="n">mesh</span><span class="o">.</span><span class="n">vertex_sample</span><span class="p">(</span><span class="n">size</span><span class="o">=</span><span class="mi">30</span><span class="p">):</span>
-    <span class="n">model</span><span class="o">.</span><span class="n">mesh_targetlength_at_vertex</span><span class="p">(</span><span class="n">vertex</span><span class="p">,</span> <span class="mf">0.01</span><span class="p">)</span>
+<span class="n">model</span> <span class="o">=</span> <span class="n">MeshModel</span><span class="o">.</span><span class="n">from_mesh</span><span class="p">(</span><span class="n">mesh</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s2">&quot;tubemesh&quot;</span><span class="p">,</span> <span class="n">targetlength</span><span class="o">=</span><span class="n">targetlength</span><span class="p">)</span>
+<span class="n">model</span><span class="o">.</span><span class="n">options</span><span class="o">.</span><span class="n">mesh</span><span class="o">.</span><span class="n">algorithm</span> <span class="o">=</span> <span class="n">MeshAlgorithm</span><span class="o">.</span><span class="n">FrontalDelaunay</span>
 
 <span class="n">model</span><span class="o">.</span><span class="n">generate_mesh</span><span class="p">()</span>
-<span class="n">model</span><span class="o">.</span><span class="n">optimize_mesh</span><span class="p">(</span><span class="n">niter</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
 
 <span class="c1"># ==============================================================================</span>
 <span class="c1"># COMPAS mesh</span>
@@ -624,26 +619,14 @@ document.write(`
 <span class="n">mesh</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">mesh_to_compas</span><span class="p">()</span>
 
 <span class="c1"># ==============================================================================</span>
-<span class="c1"># Visualization with viewer</span>
+<span class="c1"># Visualize</span>
 <span class="c1"># ==============================================================================</span>
 
 <span class="n">viewer</span> <span class="o">=</span> <span class="n">App</span><span class="p">(</span><span class="n">width</span><span class="o">=</span><span class="mi">1600</span><span class="p">,</span> <span class="n">height</span><span class="o">=</span><span class="mi">900</span><span class="p">)</span>
-
-<span class="n">viewer</span><span class="o">.</span><span class="n">view</span><span class="o">.</span><span class="n">camera</span><span class="o">.</span><span class="n">rx</span> <span class="o">=</span> <span class="o">-</span><span class="mi">75</span>
-<span class="n">viewer</span><span class="o">.</span><span class="n">view</span><span class="o">.</span><span class="n">camera</span><span class="o">.</span><span class="n">tx</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span>
-<span class="n">viewer</span><span class="o">.</span><span class="n">view</span><span class="o">.</span><span class="n">camera</span><span class="o">.</span><span class="n">ty</span> <span class="o">=</span> <span class="mi">0</span>
+<span class="n">viewer</span><span class="o">.</span><span class="n">view</span><span class="o">.</span><span class="n">camera</span><span class="o">.</span><span class="n">position</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">5</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span>
+<span class="n">viewer</span><span class="o">.</span><span class="n">view</span><span class="o">.</span><span class="n">camera</span><span class="o">.</span><span class="n">look_at</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">0</span><span class="p">])</span>
 
 <span class="n">viewer</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">mesh</span><span class="p">)</span>
-
-<span class="k">for</span> <span class="n">u</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">mesh</span><span class="o">.</span><span class="n">edges</span><span class="p">():</span>
-    <span class="n">a</span> <span class="o">=</span> <span class="n">mesh</span><span class="o">.</span><span class="n">vertex_coordinates</span><span class="p">(</span><span class="n">u</span><span class="p">)</span>
-    <span class="n">b</span> <span class="o">=</span> <span class="n">mesh</span><span class="o">.</span><span class="n">vertex_coordinates</span><span class="p">(</span><span class="n">v</span><span class="p">)</span>
-
-    <span class="k">if</span> <span class="n">mesh</span><span class="o">.</span><span class="n">halfedge</span><span class="p">[</span><span class="n">u</span><span class="p">][</span><span class="n">v</span><span class="p">]</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="n">viewer</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">Line</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">),</span> <span class="n">linewidth</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">linecolor</span><span class="o">=</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">))</span>
-    <span class="k">elif</span> <span class="n">mesh</span><span class="o">.</span><span class="n">halfedge</span><span class="p">[</span><span class="n">v</span><span class="p">][</span><span class="n">u</span><span class="p">]</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="n">viewer</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">Line</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">),</span> <span class="n">linewidth</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">linecolor</span><span class="o">=</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">))</span>
-
 <span class="n">viewer</span><span class="o">.</span><span class="n">run</span><span class="p">()</span>
 </pre></div>
 </div>
@@ -661,12 +644,12 @@ document.write(`
     <div class="footer-article-item"><!-- Previous / next buttons -->
 <div class="prev-next-area">
     <a class="left-prev"
-       href="quads.html"
+       href="plate.html"
        title="previous page">
       <i class="fa-solid fa-angle-left"></i>
       <div class="prev-next-info">
         <p class="prev-next-subtitle">previous</p>
-        <p class="prev-next-title">Quad Recombination</p>
+        <p class="prev-next-title">FE Meshes: Point load on plate</p>
       </div>
     </a>
     <a class="right-next"

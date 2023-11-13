@@ -481,12 +481,7 @@ document.write(`
 <li class="toctree-l1"><a class="reference internal" href="../installation.html">Installation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../tutorial.html">Tutorial</a></li>
 <li class="toctree-l1 current active has-children"><a class="reference internal" href="../examples.html">Examples</a><input checked="" class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-1"><i class="fa-solid fa-chevron-down"></i></label><ul class="current">
-<li class="toctree-l2"><a class="reference internal" href="csg.html">CSG Modelling</a></li>
-<li class="toctree-l2"><a class="reference internal" href="fragments2.html">Boolean Fragments 2D</a></li>
-<li class="toctree-l2"><a class="reference internal" href="fragments3.html">Boolean Fragments 3D</a></li>
-<li class="toctree-l2"><a class="reference internal" href="multi.html">Generate Multiple Meshes</a></li>
 <li class="toctree-l2"><a class="reference internal" href="plate.html">FE Meshes: Point load on plate</a></li>
-<li class="toctree-l2"><a class="reference internal" href="quads.html">Quad Recombination</a></li>
 <li class="toctree-l2"><a class="reference internal" href="remeshing.html">Mesh Remeshing</a></li>
 <li class="toctree-l2 current active"><a class="current reference internal" href="#">Shape Tetrahedralisation</a></li>
 </ul>
@@ -597,11 +592,9 @@ document.write(`
 <span class="c1"># ==============================================================================</span>
 
 <span class="n">model</span> <span class="o">=</span> <span class="n">ShapeModel</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">&quot;tets&quot;</span><span class="p">)</span>
-
-<span class="n">model</span><span class="o">.</span><span class="n">add_sphere</span><span class="p">(</span><span class="n">sphere</span><span class="p">)</span>
-
 <span class="n">model</span><span class="o">.</span><span class="n">options</span><span class="o">.</span><span class="n">mesh</span><span class="o">.</span><span class="n">lmax</span> <span class="o">=</span> <span class="mf">0.2</span>
 
+<span class="n">model</span><span class="o">.</span><span class="n">add_sphere</span><span class="p">(</span><span class="n">sphere</span><span class="p">)</span>
 <span class="n">model</span><span class="o">.</span><span class="n">generate_mesh</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>
 
 <span class="c1"># ==============================================================================</span>
@@ -614,6 +607,8 @@ document.write(`
 <span class="c1"># ==============================================================================</span>
 <span class="c1"># Boundary lookup</span>
 <span class="c1"># ==============================================================================</span>
+
+<span class="c1"># replace by model method</span>
 
 <span class="n">centroid_face</span> <span class="o">=</span> <span class="p">{}</span>
 <span class="k">for</span> <span class="n">face</span> <span class="ow">in</span> <span class="n">shell</span><span class="o">.</span><span class="n">faces</span><span class="p">():</span>
@@ -634,13 +629,21 @@ document.write(`
         <span class="n">top</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">tet</span><span class="p">)</span>
 
 <span class="k">for</span> <span class="n">tet</span> <span class="ow">in</span> <span class="n">bottom</span><span class="p">:</span>
-    <span class="k">if</span> <span class="nb">any</span><span class="p">(</span><span class="n">geometric_key</span><span class="p">(</span><span class="n">centroid_points</span><span class="p">([</span><span class="n">tet</span><span class="o">.</span><span class="n">vertices</span><span class="p">[</span><span class="n">index</span><span class="p">]</span> <span class="k">for</span> <span class="n">index</span> <span class="ow">in</span> <span class="n">face</span><span class="p">]))</span> <span class="ow">in</span> <span class="n">centroid_face</span> <span class="k">for</span> <span class="n">face</span> <span class="ow">in</span> <span class="n">tet</span><span class="o">.</span><span class="n">faces</span><span class="p">):</span>
+    <span class="k">if</span> <span class="nb">any</span><span class="p">(</span>
+        <span class="n">geometric_key</span><span class="p">(</span><span class="n">centroid_points</span><span class="p">([</span><span class="n">tet</span><span class="o">.</span><span class="n">vertices</span><span class="p">[</span><span class="n">index</span><span class="p">]</span> <span class="k">for</span> <span class="n">index</span> <span class="ow">in</span> <span class="n">face</span><span class="p">]))</span>
+        <span class="ow">in</span> <span class="n">centroid_face</span>
+        <span class="k">for</span> <span class="n">face</span> <span class="ow">in</span> <span class="n">tet</span><span class="o">.</span><span class="n">faces</span>
+    <span class="p">):</span>
         <span class="n">bottom_exterior</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">tet</span><span class="p">)</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="n">bottom_interior</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">tet</span><span class="p">)</span>
 
 <span class="k">for</span> <span class="n">tet</span> <span class="ow">in</span> <span class="n">top</span><span class="p">:</span>
-    <span class="k">if</span> <span class="nb">any</span><span class="p">(</span><span class="n">geometric_key</span><span class="p">(</span><span class="n">centroid_points</span><span class="p">([</span><span class="n">tet</span><span class="o">.</span><span class="n">vertices</span><span class="p">[</span><span class="n">index</span><span class="p">]</span> <span class="k">for</span> <span class="n">index</span> <span class="ow">in</span> <span class="n">face</span><span class="p">]))</span> <span class="ow">in</span> <span class="n">centroid_face</span> <span class="k">for</span> <span class="n">face</span> <span class="ow">in</span> <span class="n">tet</span><span class="o">.</span><span class="n">faces</span><span class="p">):</span>
+    <span class="k">if</span> <span class="nb">any</span><span class="p">(</span>
+        <span class="n">geometric_key</span><span class="p">(</span><span class="n">centroid_points</span><span class="p">([</span><span class="n">tet</span><span class="o">.</span><span class="n">vertices</span><span class="p">[</span><span class="n">index</span><span class="p">]</span> <span class="k">for</span> <span class="n">index</span> <span class="ow">in</span> <span class="n">face</span><span class="p">]))</span>
+        <span class="ow">in</span> <span class="n">centroid_face</span>
+        <span class="k">for</span> <span class="n">face</span> <span class="ow">in</span> <span class="n">tet</span><span class="o">.</span><span class="n">faces</span>
+    <span class="p">):</span>
         <span class="n">top_exterior</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">tet</span><span class="p">)</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="n">top_interior</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">tet</span><span class="p">)</span>
@@ -650,12 +653,8 @@ document.write(`
 <span class="c1"># ==============================================================================</span>
 
 <span class="n">viewer</span> <span class="o">=</span> <span class="n">App</span><span class="p">(</span><span class="n">width</span><span class="o">=</span><span class="mi">1600</span><span class="p">,</span> <span class="n">height</span><span class="o">=</span><span class="mi">900</span><span class="p">)</span>
-
-<span class="n">viewer</span><span class="o">.</span><span class="n">view</span><span class="o">.</span><span class="n">camera</span><span class="o">.</span><span class="n">rz</span> <span class="o">=</span> <span class="mi">0</span>
-<span class="n">viewer</span><span class="o">.</span><span class="n">view</span><span class="o">.</span><span class="n">camera</span><span class="o">.</span><span class="n">rx</span> <span class="o">=</span> <span class="o">-</span><span class="mi">85</span>
-<span class="n">viewer</span><span class="o">.</span><span class="n">view</span><span class="o">.</span><span class="n">camera</span><span class="o">.</span><span class="n">tx</span> <span class="o">=</span> <span class="mi">0</span>
-<span class="n">viewer</span><span class="o">.</span><span class="n">view</span><span class="o">.</span><span class="n">camera</span><span class="o">.</span><span class="n">ty</span> <span class="o">=</span> <span class="mi">0</span>
-<span class="n">viewer</span><span class="o">.</span><span class="n">view</span><span class="o">.</span><span class="n">camera</span><span class="o">.</span><span class="n">distance</span> <span class="o">=</span> <span class="mi">7</span>
+<span class="n">viewer</span><span class="o">.</span><span class="n">view</span><span class="o">.</span><span class="n">camera</span><span class="o">.</span><span class="n">position</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="o">-</span><span class="mi">8</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span>
+<span class="n">viewer</span><span class="o">.</span><span class="n">view</span><span class="o">.</span><span class="n">camera</span><span class="o">.</span><span class="n">look_at</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">])</span>
 
 <span class="n">T</span> <span class="o">=</span> <span class="n">Translation</span><span class="o">.</span><span class="n">from_vector</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">])</span>
 <span class="k">for</span> <span class="n">tet</span> <span class="ow">in</span> <span class="n">top</span><span class="p">:</span>

@@ -478,12 +478,7 @@ document.write(`
 <li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="tutorial.html">Tutorial</a></li>
 <li class="toctree-l1 has-children"><a class="reference internal" href="examples.html">Examples</a><input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-1"><i class="fa-solid fa-chevron-down"></i></label><ul>
-<li class="toctree-l2"><a class="reference internal" href="examples/csg.html">CSG Modelling</a></li>
-<li class="toctree-l2"><a class="reference internal" href="examples/fragments2.html">Boolean Fragments 2D</a></li>
-<li class="toctree-l2"><a class="reference internal" href="examples/fragments3.html">Boolean Fragments 3D</a></li>
-<li class="toctree-l2"><a class="reference internal" href="examples/multi.html">Generate Multiple Meshes</a></li>
 <li class="toctree-l2"><a class="reference internal" href="examples/plate.html">FE Meshes: Point load on plate</a></li>
-<li class="toctree-l2"><a class="reference internal" href="examples/quads.html">Quad Recombination</a></li>
 <li class="toctree-l2"><a class="reference internal" href="examples/remeshing.html">Mesh Remeshing</a></li>
 <li class="toctree-l2"><a class="reference internal" href="examples/tets.html">Shape Tetrahedralisation</a></li>
 </ul>
@@ -555,8 +550,10 @@ document.write(`
  | <a href="#H"><strong>H</strong></a>
  | <a href="#M"><strong>M</strong></a>
  | <a href="#O"><strong>O</strong></a>
+ | <a href="#P"><strong>P</strong></a>
  | <a href="#R"><strong>R</strong></a>
  | <a href="#S"><strong>S</strong></a>
+ | <a href="#V"><strong>V</strong></a>
  
 </div>
 <h2 id="A">A</h2>
@@ -596,16 +593,62 @@ document.write(`
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="api/generated/compas_gmsh.models.CSGModel.compute_tree.html#compas_gmsh.models.CSGModel.compute_tree">compute_tree() (compas_gmsh.models.CSGModel method)</a>
 </li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="api/generated/compas_gmsh.models.CSGModel.html#compas_gmsh.models.CSGModel">CSGModel (class in compas_gmsh.models)</a>
 </li>
+      <li><a href="api/generated/compas_gmsh.models.CSGModel.curve_coordinates_at.html#compas_gmsh.models.CSGModel.curve_coordinates_at">curve_coordinates_at() (compas_gmsh.models.CSGModel method)</a>
+
+      <ul>
+        <li><a href="api/generated/compas_gmsh.models.MeshModel.curve_coordinates_at.html#compas_gmsh.models.MeshModel.curve_coordinates_at">(compas_gmsh.models.MeshModel method)</a>
+</li>
+        <li><a href="api/generated/compas_gmsh.models.Model.curve_coordinates_at.html#compas_gmsh.models.Model.curve_coordinates_at">(compas_gmsh.models.Model method)</a>
+</li>
+        <li><a href="api/generated/compas_gmsh.models.ShapeModel.curve_coordinates_at.html#compas_gmsh.models.ShapeModel.curve_coordinates_at">(compas_gmsh.models.ShapeModel method)</a>
+</li>
+      </ul></li>
+      <li><a href="api/generated/compas_gmsh.models.CSGModel.curve_domain.html#compas_gmsh.models.CSGModel.curve_domain">curve_domain() (compas_gmsh.models.CSGModel method)</a>
+
+      <ul>
+        <li><a href="api/generated/compas_gmsh.models.MeshModel.curve_domain.html#compas_gmsh.models.MeshModel.curve_domain">(compas_gmsh.models.MeshModel method)</a>
+</li>
+        <li><a href="api/generated/compas_gmsh.models.Model.curve_domain.html#compas_gmsh.models.Model.curve_domain">(compas_gmsh.models.Model method)</a>
+</li>
+        <li><a href="api/generated/compas_gmsh.models.ShapeModel.curve_domain.html#compas_gmsh.models.ShapeModel.curve_domain">(compas_gmsh.models.ShapeModel method)</a>
+</li>
+      </ul></li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api/generated/compas_gmsh.models.CSGModel.curve_to_polyline.html#compas_gmsh.models.CSGModel.curve_to_polyline">curve_to_polyline() (compas_gmsh.models.CSGModel method)</a>
+
+      <ul>
+        <li><a href="api/generated/compas_gmsh.models.MeshModel.curve_to_polyline.html#compas_gmsh.models.MeshModel.curve_to_polyline">(compas_gmsh.models.MeshModel method)</a>
+</li>
+        <li><a href="api/generated/compas_gmsh.models.Model.curve_to_polyline.html#compas_gmsh.models.Model.curve_to_polyline">(compas_gmsh.models.Model method)</a>
+</li>
+        <li><a href="api/generated/compas_gmsh.models.ShapeModel.curve_to_polyline.html#compas_gmsh.models.ShapeModel.curve_to_polyline">(compas_gmsh.models.ShapeModel method)</a>
+</li>
+      </ul></li>
+      <li><a href="api/generated/compas_gmsh.models.CSGModel.curve_vertices.html#compas_gmsh.models.CSGModel.curve_vertices">curve_vertices() (compas_gmsh.models.CSGModel method)</a>
+
+      <ul>
+        <li><a href="api/generated/compas_gmsh.models.MeshModel.curve_vertices.html#compas_gmsh.models.MeshModel.curve_vertices">(compas_gmsh.models.MeshModel method)</a>
+</li>
+        <li><a href="api/generated/compas_gmsh.models.Model.curve_vertices.html#compas_gmsh.models.Model.curve_vertices">(compas_gmsh.models.Model method)</a>
+</li>
+        <li><a href="api/generated/compas_gmsh.models.ShapeModel.curve_vertices.html#compas_gmsh.models.ShapeModel.curve_vertices">(compas_gmsh.models.ShapeModel method)</a>
+</li>
+      </ul></li>
   </ul></td>
 </tr></table>
 
 <h2 id="F">F</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api/generated/compas_gmsh.models.MeshModel.find_point_at_vertex.html#compas_gmsh.models.MeshModel.find_point_at_vertex">find_point_at_vertex() (compas_gmsh.models.MeshModel method)</a>
+</li>
+      <li><a href="api/generated/compas_gmsh.models.MeshModel.find_points_at_xy.html#compas_gmsh.models.MeshModel.find_points_at_xy">find_points_at_xy() (compas_gmsh.models.MeshModel method)</a>
+</li>
+      <li><a href="api/generated/compas_gmsh.models.MeshModel.find_points_at_xyz.html#compas_gmsh.models.MeshModel.find_points_at_xyz">find_points_at_xyz() (compas_gmsh.models.MeshModel method)</a>
+</li>
       <li><a href="api/generated/compas_gmsh.models.CSGModel.from_brep.html#compas_gmsh.models.CSGModel.from_brep">from_brep() (compas_gmsh.models.CSGModel class method)</a>
 
       <ul>
@@ -652,14 +695,34 @@ document.write(`
 <h2 id="H">H</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="api/generated/compas_gmsh.models.MeshModel.heal.html#compas_gmsh.models.MeshModel.heal">heal() (compas_gmsh.models.MeshModel method)</a>
+      <li><a href="api/generated/compas_gmsh.models.CSGModel.heal.html#compas_gmsh.models.CSGModel.heal">heal() (compas_gmsh.models.CSGModel method)</a>
+
+      <ul>
+        <li><a href="api/generated/compas_gmsh.models.MeshModel.heal.html#compas_gmsh.models.MeshModel.heal">(compas_gmsh.models.MeshModel method)</a>
 </li>
+        <li><a href="api/generated/compas_gmsh.models.Model.heal.html#compas_gmsh.models.Model.heal">(compas_gmsh.models.Model method)</a>
+</li>
+        <li><a href="api/generated/compas_gmsh.models.ShapeModel.heal.html#compas_gmsh.models.ShapeModel.heal">(compas_gmsh.models.ShapeModel method)</a>
+</li>
+      </ul></li>
   </ul></td>
 </tr></table>
 
 <h2 id="M">M</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api/generated/compas_gmsh.models.CSGModel.mesh_node_xyz.html#compas_gmsh.models.CSGModel.mesh_node_xyz">mesh_node_xyz() (compas_gmsh.models.CSGModel method)</a>
+
+      <ul>
+        <li><a href="api/generated/compas_gmsh.models.MeshModel.mesh_node_xyz.html#compas_gmsh.models.MeshModel.mesh_node_xyz">(compas_gmsh.models.MeshModel method)</a>
+</li>
+        <li><a href="api/generated/compas_gmsh.models.Model.mesh_node_xyz.html#compas_gmsh.models.Model.mesh_node_xyz">(compas_gmsh.models.Model method)</a>
+</li>
+        <li><a href="api/generated/compas_gmsh.models.ShapeModel.mesh_node_xyz.html#compas_gmsh.models.ShapeModel.mesh_node_xyz">(compas_gmsh.models.ShapeModel method)</a>
+</li>
+      </ul></li>
+      <li><a href="api/generated/compas_gmsh.models.MeshModel.mesh_targetlength_at_point.html#compas_gmsh.models.MeshModel.mesh_targetlength_at_point">mesh_targetlength_at_point() (compas_gmsh.models.MeshModel method)</a>
+</li>
       <li><a href="api/generated/compas_gmsh.models.MeshModel.mesh_targetlength_at_vertex.html#compas_gmsh.models.MeshModel.mesh_targetlength_at_vertex">mesh_targetlength_at_vertex() (compas_gmsh.models.MeshModel method)</a>
 </li>
       <li><a href="api/generated/compas_gmsh.models.CSGModel.mesh_to_compas.html#compas_gmsh.models.CSGModel.mesh_to_compas">mesh_to_compas() (compas_gmsh.models.CSGModel method)</a>
@@ -682,6 +745,18 @@ document.write(`
         <li><a href="api/generated/compas_gmsh.models.ShapeModel.mesh_to_openmesh.html#compas_gmsh.models.ShapeModel.mesh_to_openmesh">(compas_gmsh.models.ShapeModel method)</a>
 </li>
       </ul></li>
+      <li><a href="api/generated/compas_gmsh.models.CSGModel.mesh_to_quads.html#compas_gmsh.models.CSGModel.mesh_to_quads">mesh_to_quads() (compas_gmsh.models.CSGModel method)</a>
+
+      <ul>
+        <li><a href="api/generated/compas_gmsh.models.MeshModel.mesh_to_quads.html#compas_gmsh.models.MeshModel.mesh_to_quads">(compas_gmsh.models.MeshModel method)</a>
+</li>
+        <li><a href="api/generated/compas_gmsh.models.Model.mesh_to_quads.html#compas_gmsh.models.Model.mesh_to_quads">(compas_gmsh.models.Model method)</a>
+</li>
+        <li><a href="api/generated/compas_gmsh.models.ShapeModel.mesh_to_quads.html#compas_gmsh.models.ShapeModel.mesh_to_quads">(compas_gmsh.models.ShapeModel method)</a>
+</li>
+      </ul></li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="api/generated/compas_gmsh.models.CSGModel.mesh_to_tets.html#compas_gmsh.models.CSGModel.mesh_to_tets">mesh_to_tets() (compas_gmsh.models.CSGModel method)</a>
 
       <ul>
@@ -692,8 +767,16 @@ document.write(`
         <li><a href="api/generated/compas_gmsh.models.ShapeModel.mesh_to_tets.html#compas_gmsh.models.ShapeModel.mesh_to_tets">(compas_gmsh.models.ShapeModel method)</a>
 </li>
       </ul></li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api/generated/compas_gmsh.models.CSGModel.mesh_to_triangles.html#compas_gmsh.models.CSGModel.mesh_to_triangles">mesh_to_triangles() (compas_gmsh.models.CSGModel method)</a>
+
+      <ul>
+        <li><a href="api/generated/compas_gmsh.models.MeshModel.mesh_to_triangles.html#compas_gmsh.models.MeshModel.mesh_to_triangles">(compas_gmsh.models.MeshModel method)</a>
+</li>
+        <li><a href="api/generated/compas_gmsh.models.Model.mesh_to_triangles.html#compas_gmsh.models.Model.mesh_to_triangles">(compas_gmsh.models.Model method)</a>
+</li>
+        <li><a href="api/generated/compas_gmsh.models.ShapeModel.mesh_to_triangles.html#compas_gmsh.models.ShapeModel.mesh_to_triangles">(compas_gmsh.models.ShapeModel method)</a>
+</li>
+      </ul></li>
       <li><a href="api/generated/compas_gmsh.models.CSGModel.mesh_to_vertices_and_faces.html#compas_gmsh.models.CSGModel.mesh_to_vertices_and_faces">mesh_to_vertices_and_faces() (compas_gmsh.models.CSGModel method)</a>
 
       <ul>
@@ -730,6 +813,34 @@ document.write(`
         <li><a href="api/generated/compas_gmsh.models.Model.optimize_mesh.html#compas_gmsh.models.Model.optimize_mesh">(compas_gmsh.models.Model method)</a>
 </li>
         <li><a href="api/generated/compas_gmsh.models.ShapeModel.optimize_mesh.html#compas_gmsh.models.ShapeModel.optimize_mesh">(compas_gmsh.models.ShapeModel method)</a>
+</li>
+      </ul></li>
+  </ul></td>
+</tr></table>
+
+<h2 id="P">P</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api/generated/compas_gmsh.models.CSGModel.point_coordinates.html#compas_gmsh.models.CSGModel.point_coordinates">point_coordinates() (compas_gmsh.models.CSGModel method)</a>
+
+      <ul>
+        <li><a href="api/generated/compas_gmsh.models.MeshModel.point_coordinates.html#compas_gmsh.models.MeshModel.point_coordinates">(compas_gmsh.models.MeshModel method)</a>
+</li>
+        <li><a href="api/generated/compas_gmsh.models.Model.point_coordinates.html#compas_gmsh.models.Model.point_coordinates">(compas_gmsh.models.Model method)</a>
+</li>
+        <li><a href="api/generated/compas_gmsh.models.ShapeModel.point_coordinates.html#compas_gmsh.models.ShapeModel.point_coordinates">(compas_gmsh.models.ShapeModel method)</a>
+</li>
+      </ul></li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api/generated/compas_gmsh.models.CSGModel.point_to_point.html#compas_gmsh.models.CSGModel.point_to_point">point_to_point() (compas_gmsh.models.CSGModel method)</a>
+
+      <ul>
+        <li><a href="api/generated/compas_gmsh.models.MeshModel.point_to_point.html#compas_gmsh.models.MeshModel.point_to_point">(compas_gmsh.models.MeshModel method)</a>
+</li>
+        <li><a href="api/generated/compas_gmsh.models.Model.point_to_point.html#compas_gmsh.models.Model.point_to_point">(compas_gmsh.models.Model method)</a>
+</li>
+        <li><a href="api/generated/compas_gmsh.models.ShapeModel.point_to_point.html#compas_gmsh.models.ShapeModel.point_to_point">(compas_gmsh.models.ShapeModel method)</a>
 </li>
       </ul></li>
   </ul></td>
@@ -772,6 +883,68 @@ document.write(`
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="api/generated/compas_gmsh.models.ShapeModel.html#compas_gmsh.models.ShapeModel">ShapeModel (class in compas_gmsh.models)</a>
 </li>
+      <li><a href="api/generated/compas_gmsh.models.CSGModel.surface_coordinates_at.html#compas_gmsh.models.CSGModel.surface_coordinates_at">surface_coordinates_at() (compas_gmsh.models.CSGModel method)</a>
+
+      <ul>
+        <li><a href="api/generated/compas_gmsh.models.MeshModel.surface_coordinates_at.html#compas_gmsh.models.MeshModel.surface_coordinates_at">(compas_gmsh.models.MeshModel method)</a>
+</li>
+        <li><a href="api/generated/compas_gmsh.models.Model.surface_coordinates_at.html#compas_gmsh.models.Model.surface_coordinates_at">(compas_gmsh.models.Model method)</a>
+</li>
+        <li><a href="api/generated/compas_gmsh.models.ShapeModel.surface_coordinates_at.html#compas_gmsh.models.ShapeModel.surface_coordinates_at">(compas_gmsh.models.ShapeModel method)</a>
+</li>
+      </ul></li>
+      <li><a href="api/generated/compas_gmsh.models.CSGModel.surface_curves.html#compas_gmsh.models.CSGModel.surface_curves">surface_curves() (compas_gmsh.models.CSGModel method)</a>
+
+      <ul>
+        <li><a href="api/generated/compas_gmsh.models.MeshModel.surface_curves.html#compas_gmsh.models.MeshModel.surface_curves">(compas_gmsh.models.MeshModel method)</a>
+</li>
+        <li><a href="api/generated/compas_gmsh.models.Model.surface_curves.html#compas_gmsh.models.Model.surface_curves">(compas_gmsh.models.Model method)</a>
+</li>
+        <li><a href="api/generated/compas_gmsh.models.ShapeModel.surface_curves.html#compas_gmsh.models.ShapeModel.surface_curves">(compas_gmsh.models.ShapeModel method)</a>
+</li>
+      </ul></li>
+      <li><a href="api/generated/compas_gmsh.models.CSGModel.surface_domain.html#compas_gmsh.models.CSGModel.surface_domain">surface_domain() (compas_gmsh.models.CSGModel method)</a>
+
+      <ul>
+        <li><a href="api/generated/compas_gmsh.models.MeshModel.surface_domain.html#compas_gmsh.models.MeshModel.surface_domain">(compas_gmsh.models.MeshModel method)</a>
+</li>
+        <li><a href="api/generated/compas_gmsh.models.Model.surface_domain.html#compas_gmsh.models.Model.surface_domain">(compas_gmsh.models.Model method)</a>
+</li>
+        <li><a href="api/generated/compas_gmsh.models.ShapeModel.surface_domain.html#compas_gmsh.models.ShapeModel.surface_domain">(compas_gmsh.models.ShapeModel method)</a>
+</li>
+      </ul></li>
+      <li><a href="api/generated/compas_gmsh.models.CSGModel.surface_faces.html#compas_gmsh.models.CSGModel.surface_faces">surface_faces() (compas_gmsh.models.CSGModel method)</a>
+
+      <ul>
+        <li><a href="api/generated/compas_gmsh.models.MeshModel.surface_faces.html#compas_gmsh.models.MeshModel.surface_faces">(compas_gmsh.models.MeshModel method)</a>
+</li>
+        <li><a href="api/generated/compas_gmsh.models.Model.surface_faces.html#compas_gmsh.models.Model.surface_faces">(compas_gmsh.models.Model method)</a>
+</li>
+        <li><a href="api/generated/compas_gmsh.models.ShapeModel.surface_faces.html#compas_gmsh.models.ShapeModel.surface_faces">(compas_gmsh.models.ShapeModel method)</a>
+</li>
+      </ul></li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api/generated/compas_gmsh.models.CSGModel.surface_mesh.html#compas_gmsh.models.CSGModel.surface_mesh">surface_mesh() (compas_gmsh.models.CSGModel method)</a>
+
+      <ul>
+        <li><a href="api/generated/compas_gmsh.models.MeshModel.surface_mesh.html#compas_gmsh.models.MeshModel.surface_mesh">(compas_gmsh.models.MeshModel method)</a>
+</li>
+        <li><a href="api/generated/compas_gmsh.models.Model.surface_mesh.html#compas_gmsh.models.Model.surface_mesh">(compas_gmsh.models.Model method)</a>
+</li>
+        <li><a href="api/generated/compas_gmsh.models.ShapeModel.surface_mesh.html#compas_gmsh.models.ShapeModel.surface_mesh">(compas_gmsh.models.ShapeModel method)</a>
+</li>
+      </ul></li>
+      <li><a href="api/generated/compas_gmsh.models.CSGModel.surface_vertices.html#compas_gmsh.models.CSGModel.surface_vertices">surface_vertices() (compas_gmsh.models.CSGModel method)</a>
+
+      <ul>
+        <li><a href="api/generated/compas_gmsh.models.MeshModel.surface_vertices.html#compas_gmsh.models.MeshModel.surface_vertices">(compas_gmsh.models.MeshModel method)</a>
+</li>
+        <li><a href="api/generated/compas_gmsh.models.Model.surface_vertices.html#compas_gmsh.models.Model.surface_vertices">(compas_gmsh.models.Model method)</a>
+</li>
+        <li><a href="api/generated/compas_gmsh.models.ShapeModel.surface_vertices.html#compas_gmsh.models.ShapeModel.surface_vertices">(compas_gmsh.models.ShapeModel method)</a>
+</li>
+      </ul></li>
       <li><a href="api/generated/compas_gmsh.models.CSGModel.synchronize.html#compas_gmsh.models.CSGModel.synchronize">synchronize() (compas_gmsh.models.CSGModel method)</a>
 
       <ul>
@@ -780,6 +953,84 @@ document.write(`
         <li><a href="api/generated/compas_gmsh.models.Model.synchronize.html#compas_gmsh.models.Model.synchronize">(compas_gmsh.models.Model method)</a>
 </li>
         <li><a href="api/generated/compas_gmsh.models.ShapeModel.synchronize.html#compas_gmsh.models.ShapeModel.synchronize">(compas_gmsh.models.ShapeModel method)</a>
+</li>
+      </ul></li>
+  </ul></td>
+</tr></table>
+
+<h2 id="V">V</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api/generated/compas_gmsh.models.CSGModel.volume_curves.html#compas_gmsh.models.CSGModel.volume_curves">volume_curves() (compas_gmsh.models.CSGModel method)</a>
+
+      <ul>
+        <li><a href="api/generated/compas_gmsh.models.MeshModel.volume_curves.html#compas_gmsh.models.MeshModel.volume_curves">(compas_gmsh.models.MeshModel method)</a>
+</li>
+        <li><a href="api/generated/compas_gmsh.models.Model.volume_curves.html#compas_gmsh.models.Model.volume_curves">(compas_gmsh.models.Model method)</a>
+</li>
+        <li><a href="api/generated/compas_gmsh.models.ShapeModel.volume_curves.html#compas_gmsh.models.ShapeModel.volume_curves">(compas_gmsh.models.ShapeModel method)</a>
+</li>
+      </ul></li>
+      <li><a href="api/generated/compas_gmsh.models.CSGModel.volume_faces.html#compas_gmsh.models.CSGModel.volume_faces">volume_faces() (compas_gmsh.models.CSGModel method)</a>
+
+      <ul>
+        <li><a href="api/generated/compas_gmsh.models.MeshModel.volume_faces.html#compas_gmsh.models.MeshModel.volume_faces">(compas_gmsh.models.MeshModel method)</a>
+</li>
+        <li><a href="api/generated/compas_gmsh.models.Model.volume_faces.html#compas_gmsh.models.Model.volume_faces">(compas_gmsh.models.Model method)</a>
+</li>
+        <li><a href="api/generated/compas_gmsh.models.ShapeModel.volume_faces.html#compas_gmsh.models.ShapeModel.volume_faces">(compas_gmsh.models.ShapeModel method)</a>
+</li>
+      </ul></li>
+      <li><a href="api/generated/compas_gmsh.models.CSGModel.volume_mesh.html#compas_gmsh.models.CSGModel.volume_mesh">volume_mesh() (compas_gmsh.models.CSGModel method)</a>
+
+      <ul>
+        <li><a href="api/generated/compas_gmsh.models.MeshModel.volume_mesh.html#compas_gmsh.models.MeshModel.volume_mesh">(compas_gmsh.models.MeshModel method)</a>
+</li>
+        <li><a href="api/generated/compas_gmsh.models.Model.volume_mesh.html#compas_gmsh.models.Model.volume_mesh">(compas_gmsh.models.Model method)</a>
+</li>
+        <li><a href="api/generated/compas_gmsh.models.ShapeModel.volume_mesh.html#compas_gmsh.models.ShapeModel.volume_mesh">(compas_gmsh.models.ShapeModel method)</a>
+</li>
+      </ul></li>
+      <li><a href="api/generated/compas_gmsh.models.CSGModel.volume_points.html#compas_gmsh.models.CSGModel.volume_points">volume_points() (compas_gmsh.models.CSGModel method)</a>
+
+      <ul>
+        <li><a href="api/generated/compas_gmsh.models.MeshModel.volume_points.html#compas_gmsh.models.MeshModel.volume_points">(compas_gmsh.models.MeshModel method)</a>
+</li>
+        <li><a href="api/generated/compas_gmsh.models.Model.volume_points.html#compas_gmsh.models.Model.volume_points">(compas_gmsh.models.Model method)</a>
+</li>
+        <li><a href="api/generated/compas_gmsh.models.ShapeModel.volume_points.html#compas_gmsh.models.ShapeModel.volume_points">(compas_gmsh.models.ShapeModel method)</a>
+</li>
+      </ul></li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api/generated/compas_gmsh.models.CSGModel.volume_surfaces.html#compas_gmsh.models.CSGModel.volume_surfaces">volume_surfaces() (compas_gmsh.models.CSGModel method)</a>
+
+      <ul>
+        <li><a href="api/generated/compas_gmsh.models.MeshModel.volume_surfaces.html#compas_gmsh.models.MeshModel.volume_surfaces">(compas_gmsh.models.MeshModel method)</a>
+</li>
+        <li><a href="api/generated/compas_gmsh.models.Model.volume_surfaces.html#compas_gmsh.models.Model.volume_surfaces">(compas_gmsh.models.Model method)</a>
+</li>
+        <li><a href="api/generated/compas_gmsh.models.ShapeModel.volume_surfaces.html#compas_gmsh.models.ShapeModel.volume_surfaces">(compas_gmsh.models.ShapeModel method)</a>
+</li>
+      </ul></li>
+      <li><a href="api/generated/compas_gmsh.models.CSGModel.volume_tets.html#compas_gmsh.models.CSGModel.volume_tets">volume_tets() (compas_gmsh.models.CSGModel method)</a>
+
+      <ul>
+        <li><a href="api/generated/compas_gmsh.models.MeshModel.volume_tets.html#compas_gmsh.models.MeshModel.volume_tets">(compas_gmsh.models.MeshModel method)</a>
+</li>
+        <li><a href="api/generated/compas_gmsh.models.Model.volume_tets.html#compas_gmsh.models.Model.volume_tets">(compas_gmsh.models.Model method)</a>
+</li>
+        <li><a href="api/generated/compas_gmsh.models.ShapeModel.volume_tets.html#compas_gmsh.models.ShapeModel.volume_tets">(compas_gmsh.models.ShapeModel method)</a>
+</li>
+      </ul></li>
+      <li><a href="api/generated/compas_gmsh.models.CSGModel.volume_vertices.html#compas_gmsh.models.CSGModel.volume_vertices">volume_vertices() (compas_gmsh.models.CSGModel method)</a>
+
+      <ul>
+        <li><a href="api/generated/compas_gmsh.models.MeshModel.volume_vertices.html#compas_gmsh.models.MeshModel.volume_vertices">(compas_gmsh.models.MeshModel method)</a>
+</li>
+        <li><a href="api/generated/compas_gmsh.models.Model.volume_vertices.html#compas_gmsh.models.Model.volume_vertices">(compas_gmsh.models.Model method)</a>
+</li>
+        <li><a href="api/generated/compas_gmsh.models.ShapeModel.volume_vertices.html#compas_gmsh.models.ShapeModel.volume_vertices">(compas_gmsh.models.ShapeModel method)</a>
 </li>
       </ul></li>
   </ul></td>
