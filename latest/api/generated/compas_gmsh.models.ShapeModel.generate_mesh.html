@@ -7,8 +7,8 @@
 
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
-
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+    <link rel="icon" href="../../_static/compas.ico" type="image/x-icon">
     <title>ShapeModel.generate_mesh &#8212; COMPAS Gmsh</title>
   
   
@@ -30,25 +30,22 @@
 <link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.1.2/webfonts/fa-regular-400.woff2" />
 
     <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
-    <link rel="stylesheet" type="text/css" href="../../_static/graphviz.css" />
-    <link rel="stylesheet" type="text/css" href="../../_static/plot_directive.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/css/compas.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css" />
     <link rel="stylesheet" type="text/css" href="../../_static/tabs.css" />
     <link rel="stylesheet" type="text/css" href="../../_static/togglebutton.css" />
-    <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css" />
     <link rel="stylesheet" type="text/css" href="../../_static/design-style.1e8bd061cd6da7fc9cf755528e8ffc24.min.css" />
-    <link rel="stylesheet" type="text/css" href="../../_static/compas.css" />
   
   <!-- Pre-loaded scripts that we'll load fully later -->
   <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=e353d410970836974a52" />
 <link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=e353d410970836974a52" />
 
     <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
-    <script src="../../_static/jquery.js"></script>
-    <script src="../../_static/underscore.js"></script>
     <script src="../../_static/doctools.js"></script>
-    <script src="../../_static/tabs.js"></script>
+    <script src="../../_static/sphinx_highlight.js"></script>
     <script src="../../_static/clipboard.min.js"></script>
     <script src="../../_static/copybutton.js"></script>
+    <script src="../../_static/tabs.js"></script>
     <script>let toggleHintShow = 'Click to show';</script>
     <script>let toggleHintHide = 'Click to hide';</script>
     <script>let toggleOpenOnPrint = 'true';</script>
@@ -60,7 +57,6 @@
         DOCUMENTATION_OPTIONS.theme_switcher_json_url = 'https://raw.githubusercontent.com/compas-dev/compas_gmsh/gh-pages/versions.json';
         DOCUMENTATION_OPTIONS.theme_switcher_version_match = 'latest';
         </script>
-    <link rel="shortcut icon" href="../../_static/compas.ico"/>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
     <link rel="next" title="ShapeModel.heal" href="compas_gmsh.models.ShapeModel.heal.html" />
@@ -130,7 +126,7 @@
       
     
     
-    <img src="../../_static/compas_icon.png" class="logo__image only-light" alt="Logo image"/>
+    <img src="../../_static/compas_icon_white.png" class="logo__image only-light" alt="Logo image"/>
     <script>document.write(`<img src="../../_static/compas_icon_white.png" class="logo__image only-dark" alt="Logo image"/>`);</script>
   
   
@@ -141,7 +137,7 @@
   </div>
   
   
-  <div class="col-lg-9 navbar-header-items">
+  <div class=" navbar-header-items">
     
     <div class="me-auto navbar-header-items__center">
       
@@ -291,7 +287,7 @@ document.write(`
           
           
           
-          <a href="https://pypi.org/project/compas-gmsh/" title="PyPI" class="nav-link" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><span><i class="fa-brands fa-python"></i></span>
+          <a href="https://pypi.org/project/compas_gmsh/" title="PyPI" class="nav-link" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><span><i class="fa-brands fa-python"></i></span>
             <label class="sr-only">PyPI</label></a>
         </li>
 </ul></div>
@@ -312,6 +308,10 @@ document.write(`
     </div>
   
 
+  
+    <label class="sidebar-toggle secondary-toggle" for="__secondary">
+      <span class="fa-solid fa-outdent"></span>
+    </label>
   
 </div>
 
@@ -464,7 +464,7 @@ document.write(`
           
           
           
-          <a href="https://pypi.org/project/compas-gmsh/" title="PyPI" class="nav-link" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><span><i class="fa-brands fa-python"></i></span>
+          <a href="https://pypi.org/project/compas_gmsh/" title="PyPI" class="nav-link" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><span><i class="fa-brands fa-python"></i></span>
             <label class="sr-only">PyPI</label></a>
         </li>
 </ul></div>
@@ -578,20 +578,20 @@ document.write(`
 <div id="searchbox"></div>
                 <article class="bd-article" role="main">
                   
-  <section class="detail" id="shapemodel-generate-mesh">
+  <section id="shapemodel-generate-mesh">
 <h1>ShapeModel.generate_mesh</h1>
 <dl class="py method">
 <dt class="sig sig-object py" id="compas_gmsh.models.ShapeModel.generate_mesh">
-<span class="sig-prename descclassname"><span class="pre">ShapeModel.</span></span><span class="sig-name descname"><span class="pre">generate_mesh</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dim</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><span class="pre">int</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">2</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.12)"><span class="pre">None</span></a></span></span></dt>
+<span class="sig-prename descclassname"><span class="pre">ShapeModel.</span></span><span class="sig-name descname"><span class="pre">generate_mesh</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dim</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">2</span></span></em><span class="sig-paren">)</span></dt>
 <dd><p>Generate a mesh of the current model.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="simple">
 <dt><strong>dim</strong><span class="classifier">int, optional</span></dt><dd><p>The dimension of the mesh.</p>
 </dd>
 </dl>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><dl class="simple">
 <dt>None</dt><dd><p>The mesh is stored in the model for further refinement and optimisation.
 To retrieve the generated mesh, use <a class="reference internal" href="compas_gmsh.models.ShapeModel.mesh_to_compas.html#compas_gmsh.models.ShapeModel.mesh_to_compas" title="compas_gmsh.models.ShapeModel.mesh_to_compas"><code class="xref py py-meth docutils literal notranslate"><span class="pre">mesh_to_compas()</span></code></a>, <a class="reference internal" href="compas_gmsh.models.ShapeModel.mesh_to_openmesh.html#compas_gmsh.models.ShapeModel.mesh_to_openmesh" title="compas_gmsh.models.ShapeModel.mesh_to_openmesh"><code class="xref py py-meth docutils literal notranslate"><span class="pre">mesh_to_openmesh()</span></code></a>, or <a class="reference internal" href="compas_gmsh.models.ShapeModel.mesh_to_tets.html#compas_gmsh.models.ShapeModel.mesh_to_tets" title="compas_gmsh.models.ShapeModel.mesh_to_tets"><code class="xref py py-meth docutils literal notranslate"><span class="pre">mesh_to_tets()</span></code></a>.</p>
@@ -614,37 +614,25 @@ To influence the meshing process, use the options of the model (<code class="xre
               
                 <footer class="bd-footer-article">
                   
-<div class="footer-article-items footer-article__inner">
-  
-    <div class="footer-article-item"><!-- Previous / next buttons -->
-<div class="prev-next-area">
-    <a class="left-prev"
-       href="compas_gmsh.models.ShapeModel.from_step.html"
-       title="previous page">
-      <i class="fa-solid fa-angle-left"></i>
-      <div class="prev-next-info">
-        <p class="prev-next-subtitle">previous</p>
-        <p class="prev-next-title">ShapeModel.from_step</p>
-      </div>
-    </a>
-    <a class="right-next"
-       href="compas_gmsh.models.ShapeModel.heal.html"
-       title="next page">
-      <div class="prev-next-info">
-        <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">ShapeModel.heal</p>
-      </div>
-      <i class="fa-solid fa-angle-right"></i>
-    </a>
-</div></div>
-  
-</div>
-
                 </footer>
               
             </div>
             
             
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> On this page
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#compas_gmsh.models.ShapeModel.generate_mesh"><code class="docutils literal notranslate"><span class="pre">ShapeModel.generate_mesh()</span></code></a></li>
+</ul>
+  </nav></div>
+
+</div></div>
               
             
           </div>
@@ -676,7 +664,7 @@ To influence the meshing process, use the options of the model (<code class="xre
       
         <div class="footer-item">
   <p class="sphinx-version">
-    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 4.5.0.
+    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 6.2.1.
     <br/>
   </p>
 </div>
