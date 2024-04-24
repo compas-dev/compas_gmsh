@@ -1,21 +1,20 @@
-from typing import Tuple
-from typing import List
-from typing import Dict
-from typing import Optional
-
 import enum
-
 import sys
+from typing import Dict
+from typing import List
+from typing import Optional
+from typing import Tuple
+
 import gmsh
-
-from compas.geometry import Point
-from compas.geometry import Polyline
-from compas.geometry import Polyhedron
 from compas.datastructures import Mesh
-from compas.utilities import linspace
+from compas.geometry import Point
+from compas.geometry import Polyhedron
+from compas.geometry import Polyline
+from compas.itertools import linspace
+from compas.tolerance import TOL
 
-from compas_gmsh.options import OptimizationAlgorithm
 from compas_gmsh.options import MeshOptions
+from compas_gmsh.options import OptimizationAlgorithm
 
 # from compas_gmsh.options import RecombinationAlgorithm
 
@@ -238,9 +237,7 @@ class Model:
         u, v = self.model.get_parametrization_bounds(1, tag)
         return u[0], v[0]
 
-    def surface_domain(
-        self, tag: int
-    ) -> Tuple[Tuple[float, float], Tuple[float, float]]:
+    def surface_domain(self, tag: int) -> Tuple[Tuple[float, float], Tuple[float, float]]:
         """Get the domain of a surface in the model.
 
         Parameters
@@ -353,9 +350,75 @@ class Model:
         points = [self.curve_coordinates_at(tag, t) for t in linspace(u, v, n)]
         return Polyline(points)
 
+    # =============================================================================
+    # Model exploration
+    # =============================================================================
+
+    def find_points_at_xyz(self, xyz: list[float], tolerance=None) -> list[int]:
+        """Find the model points at or close to a spatial location.
+
+        Parameters
+        ----------
+        xyz : list of float
+            The XYZ coordinates of the location.
+
+        Returns
+        -------
+        list of int
+            The point identifiers.
+
+        """
+        points = []
+        key = TOL.geometric_key(xyz)
+        for point in self.points:
+            test = TOL.geometric_key(self.point_coordinates(point))
+            if test == key:
+                points.append(point)
+        return points
+
+    def find_points_at_xy(self, xyz: list[float], tolerance=None) -> list[int]:
+        """Find the model points at or close to a spatial location.
+
+        Parameters
+        ----------
+        xyz : list of float
+            The XY(Z) coordinates of the location.
+
+        Returns
+        -------
+        list of int
+            The point identifiers.
+
+        """
+        points = []
+        key = TOL.geometric_key_xy(xyz[:2])
+        for point in self.points:
+            test = TOL.geometric_key_xy(self.point_coordinates(point)[:2])
+            if test == key:
+                points.append(point)
+        return points
+
     # ==============================================================================
     # Meshing
     # ==============================================================================
+
+    def mesh_targetlength_at_point(self, tag: int, target: float) -> None:
+        """
+        Set the target length at a particular mesh point.
+
+        Parameters
+        ----------
+        tag : int
+            The point identifier.
+        target : float
+            The target length value.
+
+        Returns
+        -------
+        None
+
+        """
+        self.occ.mesh.set_size([(0, tag)], target)
 
     def generate_mesh(self, dim: int = 2) -> None:
         """
@@ -529,9 +592,7 @@ class Model:
         _, downward = self.model.get_adjacencies(3, tag)
         for tag in downward:
             node_tags, node_coords, _ = self.mesh.get_nodes_by_element_type(2, tag)
-            vertices.update(
-                dict(zip(node_tags, node_coords.reshape((-1, 3), order="C")))
-            )
+            vertices.update(dict(zip(node_tags, node_coords.reshape((-1, 3), order="C"))))
         return vertices
 
     def volume_faces(self, tag: int) -> List[List[int]]:
@@ -556,9 +617,7 @@ class Model:
                 element_props = self.mesh.get_element_properties(element_type)
                 number_of_nodes = element_props[3]
                 for i, element_tag in enumerate(element_tags):
-                    faces.append(
-                        node_tags[i * number_of_nodes : (i + 1) * number_of_nodes]
-                    )
+                    faces.append(node_tags[i * number_of_nodes : (i + 1) * number_of_nodes])
         return faces
 
     def volume_mesh(self, tag: int) -> Mesh:
@@ -638,9 +697,7 @@ class Model:
             number_of_nodes = self.mesh.get_element_properties(element_type)[3]
             if element_type in (2, 3):
                 for i, element_tag in enumerate(element_tags):
-                    face = node_tags[
-                        i * number_of_nodes : i * number_of_nodes + number_of_nodes
-                    ]
+                    face = node_tags[i * number_of_nodes : i * number_of_nodes + number_of_nodes]
                     faces.append(face)
 
         return vertices, faces
@@ -657,9 +714,7 @@ class Model:
         # set the element type to triangles
         element_type = 2
         # get all triangle nodes
-        tags, coords, _ = self.mesh.get_nodes_by_element_type(
-            element_type, returnParametricCoord=False
-        )
+        tags, coords, _ = self.mesh.get_nodes_by_element_type(element_type, returnParametricCoord=False)
         node_xyz = dict(zip(tags, coords.reshape((-1, 3), order="C")))
         # get properties of triangles
         element_props = self.mesh.get_element_properties(element_type)
@@ -687,9 +742,7 @@ class Model:
         # set the element type to quads
         element_type = 3
         # get all quad nodes
-        tags, coords, _ = self.mesh.get_nodes_by_element_type(
-            element_type, returnParametricCoord=False
-        )
+        tags, coords, _ = self.mesh.get_nodes_by_element_type(element_type, returnParametricCoord=False)
         node_xyz = dict(zip(tags, coords.reshape((-1, 3), order="C")))
         # get properties of quads
         element_props = self.mesh.get_element_properties(element_type)
@@ -718,9 +771,7 @@ class Model:
         # set the element type to tetrahedra
         element_type = 4
         # get all tetrahedra nodes
-        tags, coords, _ = self.mesh.get_nodes_by_element_type(
-            element_type, returnParametricCoord=False
-        )
+        tags, coords, _ = self.mesh.get_nodes_by_element_type(element_type, returnParametricCoord=False)
         # make a node coordinate map
         node_xyz = dict(zip(tags, coords.reshape((-1, 3), order="C")))
         # get properties of tetrahedra

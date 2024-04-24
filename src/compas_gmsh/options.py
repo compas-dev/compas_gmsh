@@ -1,5 +1,6 @@
-import gmsh
 from enum import Enum
+
+import gmsh
 
 
 class MeshAlgorithm(Enum):
@@ -152,13 +153,11 @@ class MeshOptions:
 
     @property
     def meshsize_extend_from_boundary(self) -> MeshSizeExtendFromBoundary:
-        return MeshSizeExtendFromBoundary(
-            gmsh.option.get_number("Mesh.MeshSizeExtendFromBoundary")
-        )
+        return MeshSizeExtendFromBoundary(gmsh.option.get_number("Mesh.MeshSizeExtendFromBoundary"))
 
     @meshsize_extend_from_boundary.setter
     def meshsize_extend_from_boundary(self, value: MeshSizeExtendFromBoundary):
-        gmsh.option.set_number("Mesh.MeshSizeExtendFromBoundary", value.value)
+        gmsh.option.set_number("Mesh.MeshSizeExtendFromBoundary", int(value))
 
     @property
     def meshsize_min(self) -> float:

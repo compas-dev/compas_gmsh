@@ -1,7 +1,9 @@
-from typing import Optional, Union, Dict
+from typing import Dict
+from typing import Optional
+from typing import Union
+
 from compas.datastructures import Mesh
-from compas.utilities import geometric_key_xy
-from compas.utilities import geometric_key
+
 from .model import Model
 
 
@@ -103,50 +105,6 @@ class MeshModel(Model):
         """
         return self.vertex_tag[vertex]
 
-    def find_points_at_xyz(self, xyz: list[float], tolerance=None) -> list[int]:
-        """Find the model points at or close to a spatial location.
-
-        Parameters
-        ----------
-        xyz : list of float
-            The XYZ coordinates of the location.
-
-        Returns
-        -------
-        list of int
-            The point identifiers.
-
-        """
-        points = []
-        key = geometric_key(xyz)
-        for point in self.points:
-            test = geometric_key(self.point_coordinates(point))
-            if test == key:
-                points.append(point)
-        return points
-
-    def find_points_at_xy(self, xyz: list[float], tolerance=None) -> list[int]:
-        """Find the model points at or close to a spatial location.
-
-        Parameters
-        ----------
-        xyz : list of float
-            The XY(Z) coordinates of the location.
-
-        Returns
-        -------
-        list of int
-            The point identifiers.
-
-        """
-        points = []
-        key = geometric_key_xy(xyz[:2])
-        for point in self.points:
-            test = geometric_key_xy(self.point_coordinates(point)[:2])
-            if test == key:
-                points.append(point)
-        return points
-
     def mesh_targetlength_at_vertex(self, vertex: int, target: float) -> None:
         """
         Set the target length at a particular mesh vertex.
@@ -164,24 +122,6 @@ class MeshModel(Model):
 
         """
         tag = self.vertex_tag[vertex]
-        self.occ.mesh.set_size([(0, tag)], target)
-
-    def mesh_targetlength_at_point(self, tag: int, target: float) -> None:
-        """
-        Set the target length at a particular mesh point.
-
-        Parameters
-        ----------
-        tag : int
-            The point identifier.
-        target : float
-            The target length value.
-
-        Returns
-        -------
-        None
-
-        """
         self.occ.mesh.set_size([(0, tag)], target)
 
     def read_options_from_attributes(self) -> None:

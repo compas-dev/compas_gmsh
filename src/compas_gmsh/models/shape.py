@@ -1,8 +1,9 @@
-from typing import Tuple, List
+from typing import List
+from typing import Tuple
 
+from compas.geometry import Box
 from compas.geometry import Cylinder
 from compas.geometry import Sphere
-from compas.geometry import Box
 
 from .model import Model
 
@@ -69,9 +70,7 @@ class ShapeModel(Model):
         The *tools* are the shapes used to perform the operation.
 
         """
-        result = self.occ.intersect(
-            A, B, removeObject=remove_objects, removeTool=remove_tools
-        )
+        result = self.occ.intersect(A, B, removeObject=remove_objects, removeTool=remove_tools)
         dimtags = result[0]
         return dimtags
 
@@ -103,9 +102,7 @@ class ShapeModel(Model):
         The *tools* are the shapes used to perform the operation.
 
         """
-        result = self.occ.fuse(
-            A, B, removeObject=remove_objects, removeTool=remove_tools
-        )
+        result = self.occ.fuse(A, B, removeObject=remove_objects, removeTool=remove_tools)
         dimtags = result[0]
         return dimtags
 
@@ -137,9 +134,7 @@ class ShapeModel(Model):
         The *tools* are the shapes used to perform the operation.
 
         """
-        result = self.occ.cut(
-            A, B, removeObject=remove_objects, removeTool=remove_tools
-        )
+        result = self.occ.cut(A, B, removeObject=remove_objects, removeTool=remove_tools)
         dimtags = result[0]
         return dimtags
 
@@ -171,8 +166,6 @@ class ShapeModel(Model):
         The *tools* are the shapes used to perform the operation.
 
         """
-        result = self.occ.fragment(
-            A, B, removeObject=remove_objects, removeTool=remove_tools
-        )
+        result = self.occ.fragment(A, B, removeObject=remove_objects, removeTool=remove_tools)
         dimtags = result[0]
         return dimtags

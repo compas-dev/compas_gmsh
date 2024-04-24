@@ -1,10 +1,10 @@
-from typing import Tuple
 from typing import List
+from typing import Tuple
 
 import compas.geometry
 from compas.geometry import Box
-from compas.geometry import Sphere
 from compas.geometry import Cylinder
+from compas.geometry import Sphere
 
 from .model import Model
 
