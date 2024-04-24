@@ -10,7 +10,7 @@ COMPAS friendly interface for Gmsh.
 ## Installation
 
 ```bash
-conda create -n gmsh -c conda-forge compas compas_view2 --yes
+conda create -n gmsh -c conda-forge compas
 conda activate gmsh
 pip install compas_gmsh
 ```

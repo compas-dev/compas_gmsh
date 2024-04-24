@@ -117,3 +117,5 @@ temp/**
 scripts/__floor
 
 docs/api/generated
+.pytest_cache
+.ruff_cache
