@@ -1,10 +1,10 @@
-from compas.geometry import Vector, Frame
-from compas.geometry import Box
-from compas.geometry import Translation
 from compas.colors import Color
-
-from compas_view2.app import App
+from compas.geometry import Box
+from compas.geometry import Frame
+from compas.geometry import Translation
+from compas.geometry import Vector
 from compas_gmsh.models import ShapeModel
+from compas_view2.app import App
 
 # ==============================================================================
 # Geometry

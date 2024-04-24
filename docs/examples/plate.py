@@ -1,5 +1,7 @@
-from compas.geometry import Point, Vector
-from compas.datastructures import Mesh, mesh_thicken
+from compas.datastructures import Mesh
+from compas.datastructures import mesh_thicken
+from compas.geometry import Point
+from compas.geometry import Vector
 from compas_gmsh.models import MeshModel
 from compas_view2.app import App
 from compas_view2.shapes import Arrow

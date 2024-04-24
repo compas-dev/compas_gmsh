@@ -1,9 +1,10 @@
+from compas.geometry import Box
+from compas.geometry import Cylinder
 from compas.geometry import Frame
-from compas.geometry import Sphere, Cylinder, Box
+from compas.geometry import Sphere
 from compas.geometry import Translation
-
-from compas_view2.app import App
 from compas_gmsh.models import ShapeModel
+from compas_view2.app import App
 
 # ==============================================================================
 # Geometry
@@ -28,9 +29,7 @@ model.options.mesh.lmax = 0.05
 
 model.boolean_difference(
     model.boolean_intersection([model.add_sphere(sphere)], [model.add_box(box)]),
-    model.boolean_union(
-        [model.add_cylinder(cylz)], [model.add_cylinder(cylx), model.add_cylinder(cyly)]
-    ),
+    model.boolean_union([model.add_cylinder(cylz)], [model.add_cylinder(cylx), model.add_cylinder(cyly)]),
 )
 
 model.generate_mesh()

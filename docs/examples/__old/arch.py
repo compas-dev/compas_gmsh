@@ -14,7 +14,7 @@ model.add_box(b2)
 model.generate_mesh()
 mesh = model.mesh_to_compas()
 
-compas.json_dump(mesh, 'test.json')
+compas.json_dump(mesh, "test.json")
 
 viewer = App(width=1600, height=900)
 

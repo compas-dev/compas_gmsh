@@ -1,8 +1,6 @@
 from compas.geometry import Sphere
-
-from compas_view2.app import App
 from compas_gmsh.models import ShapeModel
-
+from compas_view2.app import App
 
 # ==============================================================================
 # Geometry

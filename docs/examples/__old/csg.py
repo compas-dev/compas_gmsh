@@ -1,9 +1,10 @@
+from compas.geometry import Box
+from compas.geometry import Cylinder
 from compas.geometry import Frame
-from compas.geometry import Sphere, Cylinder, Box
+from compas.geometry import Sphere
 from compas.geometry import Translation
-
-from compas_view2.app import App
 from compas_gmsh.models import CSGModel
+from compas_view2.app import App
 
 # ==============================================================================
 # Geometry

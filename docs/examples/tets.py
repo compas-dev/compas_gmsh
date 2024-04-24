@@ -1,8 +1,10 @@
-from compas.geometry import Sphere, Translation, centroid_points
+from compas.geometry import Sphere
+from compas.geometry import Translation
+from compas.geometry import centroid_points
 from compas.utilities import geometric_key
+from compas_gmsh.models import ShapeModel
 from compas_view2.app import App
 from compas_view2.objects import Collection
-from compas_gmsh.models import ShapeModel
 
 # ==============================================================================
 # Geometry
@@ -52,21 +54,13 @@ for tet in tets:
         top.append(tet)
 
 for tet in bottom:
-    if any(
-        geometric_key(centroid_points([tet.vertices[index] for index in face]))
-        in centroid_face
-        for face in tet.faces
-    ):
+    if any(geometric_key(centroid_points([tet.vertices[index] for index in face])) in centroid_face for face in tet.faces):
         bottom_exterior.append(tet)
     else:
         bottom_interior.append(tet)
 
 for tet in top:
-    if any(
-        geometric_key(centroid_points([tet.vertices[index] for index in face]))
-        in centroid_face
-        for face in tet.faces
-    ):
+    if any(geometric_key(centroid_points([tet.vertices[index] for index in face])) in centroid_face for face in tet.faces):
         top_exterior.append(tet)
     else:
         top_interior.append(tet)

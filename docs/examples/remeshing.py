@@ -1,4 +1,5 @@
 from random import choice
+
 import compas
 from compas.datastructures import Mesh
 from compas.topology import astar_shortest_path
