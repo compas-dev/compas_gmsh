@@ -1,7 +1,7 @@
 on:
   push:
     tags:
-      - 'v*'
+      - "v*"
 
 name: Create Release
 
@@ -11,21 +11,20 @@ jobs:
     strategy:
       matrix:
         os: [macos-latest, windows-latest]
-        python: ['3.8', '3.9', '3.10']
+        python: ["3.8", "3.9", "3.10"]
 
     steps:
-      - uses: compas-dev/compas-actions.build@v2
+      - uses: compas-dev/compas-actions.build@v4
         with:
-          test_lint: true
-          test_compas: true
-          use_conda: true
+          invoke_lint: true
+          invoke_test: true
           python: ${{ matrix.python }}
 
   Publish:
     needs: build
     runs-on: ubuntu-latest
     steps:
-      - uses: compas-dev/compas-actions.publish@v2
+      - uses: compas-dev/compas-actions.publish@v3
         with:
           pypi_token: ${{ secrets.PYPI }}
           github_token: ${{ secrets.GITHUB_TOKEN }}
