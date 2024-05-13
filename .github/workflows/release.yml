@@ -10,8 +10,8 @@ jobs:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        os: [macos-latest, windows-latest]
-        python: ["3.8", "3.9", "3.10"]
+        os: [macos-latest, windows-latest, ubuntu-latest]
+        python: ["3.9", "3.10", "3.11"]
 
     steps:
       - uses: compas-dev/compas-actions.build@v4
