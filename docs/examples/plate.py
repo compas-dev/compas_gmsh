@@ -1,17 +1,17 @@
+from compas.colors import Color
 from compas.datastructures import Mesh
-from compas.datastructures import mesh_thicken
+from compas.geometry import Line
 from compas.geometry import Point
 from compas.geometry import Vector
 from compas_gmsh.models import MeshModel
-from compas_view2.app import App
-from compas_view2.shapes import Arrow
+from compas_viewer import Viewer
 
 # ==============================================================================
 # Make a plate mesh
 # ==============================================================================
 
 mesh = Mesh.from_meshgrid(dx=10, nx=5)
-plate = mesh_thicken(mesh, 0.3)
+plate = mesh.thickened(0.3)
 
 # ==============================================================================
 # GMSH model
@@ -46,18 +46,19 @@ mesh = model.mesh_to_compas()
 # Viz
 # ==============================================================================
 
-viewer = App(width=1600, height=900)
-viewer.view.camera.position = [5, -6, 7]
-viewer.view.camera.look_at([5, 5, 0])
+viewer = Viewer()
 
-viewer.add(mesh)
+viewer.renderer.camera.target = [5, 5, 0]
+viewer.renderer.camera.position = [5, -6, 7]
+
+viewer.scene.add(mesh, show_points=False)
 
 poa = Point(*plate.vertex_coordinates(poa))
 start = poa + Vector(0, 0, 1)
 vector = Vector(0, 0, -1)
-load = Arrow(start, vector, body_width=0.03)
+load = Line.from_point_and_vector(start, vector)
 
-viewer.add(poa, pointsize=20)
-viewer.add(load, facecolor=(1, 0, 0))
+viewer.scene.add(poa, pointsize=20)
+viewer.scene.add(load, linecolor=Color.red(), lineswidth=5, show_points=False)
 
-viewer.run()
+viewer.show()

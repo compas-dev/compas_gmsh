@@ -1,10 +1,11 @@
+from compas.colors import Color
+from compas.datastructures import Mesh
 from compas.geometry import Sphere
 from compas.geometry import Translation
 from compas.geometry import centroid_points
-from compas.utilities import geometric_key
+from compas.tolerance import Tolerance
 from compas_gmsh.models import ShapeModel
-from compas_view2.app import App
-from compas_view2.objects import Collection
+from compas_viewer import Viewer
 
 # ==============================================================================
 # Geometry
@@ -35,9 +36,11 @@ shell = model.mesh_to_compas()
 
 # replace by model method
 
+tol = Tolerance()
+
 centroid_face = {}
 for face in shell.faces():
-    centroid_face[geometric_key(shell.face_centroid(face))] = face
+    centroid_face[tol.geometric_key(shell.face_centroid(face))] = face
 
 bottom_exterior = []
 bottom_interior = []
@@ -54,39 +57,57 @@ for tet in tets:
         top.append(tet)
 
 for tet in bottom:
-    if any(geometric_key(centroid_points([tet.vertices[index] for index in face])) in centroid_face for face in tet.faces):
+    if any(tol.geometric_key(centroid_points([tet.vertices[index] for index in face])) in centroid_face for face in tet.faces):
         bottom_exterior.append(tet)
     else:
         bottom_interior.append(tet)
 
 for tet in top:
-    if any(geometric_key(centroid_points([tet.vertices[index] for index in face])) in centroid_face for face in tet.faces):
+    if any(tol.geometric_key(centroid_points([tet.vertices[index] for index in face])) in centroid_face for face in tet.faces):
         top_exterior.append(tet)
     else:
         top_interior.append(tet)
 
 # ==============================================================================
+# This is a temp hack
+# ==============================================================================
+
+bottom_ext = Mesh()
+for tet in bottom_exterior:
+    bottom_ext.join(Mesh.from_vertices_and_faces(tet.vertices, tet.faces), weld=False)
+
+bottom_int = Mesh()
+for tet in bottom_interior:
+    bottom_int.join(Mesh.from_vertices_and_faces(tet.vertices, tet.faces), weld=False)
+
+top_ext = Mesh()
+for tet in top_exterior:
+    top_ext.join(Mesh.from_vertices_and_faces(tet.vertices, tet.faces), weld=False)
+
+top_int = Mesh()
+for tet in top_interior:
+    top_int.join(Mesh.from_vertices_and_faces(tet.vertices, tet.faces), weld=False)
+
+# ==============================================================================
 # Visualization with viewer
 # ==============================================================================
 
-viewer = App(width=1600, height=900)
-viewer.view.camera.position = [0, -8, 0]
-viewer.view.camera.look_at([0, 0, 0])
+viewer = Viewer()
+
+viewer.renderer.camera.target = [0, 0, 0]
+viewer.renderer.camera.position = [0, -8, 0]
 
 T = Translation.from_vector([0, 0, 0.5])
-for tet in top:
-    tet.transform(T)
+top_ext.transform(T)
+top_int.transform(T)
 
 T = Translation.from_vector([0, 0, -0.5])
-for tet in bottom:
-    tet.transform(T)
+bottom_ext.transform(T)
+bottom_int.transform(T)
 
-viewer.add(Collection(bottom_exterior), facecolor=(1, 0, 0))
-viewer.add(Collection(bottom_interior))
+viewer.scene.add(bottom_ext, facecolor=Color.red(), show_points=False)
+viewer.scene.add(bottom_int, show_points=False)
+viewer.scene.add(top_ext, facecolor=Color.green(), show_points=False)
+viewer.scene.add(top_int, show_points=False)
 
-viewer.add(Collection(top_exterior), facecolor=(0, 1, 0))
-viewer.add(Collection(top_interior))
-
-# viewer.add(shell)
-
-viewer.run()
+viewer.show()

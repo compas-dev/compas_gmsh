@@ -5,7 +5,7 @@ from compas.datastructures import Mesh
 from compas.topology import astar_shortest_path
 from compas_gmsh.models import MeshModel
 from compas_gmsh.options import MeshAlgorithm
-from compas_view2.app import App
+from compas_viewer import Viewer
 
 # ==============================================================================
 # Input
@@ -19,7 +19,7 @@ mesh = Mesh.from_obj(compas.get("tubemesh.obj"))
 
 targetlength = {vertex: 1.0 for vertex in mesh.vertices()}
 
-corners = list(mesh.vertices_where({"vertex_degree": 2}))
+corners = list(mesh.vertices_where(vertex_degree=2))
 
 start = choice(list(set(mesh.vertices()) - set(mesh.vertices_on_boundary())))
 end = choice(corners)
@@ -46,9 +46,10 @@ mesh = model.mesh_to_compas()
 # Visualize
 # ==============================================================================
 
-viewer = App(width=1600, height=900)
-viewer.view.camera.position = [1, -5, 1]
-viewer.view.camera.look_at([1, 5, 0])
+viewer = Viewer()
 
-viewer.add(mesh)
-viewer.run()
+viewer.renderer.camera.target = [1, 5, 0]
+viewer.renderer.camera.position = [1, -5, 1]
+
+viewer.scene.add(mesh, show_points=False)
+viewer.show()

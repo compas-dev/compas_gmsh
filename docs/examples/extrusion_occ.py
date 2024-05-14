@@ -8,7 +8,7 @@ from compas_gmsh.models import Model
 from compas_occ.brep import OCCBrepEdge
 from compas_occ.brep import OCCBrepFace
 from compas_occ.brep import OCCBrepLoop
-from compas_view2.app import App
+from compas_viewer import Viewer
 
 circle1 = Circle(1.0, frame=Frame([2, 2, 0]))
 circle2 = Circle(2.0, frame=Frame([-2, -2, 0]))
@@ -51,20 +51,20 @@ mesh = model.mesh_to_compas()
 # Visualization
 # =============================================================================
 
-viewer = App(width=1600, height=900)
-viewer.view.camera.position = [0, -12, 10]
-viewer.view.camera.look_at([0, 2, 0])
+viewer = Viewer()
+viewer.renderer.camera.position = [0, -12, 10]
+viewer.renderer.camera.target = [0, 2, 0])
 
-# viewer.add(brep, linewidth=2, opacity=0.5)
+# viewer.scene.add(brep, linewidth=2, opacity=0.5)
 
 # for surface in model.surfaces:
-#     viewer.add(model.surface_mesh(surface))
+#     viewer.scene.add(model.surface_mesh(surface))
 
 for curve in model.curves:
-    viewer.add(model.curve_to_polyline(curve), linewidth=2)
+    viewer.scene.add(model.curve_to_polyline(curve), linewidth=2)
 
 for point in model.points:
-    viewer.add(model.point_to_point(point), pointsize=10)
+    viewer.scene.add(model.point_to_point(point), pointsize=10)
 
-viewer.add(mesh, opacity=0.7)
+viewer.scene.add(mesh, opacity=0.7)
 viewer.show()
