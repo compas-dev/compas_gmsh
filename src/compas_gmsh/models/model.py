@@ -69,7 +69,10 @@ class Model:
         self.mesh = gmsh.model.mesh
         self.occ = gmsh.model.occ
 
-    def __del__(self):
+    # def __del__(self):
+    #     gmsh.finalize()
+
+    def destroy(self):
         gmsh.finalize()
 
     @property
