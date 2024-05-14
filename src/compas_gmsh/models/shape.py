@@ -28,7 +28,7 @@ class ShapeModel(Model):
 
     def add_sphere(self, sphere: Sphere) -> Tuple[int, int]:
         """Add a sphere to the model."""
-        x, y, z = sphere.point
+        x, y, z = sphere.frame.point
         R = sphere.radius
         tag = self.occ.add_sphere(x, y, z, R)
         return 3, tag
