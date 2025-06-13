@@ -1,20 +1,30 @@
 import enum
 import sys
-from typing import Dict
-from typing import List
+import tempfile
+from typing import Annotated
+from typing import Literal
 from typing import Optional
-from typing import Tuple
+from typing import TypeVar
 
 import gmsh
+import numpy as np
+import numpy.typing as npt
 from compas.datastructures import Mesh
+from compas.geometry import Brep
 from compas.geometry import Point
 from compas.geometry import Polyhedron
 from compas.geometry import Polyline
+from compas.geometry import transform_points_numpy
 from compas.itertools import linspace
 from compas.tolerance import TOL
 
 from compas_gmsh.options import MeshOptions
 from compas_gmsh.options import OptimizationAlgorithm
+
+DType = TypeVar("DType", bound=np.generic)
+
+Array3 = Annotated[npt.NDArray[DType], Literal[3]]
+ArrayNx3 = Annotated[npt.NDArray[DType], Literal["N", 3]]
 
 # from compas_gmsh.options import RecombinationAlgorithm
 
@@ -110,20 +120,40 @@ class Model:
     # ==============================================================================
 
     @classmethod
-    def from_step(cls, filename: str) -> "Model":
-        """
-        Construc a model from the data contained in a STEP file.
+    def from_step(cls, filepath: str) -> "Model":
+        """Construct a model from the data contained in a STEP file.
+
+        Parameters
+        ----------
+        filepath : pathlib.Path | str
+            The path to the step file.
+
+        Returns
+        -------
+        :class:`Model`
+
         """
         model = cls()
-        gmsh.open(filename)
+        gmsh.open(filepath)
         return model
 
     @classmethod
-    def from_brep(cls, brep) -> "Model":
+    def from_brep(cls, brep: Brep) -> "Model":
+        """Construct a model from a Brep.
+
+        Parameters
+        ----------
+        brep : :class:`Brep`
+            The brep geometry.
+
+        Returns
+        -------
+        :class:`Model`
+
         """
-        Construct a model from a Brep.
-        """
-        raise NotImplementedError
+        _, filepath = tempfile.mkstemp(suffix=".stp")
+        brep.to_step(filepath)
+        return cls.from_step(filepath)
 
     # ==============================================================================
     # Model entities
@@ -149,7 +179,7 @@ class Model:
     # Model boundaries
     # =============================================================================
 
-    def surface_curves(self, tag: int) -> List[int]:
+    def surface_curves(self, tag: int) -> list[int]:
         """Get the boundary curves of a surface in the model.
 
         Parameters
@@ -165,7 +195,7 @@ class Model:
         """
         return [dimtag[1] for dimtag in self.model.get_boundary([(2, tag)])]
 
-    def volume_surfaces(self, tag: int) -> List[int]:
+    def volume_surfaces(self, tag: int) -> list[int]:
         """Get the surfaces of a volume in the model.
 
         Parameters
@@ -181,7 +211,7 @@ class Model:
         """
         return [dimtag[1] for dimtag in self.model.get_boundary([(3, tag)])]
 
-    def volume_curves(self, tag: int) -> List[int]:
+    def volume_curves(self, tag: int) -> list[int]:
         """Get the curves of a volume in the model.
 
         Parameters
@@ -202,7 +232,7 @@ class Model:
             curves += [tag for tag in temp if tag > 0]
         return curves
 
-    def volume_points(self, tag: int) -> List[int]:
+    def volume_points(self, tag: int) -> list[int]:
         """Get the points of a volume in the model.
 
         Parameters
@@ -223,7 +253,7 @@ class Model:
     # Model geometry representations
     # =============================================================================
 
-    def curve_domain(self, tag: int) -> Tuple[float, float]:
+    def curve_domain(self, tag: int) -> tuple[float, float]:
         """Get the domain of a curve in the model.
 
         Parameters
@@ -240,7 +270,7 @@ class Model:
         u, v = self.model.get_parametrization_bounds(1, tag)
         return u[0], v[0]
 
-    def surface_domain(self, tag: int) -> Tuple[Tuple[float, float], Tuple[float, float]]:
+    def surface_domain(self, tag: int) -> tuple[tuple[float, float], tuple[float, float]]:
         """Get the domain of a surface in the model.
 
         Parameters
@@ -259,7 +289,7 @@ class Model:
         umax, vmax = dmax
         return (umin, umax), (vmin, vmax)
 
-    def point_coordinates(self, tag: int) -> List[float]:
+    def point_coordinates(self, tag: int) -> Array3[np.float64]:
         """Get the coordinates of a point in the model.
 
         Parameters
@@ -273,9 +303,9 @@ class Model:
             The coordinates of the point.
 
         """
-        return self.model.get_value(0, tag, [None])
+        return self.model.get_value(0, tag, [None])  # type: ignore
 
-    def curve_coordinates_at(self, tag: int, u: float) -> List[float]:
+    def curve_coordinates_at(self, tag: int, u: float) -> Array3[np.float64]:
         """Get the coordinates of a point on a curve in the model.
 
         Parameters
@@ -291,9 +321,9 @@ class Model:
             The coordinates of the point on the curve.
 
         """
-        return self.model.get_value(1, tag, [u])
+        return self.model.get_value(1, tag, [u])  # type: ignore
 
-    def surface_coordinates_at(self, tag: int, u: float, v: float) -> List[float]:
+    def surface_coordinates_at(self, tag: int, u: float, v: float) -> Array3[np.float64]:
         """Get the coordinates of a point on a surface in the model.
 
         Parameters
@@ -311,7 +341,7 @@ class Model:
             The coordinates of the point on the surface.
 
         """
-        return self.model.get_value(2, tag, [u, v])
+        return self.model.get_value(2, tag, [u, v])  # type: ignore
 
     # =============================================================================
     # Model geometry conversions
@@ -499,7 +529,7 @@ class Model:
     # Mesh elements
     # =============================================================================
 
-    def curve_vertices(self, tag: int) -> dict[int, List[float]]:
+    def curve_vertices(self, tag: int) -> dict[int, Array3[np.float64]]:
         """Get the vertices of a curve.
 
         Parameters
@@ -513,10 +543,11 @@ class Model:
             The vertices of the curve.
 
         """
-        node_tags, node_coords, _ = self.mesh.get_nodes_by_element_type(1, tag)
+        node_coords: ArrayNx3[np.float64]
+        node_tags, node_coords, _ = self.mesh.get_nodes_by_element_type(1, tag)  # type: ignore
         return dict(zip(node_tags, node_coords.reshape((-1, 3), order="C")))
 
-    def surface_vertices(self, tag: int) -> dict[int, List[float]]:
+    def surface_vertices(self, tag: int) -> dict[int, Array3[np.float64]]:
         """Get the vertices of a surface.
 
         Parameters
@@ -526,14 +557,15 @@ class Model:
 
         Returns
         -------
-        list[list[int]]
+        list[list[float]]
             The vertices of the surface.
 
         """
-        node_tags, node_coords, _ = self.mesh.get_nodes_by_element_type(2, tag)
+        node_coords: ArrayNx3[np.float64]
+        node_tags, node_coords, _ = self.mesh.get_nodes_by_element_type(2, tag)  # type: ignore
         return dict(zip(node_tags, node_coords.reshape((-1, 3), order="C")))
 
-    def surface_faces(self, tag: int) -> List[List[int]]:
+    def surface_faces(self, tag: int) -> list[list[int]]:
         """Get the faces of a surface.
 
         Parameters
@@ -577,7 +609,7 @@ class Model:
         mesh.remove_unused_vertices()
         return mesh
 
-    def volume_vertices(self, tag: int) -> dict[int, List[float]]:
+    def volume_vertices(self, tag: int) -> dict[int, Array3[np.float64]]:
         """Get the vertices of a volume.
 
         Parameters
@@ -593,12 +625,13 @@ class Model:
         """
         vertices = {}
         _, downward = self.model.get_adjacencies(3, tag)
+        node_coords: ArrayNx3[np.float64]
         for tag in downward:
-            node_tags, node_coords, _ = self.mesh.get_nodes_by_element_type(2, tag)
+            node_tags, node_coords, _ = self.mesh.get_nodes_by_element_type(2, tag)  # type: ignore
             vertices.update(dict(zip(node_tags, node_coords.reshape((-1, 3), order="C"))))
         return vertices
 
-    def volume_faces(self, tag: int) -> List[List[int]]:
+    def volume_faces(self, tag: int) -> list[list[int]]:
         """Get the faces of a volume.
 
         Parameters
@@ -643,7 +676,7 @@ class Model:
         mesh.remove_unused_vertices()
         return mesh
 
-    def volume_tets(self, tag: int) -> List[Polyhedron]:
+    def volume_tets(self, tag: int) -> list[Polyhedron]:
         """Get the tetrahedra of a volume entity.
 
         Parameters
@@ -657,7 +690,7 @@ class Model:
             The tetrahedra of the volume.
 
         """
-        pass
+        raise NotImplementedError
 
     # ==============================================================================
     # Export
@@ -672,14 +705,13 @@ class Model:
             A dictionary mapping node tags to node coordinates.
 
         """
-        nodes = self.mesh.get_nodes()
-        node_tags = nodes[0]
-        node_coords = nodes[1].reshape((-1, 3), order="C")
-        return dict(zip(node_tags, node_coords))
+        node_coords: ArrayNx3[np.float64]
+        node_tags, node_coords, _ = self.mesh.get_nodes()  # type: ignore
+        return dict(zip(node_tags, node_coords.reshape((-1, 3), order="C")))
 
     def mesh_to_vertices_and_faces(
         self,
-    ) -> Tuple[Dict[int, List[float]], List[List[int]]]:
+    ) -> tuple[dict[int, Array3[np.float64]], list[list[int]]]:
         """
         Convert the model mesh to a COMPAS mesh data structure.
 
@@ -705,7 +737,7 @@ class Model:
 
         return vertices, faces
 
-    def mesh_to_triangles(self) -> List[List[Point]]:
+    def mesh_to_triangles(self) -> list[list[Point]]:
         """Convert the model mesh to a list of triangles.
 
         Returns
@@ -717,7 +749,8 @@ class Model:
         # set the element type to triangles
         element_type = 2
         # get all triangle nodes
-        tags, coords, _ = self.mesh.get_nodes_by_element_type(element_type, returnParametricCoord=False)
+        coords: ArrayNx3[np.float64]
+        tags, coords, _ = self.mesh.get_nodes_by_element_type(element_type, returnParametricCoord=False)  # type: ignore
         node_xyz = dict(zip(tags, coords.reshape((-1, 3), order="C")))
         # get properties of triangles
         element_props = self.mesh.get_element_properties(element_type)
@@ -728,12 +761,12 @@ class Model:
         # node_tags is a flattened list of node tags
         element_tags, node_tags = self.mesh.get_elements_by_type(element_type)
         # reshape the node_tags array to a 2D array
-        node_tags = node_tags.reshape((-1, number_of_nodes), order="C")
+        node_tags = node_tags.reshape((-1, number_of_nodes), order="C")  # type: ignore
         # every row in node_tags is a triangle face
         triangles = [[Point(*node_xyz[node]) for node in face] for face in node_tags]
         return triangles
 
-    def mesh_to_quads(self) -> List[List[Point]]:
+    def mesh_to_quads(self) -> list[list[Point]]:
         """Convert the model mesh to a list of quads.
 
         Returns
@@ -745,7 +778,8 @@ class Model:
         # set the element type to quads
         element_type = 3
         # get all quad nodes
-        tags, coords, _ = self.mesh.get_nodes_by_element_type(element_type, returnParametricCoord=False)
+        coords: ArrayNx3[np.float64]
+        tags, coords, _ = self.mesh.get_nodes_by_element_type(element_type, returnParametricCoord=False)  # type: ignore
         node_xyz = dict(zip(tags, coords.reshape((-1, 3), order="C")))
         # get properties of quads
         element_props = self.mesh.get_element_properties(element_type)
@@ -756,12 +790,12 @@ class Model:
         # node_tags is a flattened list of node tags
         element_tags, node_tags = self.mesh.get_elements_by_type(element_type)
         # reshape the node_tags array to a 2D array
-        node_tags = node_tags.reshape((-1, number_of_nodes), order="C")
+        node_tags = node_tags.reshape((-1, number_of_nodes), order="C")  # type: ignore
         # every row in node_tags is a quad face
         quads = [[Point(*node_xyz[node]) for node in face] for face in node_tags]
         return quads
 
-    def mesh_to_tets(self) -> List[Polyhedron]:
+    def mesh_to_tets(self) -> list[Polyhedron]:
         """
         Convert the model mesh to a COMPAS mesh data structure.
 
@@ -774,7 +808,8 @@ class Model:
         # set the element type to tetrahedra
         element_type = 4
         # get all tetrahedra nodes
-        tags, coords, _ = self.mesh.get_nodes_by_element_type(element_type, returnParametricCoord=False)
+        coords: ArrayNx3[np.float64]
+        tags, coords, _ = self.mesh.get_nodes_by_element_type(element_type, returnParametricCoord=False)  # type: ignore
         # make a node coordinate map
         node_xyz = dict(zip(tags, coords.reshape((-1, 3), order="C")))
         # get properties of tetrahedra
@@ -783,13 +818,79 @@ class Model:
         number_of_nodes = element_props[3]
         # get all tetrahedra
         element_tags, node_tags = self.mesh.get_elements_by_type(element_type)
-        node_tags = node_tags.reshape((-1, number_of_nodes), order="C")
+        node_tags = node_tags.reshape((-1, number_of_nodes), order="C")  # type: ignore
         # construct a polyhedron for each tetrahedron
         tets = []
         for nodes in node_tags:
             vertices = [node_xyz[node] for node in nodes]
             faces = [[0, 1, 2], [0, 2, 3], [1, 3, 2], [0, 3, 1]]
             tets.append(Polyhedron(vertices, faces))
+        return tets
+
+    def mesh_to_vertices_faces_edges(
+        self,
+        transformation=None,
+    ) -> tuple[list[list[float]], list[list[int]], list[tuple[int, int]]]:
+        # set the element type to tetrahedra
+        element_type = 4
+        # get all tetrahedra nodes
+        coords: ArrayNx3[np.float64]
+        tags, coords, _ = self.mesh.get_nodes_by_element_type(element_type, returnParametricCoord=False)  # type: ignore
+        # make a node coordinate map
+        node_index = {tag: index for index, tag in enumerate(tags)}
+        # get properties of tetrahedra
+        element_props = self.mesh.get_element_properties(element_type)
+        # get number of nodes per tetrahedron
+        number_of_nodes = element_props[3]
+        # get all tetrahedra
+        element_tags, node_tags = self.mesh.get_elements_by_type(element_type)
+        node_tags = node_tags.reshape((-1, number_of_nodes), order="C")  # type: ignore
+        # construct the vertices faces and edges
+        xyz = coords.reshape((-1, 3), order="C")
+        if transformation:
+            xyz = transform_points_numpy(xyz, transformation)
+        vertices = xyz.tolist()
+        faces = []
+        edges = []
+        for nodes in node_tags:
+            faces.append([node_index[nodes[n]] for n in [0, 1, 2]])
+            faces.append([node_index[nodes[n]] for n in [0, 2, 3]])
+            faces.append([node_index[nodes[n]] for n in [1, 3, 2]])
+            faces.append([node_index[nodes[n]] for n in [0, 3, 1]])
+            edges.append((node_index[nodes[0]], node_index[nodes[1]]))
+            edges.append((node_index[nodes[1]], node_index[nodes[2]]))
+            edges.append((node_index[nodes[2]], node_index[nodes[0]]))
+            edges.append((node_index[nodes[0]], node_index[nodes[3]]))
+            edges.append((node_index[nodes[1]], node_index[nodes[3]]))
+            edges.append((node_index[nodes[2]], node_index[nodes[3]]))
+        return vertices, faces, edges
+
+    def mesh_to_faces(self) -> list[list[list[float]]]:
+        # set the element type to tetrahedra
+        element_type = 4
+        # get all tetrahedra nodes
+        coords: ArrayNx3[np.float64]
+        tags, coords, _ = self.mesh.get_nodes_by_element_type(element_type, returnParametricCoord=False)  # type: ignore
+        # make a node coordinate map
+        node_xyz = dict(zip(tags, coords.reshape((-1, 3), order="C")))
+        # get properties of tetrahedra
+        element_props = self.mesh.get_element_properties(element_type)
+        # get number of nodes per tetrahedron
+        number_of_nodes = element_props[3]
+        # get all tetrahedra
+        element_tags, node_tags = self.mesh.get_elements_by_type(element_type)
+        node_tags = node_tags.reshape((-1, number_of_nodes), order="C")  # type: ignore
+        # construct a polyhedron for each tetrahedron
+        tets = []
+        for nodes in node_tags:
+            vertices = [node_xyz[node] for node in nodes]
+            faces = [
+                [vertices[0], vertices[1], vertices[2]],
+                [vertices[0], vertices[2], vertices[3]],
+                [vertices[1], vertices[3], vertices[2]],
+                [vertices[0], vertices[3], vertices[1]],
+            ]
+            tets.append(faces)
         return tets
 
     def mesh_to_compas(self) -> Mesh:
@@ -827,6 +928,8 @@ class Model:
             mesh = openmesh.TriMesh()
         elif len(faces[0]) == 4:
             mesh = openmesh.PolyMesh()
+        else:
+            raise NotImplementedError
 
         vertex_index = {}
         for vertex in vertices:
