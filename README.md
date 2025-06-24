@@ -10,9 +10,23 @@ COMPAS friendly interface for Gmsh.
 ## Installation
 
 ```bash
-conda create -n gmsh -c conda-forge compas
-conda activate gmsh
 pip install compas_gmsh
+```
+
+### Linux
+
+On linux, you may have to install gmsh and it's python bindings manually.
+
+```bash
+conda create -n gmsh-dev gmsh python-gmsh -y
+conda activate gmsh-dev
+pip install compas_gmsh
+```
+
+Or use the environment file in this repo
+
+```bash
+conda env create -f environment-linux.yml
 ```
 
 ## Getting Started

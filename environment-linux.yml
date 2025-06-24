@@ -1,0 +1,10 @@
+name: gmsh-dev
+channels:
+  - conda-forge
+dependencies:
+  - python
+  - pip
+  - gmsh
+  - python-gmsh
+  - pip:
+      - compas
