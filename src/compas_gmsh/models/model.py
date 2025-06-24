@@ -139,21 +139,23 @@ class Model:
 
     @classmethod
     def from_brep(cls, brep: Brep) -> "Model":
-        """Construct a model from a Brep.
+        """Construct a model from a b-rep geometry.
 
         Parameters
         ----------
         brep : :class:`Brep`
-            The brep geometry.
+            The b-rep geometry.
 
         Returns
         -------
         :class:`Model`
 
         """
-        _, filepath = tempfile.mkstemp(suffix=".stp")
-        brep.to_step(filepath)
-        return cls.from_step(filepath)
+        fd, filepath = tempfile.mkstemp(suffix=".brep")
+        brep.to_brep(filepath)  # type: ignore
+        model = cls()
+        gmsh.open(filepath)
+        return model
 
     # ==============================================================================
     # Model entities
