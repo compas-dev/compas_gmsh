@@ -16,7 +16,7 @@ class MeshModel(Model):
 
     @classmethod
     def from_mesh(
-        cls: "MeshModel",
+        cls,
         mesh: Mesh,
         name: str = "Mesh",
         targetlength: Optional[Union[float, Dict]] = None,
@@ -41,7 +41,7 @@ class MeshModel(Model):
         model: MeshModel = cls(name)
 
         for vertex in mesh.vertices():
-            point = mesh.vertex_coordinates(vertex)
+            point = mesh.vertex_point(vertex)
             if targetlength:
                 if isinstance(targetlength, dict):
                     length = targetlength.get(vertex)
@@ -85,7 +85,6 @@ class MeshModel(Model):
         To influence the meshing process, use the options of the model (:attr:`options.mesh`).
 
         """
-        self.occ.heal_shapes()
         self.occ.synchronize()
         self.mesh.generate(dim)
 

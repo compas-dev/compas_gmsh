@@ -11,6 +11,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
+* Fixed bug related to implicit healing of shapes in `compas_gmsh.models.mesh.MeshModel.generate`.
+
 ### Removed
 
 
