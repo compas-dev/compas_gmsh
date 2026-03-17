@@ -129,7 +129,7 @@ class MeshOptions:
 
     @property
     def lmin(self) -> float:
-        gmsh.option.get_number("Mesh.CharacteristicLengthMin")
+        return gmsh.option.get_number("Mesh.CharacteristicLengthMin")
 
     @lmin.setter
     def lmin(self, value: float):
@@ -137,7 +137,7 @@ class MeshOptions:
 
     @property
     def lmax(self) -> float:
-        gmsh.option.get_number("Mesh.CharacteristicLengthMax")
+        return gmsh.option.get_number("Mesh.CharacteristicLengthMax")
 
     @lmax.setter
     def lmax(self, value: float):

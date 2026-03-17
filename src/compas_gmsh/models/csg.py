@@ -1,6 +1,3 @@
-from typing import List
-from typing import Tuple
-
 import compas.geometry
 from compas.geometry import Box
 from compas.geometry import Cylinder
@@ -9,7 +6,7 @@ from compas.geometry import Sphere
 from .model import Model
 
 
-def add_cylinder(self, cylinder: Cylinder) -> Tuple[int, int]:
+def add_cylinder(self, cylinder: Cylinder) -> tuple[int, int]:
     """Add a cylinder to the model."""
     H = cylinder.height
     R = cylinder.radius
@@ -23,15 +20,15 @@ def add_cylinder(self, cylinder: Cylinder) -> Tuple[int, int]:
     return 3, tag
 
 
-def add_sphere(self, sphere: Sphere) -> Tuple[int, int]:
+def add_sphere(self, sphere: Sphere) -> tuple[int, int]:
     """Add a sphere to the model."""
-    x, y, z = sphere.point
+    x, y, z = sphere.base
     R = sphere.radius
     tag = self.occ.addSphere(x, y, z, R)
     return 3, tag
 
 
-def add_box(self, box: Box) -> Tuple[int, int]:
+def add_box(self, box: Box) -> tuple[int, int]:
     """Add a box to the model."""
     x0, y0, z0 = box.frame.point
     x = x0 - 0.5 * box.xsize
@@ -49,17 +46,17 @@ class CSGModel(Model):
 
     Parameters
     ----------
-    tree : dict
+    tree
         The CSG tree as a dictionary mapping operations to operands.
         The operations have to be one of ``{"union", "intersection", "difference"}``.
         The operands have to be lists of shapes or lists of dicts that are CSG trees themselves.
         At every level of the tree, there can be only one operation.
-    name : str
+    name
         The name of the model.
 
     Attributes
     ----------
-    tree : dict
+    tree
         The CSG tree as a dictionary mapping operations to operands.
         The operations have to be one of ``{"union", "intersection", "difference"}``.
         The operands have to be lists of shapes or lists of dicts that are CSG trees themselves.
@@ -69,7 +66,7 @@ class CSGModel(Model):
 
     def __init__(self, tree: dict, name: str, **kwargs) -> None:
         super().__init__(name, **kwargs)
-        self._tree = None
+        self._tree = {}
         self.tree = tree
 
     @property
@@ -94,13 +91,13 @@ class CSGModel(Model):
         else:
             self._tree = tree
 
-    def add(self, shape: compas.geometry.Shape) -> Tuple[int, int]:
+    def add(self, shape: compas.geometry.Shape) -> tuple[int, int]:
         """
         Add a shape to the underlying OCC model.
 
         Parameters
         ----------
-        shape : :class:`compas.geometry.Shape`
+        shape
             A geometric shape.
 
         Returns
@@ -125,7 +122,7 @@ class CSGModel(Model):
 
         """
 
-        def walk(tree: dict) -> List[Tuple[int, int]]:
+        def walk(tree: dict) -> list[tuple[int, int]]:
             operation = next(iter(tree))
             operands = tree[operation]
 

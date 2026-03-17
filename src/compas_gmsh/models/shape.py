@@ -1,6 +1,3 @@
-from typing import List
-from typing import Tuple
-
 from compas.geometry import Box
 from compas.geometry import Cylinder
 from compas.geometry import Sphere
@@ -13,7 +10,7 @@ class ShapeModel(Model):
     Model for shape combinations.
     """
 
-    def add_cylinder(self, cylinder: Cylinder) -> Tuple[int, int]:
+    def add_cylinder(self, cylinder: Cylinder) -> tuple[int, int]:
         """Add a cylinder to the model."""
         H = cylinder.height
         R = cylinder.radius
@@ -26,14 +23,14 @@ class ShapeModel(Model):
         tag = self.occ.add_cylinder(x0, y0, z0, dx, dy, dz, R)
         return 3, tag
 
-    def add_sphere(self, sphere: Sphere) -> Tuple[int, int]:
+    def add_sphere(self, sphere: Sphere) -> tuple[int, int]:
         """Add a sphere to the model."""
         x, y, z = sphere.frame.point
         R = sphere.radius
         tag = self.occ.add_sphere(x, y, z, R)
         return 3, tag
 
-    def add_box(self, box: Box) -> Tuple[int, int]:
+    def add_box(self, box: Box) -> tuple[int, int]:
         """Add a box to the model."""
         x0, y0, z0 = box.frame.point
         x = x0 - 0.5 * box.xsize
@@ -44,24 +41,24 @@ class ShapeModel(Model):
 
     def boolean_intersection(
         self,
-        A: List[Tuple[int, int]],
-        B: List[Tuple[int, int]],
+        A: list[tuple[int, int]],
+        B: list[tuple[int, int]],
         remove_objects: bool = True,
         remove_tools: bool = True,
-    ) -> List[Tuple[int, int]]:
+    ) -> list[tuple[int, int]]:
         """
         Boolean intersection of two sets of shapes.
 
         Parameters
         ----------
-        A : list of tuple
+        A
             The *dimtags* of the *object* shapes.
-        B : tuple
+        B
             The *dimtags* of the *tool* shapes.
 
         Returns
         -------
-        list of tuple
+        list[tuple[int, int]]
             The dimtags of the resulting shapes.
 
         Notes
@@ -76,11 +73,11 @@ class ShapeModel(Model):
 
     def boolean_union(
         self,
-        A: List[Tuple[int, int]],
-        B: List[Tuple[int, int]],
+        A: list[tuple[int, int]],
+        B: list[tuple[int, int]],
         remove_objects: bool = True,
         remove_tools: bool = True,
-    ) -> List[Tuple[int, int]]:
+    ) -> list[tuple[int, int]]:
         """
         Boolean union of two sets of shapes.
 
@@ -93,7 +90,7 @@ class ShapeModel(Model):
 
         Returns
         -------
-        list of tuple
+        list[tuple[int, int]]
             The dimtags of the resulting shapes.
 
         Notes
@@ -108,11 +105,11 @@ class ShapeModel(Model):
 
     def boolean_difference(
         self,
-        A: List[Tuple[int, int]],
-        B: List[Tuple[int, int]],
+        A: list[tuple[int, int]],
+        B: list[tuple[int, int]],
         remove_objects: bool = True,
         remove_tools: bool = True,
-    ) -> List[Tuple[int, int]]:
+    ) -> list[tuple[int, int]]:
         """
         Boolean difference of two sets of shapes.
 
@@ -125,7 +122,7 @@ class ShapeModel(Model):
 
         Returns
         -------
-        list of tuple
+        list[tuple[int, int]]
             The dimtags of the resulting shapes.
 
         Notes
@@ -140,11 +137,11 @@ class ShapeModel(Model):
 
     def boolean_fragment(
         self,
-        A: List[Tuple[int, int]],
-        B: List[Tuple[int, int]],
+        A: list[tuple[int, int]],
+        B: list[tuple[int, int]],
         remove_objects: bool = True,
         remove_tools: bool = True,
-    ) -> List[Tuple[int, int]]:
+    ) -> list[tuple[int, int]]:
         """
         Boolean fragment of two sets of shapes.
 
@@ -157,7 +154,7 @@ class ShapeModel(Model):
 
         Returns
         -------
-        list of tuple
+        list[tuple[int, int]]
             The dimtags of the resulting shapes.
 
         Notes

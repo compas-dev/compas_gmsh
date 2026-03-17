@@ -26,16 +26,16 @@ class MeshModel(Model):
 
         Parameters
         ----------
-        mesh : :class:`Mesh`
+        mesh
             A COMPAS mesh.
-        name : str, optional
+        name
             The name of the model.
-        target_length : float, optional
+        target_length
             Target value for the length of the mesh edges.
 
         Returns
         -------
-        :class:`MeshModel`
+        MeshModel
 
         """
         model: MeshModel = cls(name)
@@ -69,7 +69,7 @@ class MeshModel(Model):
 
         Parameters
         ----------
-        dim : int, optional
+        dim
             The dimension of the mesh.
 
         Returns
@@ -93,7 +93,7 @@ class MeshModel(Model):
 
         Parameters
         ----------
-        vertex : int
+        vertex
             A vertex of the input mesh.
 
         Returns
@@ -110,9 +110,9 @@ class MeshModel(Model):
 
         Parameters
         ----------
-        vertex : int
+        vertex
             The vertex identifier.
-        target : float
+        target
             The target length value.
 
         Returns
