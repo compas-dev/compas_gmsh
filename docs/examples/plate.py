@@ -1,10 +1,11 @@
+from compas_viewer import Viewer
+
 from compas.colors import Color
 from compas.datastructures import Mesh
 from compas.geometry import Line
 from compas.geometry import Point
 from compas.geometry import Vector
 from compas_gmsh.models import MeshModel
-from compas_viewer import Viewer
 
 # ==============================================================================
 # Make a plate mesh

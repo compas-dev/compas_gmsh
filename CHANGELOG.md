@@ -9,7 +9,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+* Added `compas_gmsh.models.Model.find_points_within_distance_of_location`.
+* Added `compas_gmsh.models.Model.find_points_within_horizontal_distance_of_location`.
+
 ### Changed
+
+* Changed doc system to mkdocs.
 
 ### Removed
 

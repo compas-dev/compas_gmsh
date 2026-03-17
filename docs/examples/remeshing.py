@@ -1,11 +1,12 @@
 from random import choice
 
+from compas_viewer import Viewer
+
 import compas
 from compas.datastructures import Mesh
 from compas.topology import astar_shortest_path
 from compas_gmsh.models import MeshModel
 from compas_gmsh.options import MeshAlgorithm
-from compas_viewer import Viewer
 
 # ==============================================================================
 # Input

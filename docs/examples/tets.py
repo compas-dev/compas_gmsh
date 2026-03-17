@@ -1,3 +1,5 @@
+from compas_viewer import Viewer
+
 from compas.colors import Color
 from compas.datastructures import Mesh
 from compas.geometry import Sphere
@@ -5,7 +7,6 @@ from compas.geometry import Translation
 from compas.geometry import centroid_points
 from compas.tolerance import Tolerance
 from compas_gmsh.models import ShapeModel
-from compas_viewer import Viewer
 
 # ==============================================================================
 # Geometry

@@ -1,14 +1,15 @@
 # type: ignore
 
+from compas_occ.brep import OCCBrepEdge
+from compas_occ.brep import OCCBrepFace
+from compas_occ.brep import OCCBrepLoop
+from compas_viewer import Viewer
+
 from compas.brep import Brep
 from compas.geometry import Circle
 from compas.geometry import Frame
 from compas.geometry import Plane
 from compas_gmsh.models import Model
-from compas_occ.brep import OCCBrepEdge
-from compas_occ.brep import OCCBrepFace
-from compas_occ.brep import OCCBrepLoop
-from compas_viewer import Viewer
 
 circle1 = Circle(1.0, frame=Frame([2, 2, 0]))
 circle2 = Circle(2.0, frame=Frame([-2, -2, 0]))
@@ -53,7 +54,7 @@ mesh = model.mesh_to_compas()
 
 viewer = Viewer()
 viewer.renderer.camera.position = [0, -12, 10]
-viewer.renderer.camera.target = [0, 2, 0])
+viewer.renderer.camera.target = [0, 2, 0]
 
 # viewer.scene.add(brep, linewidth=2, opacity=0.5)
 
