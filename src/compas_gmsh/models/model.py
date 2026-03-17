@@ -6,18 +6,19 @@ from typing import Literal
 from typing import Optional
 from typing import TypeVar
 
-import gmsh
+import gmsh  # type: ignore
 import numpy as np
 import numpy.typing as npt
+
 from compas.datastructures import Mesh
 from compas.geometry import Brep
 from compas.geometry import Point
 from compas.geometry import Polyhedron
 from compas.geometry import Polyline
+from compas.geometry import distance_point_point_sqrd_xy
 from compas.geometry import transform_points_numpy
 from compas.itertools import linspace
 from compas.tolerance import TOL
-
 from compas_gmsh.options import MeshOptions
 from compas_gmsh.options import OptimizationAlgorithm
 
@@ -25,8 +26,6 @@ DType = TypeVar("DType", bound=np.generic)
 
 Array3 = Annotated[npt.NDArray[DType], Literal[3]]
 ArrayNx3 = Annotated[npt.NDArray[DType], Literal["N", 3]]
-
-# from compas_gmsh.options import RecombinationAlgorithm
 
 
 class MeshElementType(enum.Enum):
@@ -46,11 +45,11 @@ class Model:
 
     Parameters
     ----------
-    name : str, optional
+    name
         The name of the model.
-    verbose, bool, optional
+    verbose
         Flag indicating if output should be printed to the terminal.
-    options.mesh : :class:`MeshOptions`
+    options.mesh
         The meshing options.
 
     """
@@ -78,9 +77,6 @@ class Model:
         self.model = gmsh.model
         self.mesh = gmsh.model.mesh
         self.occ = gmsh.model.occ
-
-    # def __del__(self):
-    #     gmsh.finalize()
 
     def destroy(self):
         gmsh.finalize()
@@ -125,12 +121,12 @@ class Model:
 
         Parameters
         ----------
-        filepath : pathlib.Path | str
+        filepath
             The path to the step file.
 
         Returns
         -------
-        :class:`Model`
+        Model
 
         """
         model = cls()
@@ -143,12 +139,12 @@ class Model:
 
         Parameters
         ----------
-        brep : :class:`Brep`
+        brep
             The b-rep geometry.
 
         Returns
         -------
-        :class:`Model`
+        Model
 
         """
         fd, filepath = tempfile.mkstemp(suffix=".brep")
@@ -186,7 +182,7 @@ class Model:
 
         Parameters
         ----------
-        tag : int
+        tag
             The identifier of the surface.
 
         Returns
@@ -202,7 +198,7 @@ class Model:
 
         Parameters
         ----------
-        tag : int
+        tag
             The identifier of the volume.
 
         Returns
@@ -218,7 +214,7 @@ class Model:
 
         Parameters
         ----------
-        tag : int
+        tag
             The identifier of the volume.
 
         Returns
@@ -239,7 +235,7 @@ class Model:
 
         Parameters
         ----------
-        tag : int
+        tag
             The identifier of the volume.
 
         Returns
@@ -260,7 +256,7 @@ class Model:
 
         Parameters
         ----------
-        tag : int
+        tag
             The identifier of the curve.
 
         Returns
@@ -277,7 +273,7 @@ class Model:
 
         Parameters
         ----------
-        tag : int
+        tag
             The identifier of the surface.
 
         Returns
@@ -296,7 +292,7 @@ class Model:
 
         Parameters
         ----------
-        tag : int
+        tag
             The identifier of the point.
 
         Returns
@@ -312,9 +308,9 @@ class Model:
 
         Parameters
         ----------
-        tag : int
+        tag
             The identifier of the curve.
-        u : float
+        u
             The parameter of the curve.
 
         Returns
@@ -330,11 +326,11 @@ class Model:
 
         Parameters
         ----------
-        tag : int
+        tag
             The identifier of the surface.
-        u : float
+        u
             The first parameter of the surface.
-        v : float
+        v
             The second parameter of the surface.
 
         Returns
@@ -354,12 +350,12 @@ class Model:
 
         Parameters
         ----------
-        tag : int
+        tag
             The identifier of the point.
 
         Returns
         -------
-        :class:`Point`
+        Point
             The point.
 
         """
@@ -370,14 +366,14 @@ class Model:
 
         Parameters
         ----------
-        tag : int
+        tag
             The identifier of the curve.
-        n : int, optional
+        n
             The number of points on the curve.
 
         Returns
         -------
-        :class:`Polyline`
+        Polyline
             The polyline that is a discretisation of the curve.
 
         """
@@ -389,17 +385,17 @@ class Model:
     # Model exploration
     # =============================================================================
 
-    def find_points_at_xyz(self, xyz: list[float], tolerance=None) -> list[int]:
+    def find_points_at_xyz(self, xyz: list[float]) -> list[int]:
         """Find the model points at or close to a spatial location.
 
         Parameters
         ----------
-        xyz : list of float
+        xyz
             The XYZ coordinates of the location.
 
         Returns
         -------
-        list of int
+        list[int]
             The point identifiers.
 
         """
@@ -411,17 +407,17 @@ class Model:
                 points.append(point)
         return points
 
-    def find_points_at_xy(self, xyz: list[float], tolerance=None) -> list[int]:
+    def find_points_at_xy(self, xyz: list[float]) -> list[int]:
         """Find the model points at or close to a spatial location.
 
         Parameters
         ----------
-        xyz : list of float
+        xyz
             The XY(Z) coordinates of the location.
 
         Returns
         -------
-        list of int
+        list[int]
             The point identifiers.
 
         """
@@ -430,6 +426,52 @@ class Model:
         for point in self.points:
             test = TOL.geometric_key_xy(self.point_coordinates(point)[:2])
             if test == key:
+                points.append(point)
+        return points
+
+    def find_points_within_distance_of_location(self, location: Point, distance: float) -> list[int]:
+        """Find the model points within a distance from a given location.
+
+        Parameters
+        ----------
+        location
+            The reference location.
+        distance
+            The distance from the reference location.
+
+        Returns
+        -------
+        list[int]
+            The tags of the found points.
+
+        """
+        points = []
+        for point in self.points:
+            if location.distance_to_point(self.point_coordinates(point)) < distance:
+                points.append(point)
+        return points
+
+    def find_points_within_horizontal_distance_of_location(self, location: Point, distance: float) -> list[int]:
+        """Find the model points within a horizontal distance from a given location.
+
+        Parameters
+        ----------
+        location
+            The reference location.
+        distance
+            The horizontal distance from the reference location.
+
+        Returns
+        -------
+        list[int]
+            The tags of the found points.
+
+        """
+        points = []
+        xy = location[:2]
+        d2 = distance**2
+        for point in self.points:
+            if distance_point_point_sqrd_xy(xy, self.point_coordinates(point)[:2]) < d2:
                 points.append(point)
         return points
 
@@ -443,9 +485,9 @@ class Model:
 
         Parameters
         ----------
-        tag : int
+        tag
             The point identifier.
-        target : float
+        target
             The target length value.
 
         Returns
@@ -461,7 +503,7 @@ class Model:
 
         Parameters
         ----------
-        dim : int, optional
+        dim
             The dimension of the mesh.
 
         Returns
@@ -502,9 +544,9 @@ class Model:
 
         Parameters
         ----------
-        algo : OptimizationAlgorithm, optional
+        algo
             The optimization algorithm to use.
-        niter : int, optional
+        niter
             The number of iterations.
 
         Returns
@@ -536,7 +578,7 @@ class Model:
 
         Parameters
         ----------
-        tag : int
+        tag
             The identifier of the curve.
 
         Returns
@@ -554,7 +596,7 @@ class Model:
 
         Parameters
         ----------
-        tag : int
+        tag
             The identifier of the surface.
 
         Returns
@@ -572,7 +614,7 @@ class Model:
 
         Parameters
         ----------
-        tag : int
+        tag
             The identifier of the surface.
 
         Returns
@@ -596,7 +638,7 @@ class Model:
 
         Parameters
         ----------
-        tag : int
+        tag
             The identifier of the surface.
 
         Returns
@@ -616,7 +658,7 @@ class Model:
 
         Parameters
         ----------
-        tag : int
+        tag
             The identifier of the volume.
 
         Returns
@@ -638,7 +680,7 @@ class Model:
 
         Parameters
         ----------
-        tag : int
+        tag
             The identifier of the volume.
 
         Returns
@@ -663,12 +705,12 @@ class Model:
 
         Parameters
         ----------
-        tag : int
+        tag
             The identifier of the volume.
 
         Returns
         -------
-        :class:`Mesh`
+        Mesh
             The mesh of the volume.
 
         """
@@ -683,12 +725,12 @@ class Model:
 
         Parameters
         ----------
-        tag : int
+        tag
             The identifier of the volume.
 
         Returns
         -------
-        list[:class:`Polyhedron`]
+        list[Polyhedron]
             The tetrahedra of the volume.
 
         """
@@ -803,7 +845,7 @@ class Model:
 
         Returns
         -------
-        list[:class:`Polyhedron`]
+        list[Polyhedron]
             A list of COMPAS polyhedra.
 
         """
@@ -901,7 +943,7 @@ class Model:
 
         Returns
         -------
-        :class:`Mesh`
+        Mesh
             A COMPAS mesh.
 
         """
