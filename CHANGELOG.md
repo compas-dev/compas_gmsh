@@ -18,6 +18,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 * Made `Model.from_brep` use the core STEP export contract with deterministic temporary-file cleanup.
 * Updated local development to use a committed uv lock and thin Invoke task aliases.
 * Updated the documentation to use strict, offline MkDocs builds and Markdown/NumPy docstrings.
+* Updated the verified macOS ARM64 CI target to the supported macOS 15 runner.
 
 ### Removed
 
