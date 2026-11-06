@@ -111,7 +111,7 @@ jobs:
         shell: bash -el {0}
         run: >-
           uv pip install --python "$CONDA_PREFIX/bin/python" --no-deps
-          "compas_occ @ git+https://github.com/compas-dev/compas_occ.git@369596ef66813243f2396247c80bdb82f7d57921"
+          "compas_occ @ git+https://github.com/compas-dev/compas_occ.git@7c964e02032490e60f23e9599a7f1011dcec570d"
       - name: Verify BRep STEP exchange
         shell: bash -el {0}
         run: VIRTUAL_ENV="$CONDA_PREFIX" uv run --active --no-sync python docs/examples/brep_cleanup.py
