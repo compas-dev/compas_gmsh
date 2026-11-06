@@ -4,6 +4,8 @@ import gmsh
 
 
 class MeshAlgorithm(Enum):
+    """Available two-dimensional Gmsh mesh algorithms."""
+
     MeshAdapt = 1
     Automatic = 2
     InitialMeshOnly = 3
@@ -14,11 +16,13 @@ class MeshAlgorithm(Enum):
     PackingParallelograms = 9
 
     @classmethod
-    def __missing__(cls, value):
+    def __missing__(cls, value: object) -> "MeshAlgorithm":
         return cls.MeshAdapt
 
 
 class OptimizationAlgorithm(Enum):
+    """Available Gmsh mesh optimization algorithms."""
+
     Default = ""
     Gmsh = "Gmsh"
     Netgen = "Netgen"
@@ -30,22 +34,26 @@ class OptimizationAlgorithm(Enum):
     Relocate3D = "Relocate3D"
 
     @classmethod
-    def __missing__(cls, value):
+    def __missing__(cls, value: object) -> "OptimizationAlgorithm":
         return cls.Default
 
 
 class RecombinationAlgorithm(Enum):
+    """Available Gmsh triangle recombination algorithms."""
+
     Simple = 0
     Blossom = 1
     SimpleFullQuad = 2
     BlossomFullQuad = 3
 
     @classmethod
-    def __missing__(cls, value):
+    def __missing__(cls, value: object) -> "RecombinationAlgorithm":
         return cls.Blossom
 
 
 class MeshSizeExtendFromBoundary(Enum):
+    """Modes for extending boundary mesh sizes into geometry."""
+
     Never = 0
     SurfacesAndVolumes = 1
     SurfacesAndVolumesUseSmallestSurfaceElementEdgeLength = 2
@@ -53,7 +61,7 @@ class MeshSizeExtendFromBoundary(Enum):
     OnlyVolumes = -3
 
     @classmethod
-    def __missing__(cls, value):
+    def __missing__(cls, value: object) -> "MeshSizeExtendFromBoundary":
         return cls.SurfacesAndVolumes
 
 
@@ -68,12 +76,12 @@ class MeshOptions:
         The minimum characteristic edge length for meshing.
         Note that the actual minimum edge length may deviate from this value.
         The deviation is captured in an efficiency index, which tends to be around 0.8.
-        Use :attr:`MeshAlgortihmFrontalDelaunay` for best results.
+        Use `MeshAlgorithm.FrontalDelaunay` for best results.
     lmax : float
         The maximum characteristic edge length for meshing.
         Note that the actual maximum edge length may deviate from this value.
         The deviation is captured in an efficiency index, which tends to be around 0.8.
-        Use :attr:`MeshAlgortihmFrontalDelaunay` for best results.
+        Use `MeshAlgorithm.FrontalDelaunay` for best results.
     mesh_only_empty : bool
         Mesh only parts without existing mesh.
         Default is False.
@@ -91,10 +99,10 @@ class MeshOptions:
     meshsize_from_points : bool
         Define mesh size based values assigned to points.
         Default is True.
-    min_nodes_circle : float
+    min_nodes_circle : int
         Minimum number of nodes for discretising a circle.
         Default is 7.
-    min_nodes_curve : float
+    min_nodes_curve : int
         Minimum number of nodes for discretising a curve.
         Default is 3.
 
@@ -132,7 +140,7 @@ class MeshOptions:
         return gmsh.option.get_number("Mesh.CharacteristicLengthMin")
 
     @lmin.setter
-    def lmin(self, value: float):
+    def lmin(self, value: float) -> None:
         gmsh.option.set_number("Mesh.CharacteristicLengthMin", value)
 
     @property
@@ -140,7 +148,7 @@ class MeshOptions:
         return gmsh.option.get_number("Mesh.CharacteristicLengthMax")
 
     @lmax.setter
-    def lmax(self, value: float):
+    def lmax(self, value: float) -> None:
         gmsh.option.set_number("Mesh.CharacteristicLengthMax", value)
 
     @property
@@ -148,7 +156,7 @@ class MeshOptions:
         return bool(gmsh.option.get_number("Mesh.MeshOnlyEmpty"))
 
     @mesh_only_empty.setter
-    def mesh_only_empty(self, value: bool):
+    def mesh_only_empty(self, value: bool) -> None:
         gmsh.option.set_number("Mesh.MeshOnlyEmpty", int(value))
 
     @property
@@ -156,15 +164,15 @@ class MeshOptions:
         return MeshSizeExtendFromBoundary(gmsh.option.get_number("Mesh.MeshSizeExtendFromBoundary"))
 
     @meshsize_extend_from_boundary.setter
-    def meshsize_extend_from_boundary(self, value: MeshSizeExtendFromBoundary):
-        gmsh.option.set_number("Mesh.MeshSizeExtendFromBoundary", int(value))
+    def meshsize_extend_from_boundary(self, value: MeshSizeExtendFromBoundary) -> None:
+        gmsh.option.set_number("Mesh.MeshSizeExtendFromBoundary", value.value)
 
     @property
     def meshsize_min(self) -> float:
         return gmsh.option.get_number("Mesh.MeshSizeMin")
 
     @meshsize_min.setter
-    def meshsize_min(self, value: float):
+    def meshsize_min(self, value: float) -> None:
         gmsh.option.set_number("Mesh.MeshSizeMin", value)
 
     @property
@@ -172,7 +180,7 @@ class MeshOptions:
         return gmsh.option.get_number("Mesh.MeshSizeMax")
 
     @meshsize_max.setter
-    def meshsize_max(self, value: float):
+    def meshsize_max(self, value: float) -> None:
         gmsh.option.set_number("Mesh.MeshSizeMax", value)
 
     @property
@@ -180,7 +188,7 @@ class MeshOptions:
         return bool(gmsh.option.get_number("Mesh.MeshSizeFromCurvature"))
 
     @meshsize_from_curvature.setter
-    def meshsize_from_curvature(self, value: bool):
+    def meshsize_from_curvature(self, value: bool) -> None:
         gmsh.option.set_number("Mesh.MeshSizeFromCurvature", int(value))
 
     @property
@@ -188,21 +196,21 @@ class MeshOptions:
         return bool(gmsh.option.get_number("Mesh.MeshSizeFromPoints"))
 
     @meshsize_from_points.setter
-    def meshsize_from_points(self, value: bool):
+    def meshsize_from_points(self, value: bool) -> None:
         gmsh.option.set_number("Mesh.MeshSizeFromPoints", int(value))
 
     @property
-    def min_nodes_circle(self) -> float:
+    def min_nodes_circle(self) -> int:
         return int(gmsh.option.get_number("Mesh.MinimumCircleNodes"))
 
     @min_nodes_circle.setter
-    def min_nodes_circle(self, value: float):
+    def min_nodes_circle(self, value: float) -> None:
         gmsh.option.set_number("Mesh.MinimumCircleNodes", value)
 
     @property
-    def min_nodes_curve(self) -> float:
+    def min_nodes_curve(self) -> int:
         return int(gmsh.option.get_number("Mesh.MinimumCurveNodes"))
 
     @min_nodes_curve.setter
-    def min_nodes_curve(self, value: float):
+    def min_nodes_curve(self, value: float) -> None:
         gmsh.option.set_number("Mesh.MinimumCurveNodes", value)

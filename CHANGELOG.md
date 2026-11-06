@@ -9,9 +9,19 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+* Added real headless meshing, STEP import, option, cleanup, and installed-wheel verification.
+* Added package typing with a `py.typed` marker and blocking Pyright checks.
+
 ### Changed
 
+* Modernized the package contract for Python 3.12+, COMPAS 3, NumPy 1.26+, and the official Gmsh 4.x PyPI SDK.
+* Made `Model.from_brep` use the core STEP export contract with deterministic temporary-file cleanup.
+* Updated local development to use a committed uv lock and thin Invoke task aliases.
+* Updated the documentation to use strict, offline MkDocs builds and Markdown/NumPy docstrings.
+
 ### Removed
+
+* Removed the duplicate Conda Gmsh environment and the ambiguous GPL-3.0 wrapper license file.
 
 
 ## [0.4.6] 2026-03-17

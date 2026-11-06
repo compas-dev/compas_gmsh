@@ -1,5 +1,5 @@
 site_name: COMPAS GMSH
-site_url: https://github.com/compas-dev/compas_gmsh/
+site_url: https://compas-dev.github.io/compas_gmsh/
 
 repo_name: compas-dev/compas_gmsh
 repo_url: https://github.com/compas-dev/compas_gmsh/
@@ -85,9 +85,6 @@ plugins:
       handlers:
         python:
           paths: [src] # search packages in the src folder
-          inventories:
-            - https://docs.python.org/3/objects.inv
-            - https://compas.dev/compas/latest/objects.inv
           options:
             allow_inspection: true
             backlinks: tree
@@ -135,12 +132,14 @@ nav:
   - Introduction: index.md
   - Installation: installation.md
   - Tutorial: tutorial.md
+  - Examples: examples.md
   - API:
       - Models:
           - Model: api/compas_gmsh.models.Model.md
           - MeshModel: api/compas_gmsh.models.MeshModel.md
           - ShapeModel: api/compas_gmsh.models.ShapeModel.md
           - CSGModel: api/compas_gmsh.models.CSGModel.md
+      - Mesh options: api/compas_gmsh.options.MeshOptions.md
   - Other:
       - License: license.md
       - Acknowledgements: acknowledgements.md

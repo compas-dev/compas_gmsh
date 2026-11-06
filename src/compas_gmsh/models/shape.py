@@ -6,9 +6,7 @@ from .model import Model
 
 
 class ShapeModel(Model):
-    """
-    Model for shape combinations.
-    """
+    """Model for shape combinations."""
 
     def add_cylinder(self, cylinder: Cylinder) -> tuple[int, int]:
         """Add a cylinder to the model."""
@@ -46,8 +44,7 @@ class ShapeModel(Model):
         remove_objects: bool = True,
         remove_tools: bool = True,
     ) -> list[tuple[int, int]]:
-        """
-        Boolean intersection of two sets of shapes.
+        """Compute the boolean intersection of two shape sets.
 
         Parameters
         ----------
@@ -55,6 +52,10 @@ class ShapeModel(Model):
             The *dimtags* of the *object* shapes.
         B
             The *dimtags* of the *tool* shapes.
+        remove_objects
+            If True, remove the object shapes after the operation.
+        remove_tools
+            If True, remove the tool shapes after the operation.
 
         Returns
         -------
@@ -78,15 +79,18 @@ class ShapeModel(Model):
         remove_objects: bool = True,
         remove_tools: bool = True,
     ) -> list[tuple[int, int]]:
-        """
-        Boolean union of two sets of shapes.
+        """Compute the boolean union of two shape sets.
 
         Parameters
         ----------
-        A : list of tuple
+        A
             The *dimtags* of the *object* shapes.
-        B : tuple
+        B
             The *dimtags* of the *tool* shapes.
+        remove_objects
+            If True, remove the object shapes after the operation.
+        remove_tools
+            If True, remove the tool shapes after the operation.
 
         Returns
         -------
@@ -110,15 +114,18 @@ class ShapeModel(Model):
         remove_objects: bool = True,
         remove_tools: bool = True,
     ) -> list[tuple[int, int]]:
-        """
-        Boolean difference of two sets of shapes.
+        """Compute the boolean difference of two shape sets.
 
         Parameters
         ----------
-        A : list of tuple
+        A
             The *dimtags* of the *object* shapes.
-        B : tuple
+        B
             The *dimtags* of the *tool* shapes.
+        remove_objects
+            If True, remove the object shapes after the operation.
+        remove_tools
+            If True, remove the tool shapes after the operation.
 
         Returns
         -------
@@ -142,15 +149,18 @@ class ShapeModel(Model):
         remove_objects: bool = True,
         remove_tools: bool = True,
     ) -> list[tuple[int, int]]:
-        """
-        Boolean fragment of two sets of shapes.
+        """Compute the boolean fragments of two shape sets.
 
         Parameters
         ----------
-        A : list of tuple
+        A
             The *dimtags* of the *object* shapes.
-        B : tuple
+        B
             The *dimtags* of the *tool* shapes.
+        remove_objects
+            If True, remove the object shapes after the operation.
+        remove_tools
+            If True, remove the tool shapes after the operation.
 
         Returns
         -------

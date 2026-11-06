@@ -1,29 +1,28 @@
 name: docs
+
 on:
-  push:
-    branches:
-      - main
+  pull_request:
+    branches: [main, c3-upgrade]
+  workflow_dispatch:
+
 permissions:
-  contents: write
+  contents: read
+
+concurrency:
+  group: docs-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
-  deploy:
-    runs-on: ubuntu-latest
+  build:
+    runs-on: ubuntu-24.04
     steps:
-      - uses: actions/checkout@v4
-      - name: Configure Git Credentials
+      - name: Install Linux Gmsh loader dependency
         run: |
-          git config user.name github-actions[bot]
-          git config user.email 41898282+github-actions[bot]@users.noreply.github.com
-      - uses: actions/setup-python@v5
+          sudo apt-get update
+          sudo apt-get install --yes libglu1-mesa
+      - uses: compas-dev/compas-actions/docs@5c64e6e2b576a1232d28fed47d9478ca8eb63b2d # v2 candidate
         with:
-          python-version: 3.x
-      - run: echo "cache_id=$(date --utc '+%V')" >> $GITHUB_ENV
-      - uses: actions/cache@v4
-        with:
-          key: mkdocs-material-${{ env.cache_id }}
-          path: ~/.cache
-          restore-keys: |
-            mkdocs-material-
-      - run: pip install .[dev,docs]
-      - run: pip install mkdocs-material
-      - run: mkdocs gh-deploy --force
+          python-version: "3.12"
+          dependency-groups: docs
+          extras: ""
+          strict: true

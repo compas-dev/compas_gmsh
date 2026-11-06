@@ -8,36 +8,48 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "compas_gmsh"
-description = "COMPAS wrapper for the PYthon bindings of GMSH"
+description = "COMPAS wrapper for the Python bindings of Gmsh"
 keywords = ["compas", "fea", "meshing", "gmsh"]
 authors = [{ name = "tom van mele", email = "tom.v.mele@gmail.com" }]
-license = { file = "LICENSE" }
+license = "MIT"
+license-files = ["LICENSE.MIT"]
 readme = "README.md"
-requires-python = ">=3.9"
+requires-python = ">=3.12"
 dynamic = ["version"]
 classifiers = [
     "Development Status :: 4 - Beta",
     "Topic :: Scientific/Engineering",
     "Programming Language :: Python",
     "Programming Language :: Python :: 3",
-    "Programming Language :: Python :: 3.10",
-    "Programming Language :: Python :: 3.11",
     "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Programming Language :: Python :: 3.14",
 ]
-dependencies = ["compas", "gmsh"]
+dependencies = [
+    "compas>=3,<4",
+    "gmsh>=4.13.1,<5",
+    "numpy>=1.26",
+]
 
 [project.optional-dependencies]
+viz = ["compas_viewer"]
+
+[dependency-groups]
+test = [
+    "pytest>=8",
+]
 dev = [
-    "build",
-    "bump-my-version",
-    "compas_invocations2",
-    "invoke >=0.14",
-    "pytest",
-    "ruff",
-    "twine",
-    "wheel",
+    { include-group = "test" },
+    "build>=1.2",
+    "bump-my-version>=1.2",
+    "invoke>=2.2",
+    "packaging>=24",
+    "pyright==1.1.414",
+    "ruff>=0.14",
+    "twine>=6",
 ]
 docs = [
+    { include-group = "dev" },
     "markdown-callouts >=0.4",
     "markdown-exec >=1.8",
     "mike",
@@ -54,11 +66,17 @@ docs = [
     "pydantic >=2.10",
     "tomli >=2.0; python_version < '3.11'",
 ]
-viz = ["compas_viewer"]
 
 [project.urls]
 Homepage = "https://compas-dev.github.io/compas_gmsh"
+Documentation = "https://compas-dev.github.io/compas_gmsh"
 Repository = "https://github.com/compas-dev/compas_gmsh"
+Changelog = "https://github.com/compas-dev/compas_gmsh/blob/main/CHANGELOG.md"
+Issues = "https://github.com/compas-dev/compas_gmsh/issues"
+Forum = "https://forum.compas-framework.org/"
+
+[tool.uv.sources]
+compas = { git = "https://github.com/compas-dev/compas.git", rev = "3c1a2e8e0e5c4c14292ecf4bb38c82e5b977273e" }
 
 # ============================================================================
 # setuptools config
@@ -76,6 +94,7 @@ version = { attr = "compas_gmsh.__version__" }
 where = ["src"]
 
 [tool.setuptools.package-data]
+compas_gmsh = ["py.typed"]
 
 # ============================================================================
 # replace pytest.ini
@@ -83,9 +102,9 @@ where = ["src"]
 
 [tool.pytest.ini_options]
 minversion = "6.0"
-testpaths = ["tests", "src/compas_gmsh"]
+testpaths = ["tests"]
 python_files = ["test_*.py", "*_test.py", "test.py"]
-addopts = ["-ra", "--strict-markers", "--doctest-glob=*.rst", "--tb=short"]
+addopts = ["-ra", "--strict-markers", "--tb=short", "--import-mode=importlib"]
 doctest_optionflags = [
     "NORMALIZE_WHITESPACE",
     "IGNORE_EXCEPTION_DETAIL",
@@ -121,7 +140,8 @@ replace = "[{new_version}] {now:%Y-%m-%d}"
 [tool.ruff]
 line-length = 179
 indent-width = 4
-target-version = "py39"
+target-version = "py312"
+extend-include = ["docs/examples/**/*.py"]
 
 [tool.ruff.lint]
 select = ["E", "F", "I"]
@@ -144,3 +164,8 @@ max-doc-length = 179
 [tool.ruff.format]
 docstring-code-format = true
 docstring-code-line-length = "dynamic"
+
+[tool.pyright]
+include = ["src/compas_gmsh", "tests", "docs/examples", ".github/installed_typing_consumer.py"]
+pythonVersion = "3.12"
+typeCheckingMode = "standard"

@@ -1,0 +1,8 @@
+name: compas-gmsh-occ
+channels:
+  - conda-forge
+dependencies:
+  - python =3.12
+  - pip
+  - pythonocc-core
+  - uv

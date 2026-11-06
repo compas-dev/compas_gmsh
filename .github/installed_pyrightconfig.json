@@ -1,0 +1,6 @@
+{
+  "venvPath": ".",
+  "venv": "wheel-env",
+  "pythonVersion": "3.12",
+  "typeCheckingMode": "strict"
+}

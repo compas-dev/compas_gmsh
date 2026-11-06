@@ -1,6 +1,5 @@
-from typing import Dict
-from typing import Optional
-from typing import Union
+from typing import Self
+from typing import cast
 
 from compas.datastructures import Mesh
 
@@ -10,19 +9,18 @@ from .model import Model
 class MeshModel(Model):
     """Model for mesh (re)meshing."""
 
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        self.vertex_tag = {}
+    def __init__(self, name: str | None = None, verbose: bool = False) -> None:
+        super().__init__(name=name, verbose=verbose)
+        self.vertex_tag: dict[int, int] = {}
 
     @classmethod
     def from_mesh(
         cls,
         mesh: Mesh,
         name: str = "Mesh",
-        targetlength: Optional[Union[float, Dict]] = None,
-    ) -> "MeshModel":
-        """
-        Create a mesh model from a mesh.
+        targetlength: float | dict[int, float] | None = None,
+    ) -> Self:
+        """Create a mesh model from a mesh.
 
         Parameters
         ----------
@@ -30,7 +28,7 @@ class MeshModel(Model):
             A COMPAS mesh.
         name
             The name of the model.
-        target_length
+        targetlength
             Target value for the length of the mesh edges.
 
         Returns
@@ -38,18 +36,19 @@ class MeshModel(Model):
         MeshModel
 
         """
-        model: MeshModel = cls(name)
+        model = cls(name)
 
         for vertex in mesh.vertices():
             point = mesh.vertex_point(vertex)
+            x, y, z = point
             if targetlength:
                 if isinstance(targetlength, dict):
                     length = targetlength.get(vertex)
                 else:
                     length = targetlength
-                tag = model.occ.add_point(*point, length)
+                tag = model.occ.add_point(x, y, z, meshSize=cast(float, length))
             else:
-                tag = model.occ.add_point(*point)
+                tag = model.occ.add_point(x, y, z)
             model.vertex_tag[vertex] = tag
 
         for face in mesh.faces():
@@ -64,25 +63,20 @@ class MeshModel(Model):
         return model
 
     def generate_mesh(self, dim: int = 2) -> None:
-        """
-        Generate a mesh of the current model.
+        """Generate a mesh of the current model.
 
         Parameters
         ----------
         dim
             The dimension of the mesh.
 
-        Returns
-        -------
-        None
-            The mesh is stored in the model for further refinement and optimisation.
-            To retrieve the generated mesh, use :meth:`mesh_to_compas`, :meth:`mesh_to_openmesh`, or :meth:`mesh_to_tets`.
-
         Notes
         -----
+        The mesh is stored in the model for further refinement and optimisation.
+        To retrieve the generated mesh, use `mesh_to_compas`, `mesh_to_openmesh`, or `mesh_to_tets`.
         The geometry is automatically synchronised with the underlying OCC model.
-        Therefore, there is no need to call :meth:`synchronize` before generating the mesh.
-        To influence the meshing process, use the options of the model (:attr:`options.mesh`).
+        Therefore, there is no need to call `synchronize` before generating the mesh.
+        To influence the meshing process, use the options of the model (`options.mesh`).
 
         """
         self.occ.synchronize()
@@ -105,8 +99,7 @@ class MeshModel(Model):
         return self.vertex_tag[vertex]
 
     def mesh_targetlength_at_vertex(self, vertex: int, target: float) -> None:
-        """
-        Set the target length at a particular mesh vertex.
+        """Set the target length at a particular mesh vertex.
 
         Parameters
         ----------
@@ -115,20 +108,10 @@ class MeshModel(Model):
         target
             The target length value.
 
-        Returns
-        -------
-        None
-
         """
         tag = self.vertex_tag[vertex]
         self.occ.mesh.set_size([(0, tag)], target)
 
     def read_options_from_attributes(self) -> None:
-        """Read the model options from the attributes of the mesh data structure.
-
-        Returns
-        -------
-        None
-
-        """
+        """Read the model options from the attributes of the mesh data structure."""
         pass

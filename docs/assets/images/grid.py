@@ -5,12 +5,12 @@ from PIL import Image
 here = os.path.dirname(__file__)
 paths = []
 # for name in os.listdir(here):
-for name in ['plate.png', 'tets.png', 'csg.png', 'remeshing.png']:
+for name in ["plate.png", "tets.png", "csg.png", "remeshing.png"]:
     filepath = os.path.join(here, name)
     basename, ext = os.path.splitext(filepath)
     paths.append(filepath)
 
-grid = Image.new('RGBA', (1600, 900), (255, 255, 255, 255))
+grid = Image.new("RGBA", (1600, 900), (255, 255, 255, 255))
 
 xsize = 800
 ysize = 450
@@ -28,4 +28,4 @@ for index in range(len(paths)):
     item = image.resize((int(w * factor), int(h * factor)))
     grid.paste(item, (xsize * col, ysize * row))
 
-grid.save('docs/_images/grid.png', quality=96)
+grid.save("docs/_images/grid.png", quality=96)

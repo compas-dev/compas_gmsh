@@ -1,12 +1,19 @@
-import compas.geometry
+from collections.abc import Callable
+from typing import cast
+
 from compas.geometry import Box
 from compas.geometry import Cylinder
+from compas.geometry import Shape
 from compas.geometry import Sphere
 
 from .model import Model
 
+type DimTag = tuple[int, int]
+type CSGTree = dict[str, list[object]]
+type ShapeAdder = Callable[[Model, Shape], DimTag]
 
-def add_cylinder(self, cylinder: Cylinder) -> tuple[int, int]:
+
+def add_cylinder(self: Model, cylinder: Cylinder) -> DimTag:
     """Add a cylinder to the model."""
     H = cylinder.height
     R = cylinder.radius
@@ -20,7 +27,7 @@ def add_cylinder(self, cylinder: Cylinder) -> tuple[int, int]:
     return 3, tag
 
 
-def add_sphere(self, sphere: Sphere) -> tuple[int, int]:
+def add_sphere(self: Model, sphere: Sphere) -> DimTag:
     """Add a sphere to the model."""
     x, y, z = sphere.base
     R = sphere.radius
@@ -28,7 +35,7 @@ def add_sphere(self, sphere: Sphere) -> tuple[int, int]:
     return 3, tag
 
 
-def add_box(self, box: Box) -> tuple[int, int]:
+def add_box(self: Model, box: Box) -> DimTag:
     """Add a box to the model."""
     x0, y0, z0 = box.frame.point
     x = x0 - 0.5 * box.xsize
@@ -38,7 +45,11 @@ def add_box(self, box: Box) -> tuple[int, int]:
     return 3, tag
 
 
-_SHAPE_FUNC = {Box: add_box, Sphere: add_sphere, Cylinder: add_cylinder}
+_SHAPE_FUNC: dict[type[Shape], ShapeAdder] = {
+    Box: cast(ShapeAdder, add_box),
+    Sphere: cast(ShapeAdder, add_sphere),
+    Cylinder: cast(ShapeAdder, add_cylinder),
+}
 
 
 class CSGModel(Model):
@@ -48,7 +59,7 @@ class CSGModel(Model):
     ----------
     tree
         The CSG tree as a dictionary mapping operations to operands.
-        The operations have to be one of ``{"union", "intersection", "difference"}``.
+        The operations have to be one of `{"union", "intersection", "difference"}`.
         The operands have to be lists of shapes or lists of dicts that are CSG trees themselves.
         At every level of the tree, there can be only one operation.
     name
@@ -58,31 +69,31 @@ class CSGModel(Model):
     ----------
     tree
         The CSG tree as a dictionary mapping operations to operands.
-        The operations have to be one of ``{"union", "intersection", "difference"}``.
+        The operations have to be one of `{"union", "intersection", "difference"}`.
         The operands have to be lists of shapes or lists of dicts that are CSG trees themselves.
         At every level of the tree, there can be only one operation.
 
     """
 
-    def __init__(self, tree: dict, name: str, **kwargs) -> None:
-        super().__init__(name, **kwargs)
-        self._tree = {}
+    def __init__(self, tree: CSGTree, name: str, verbose: bool = False) -> None:
+        super().__init__(name, verbose=verbose)
+        self._tree: CSGTree = {}
         self.tree = tree
 
     @property
-    def tree(self) -> dict:
+    def tree(self) -> CSGTree:
         return self._tree
 
     @tree.setter
-    def tree(self, tree: dict) -> None:
-        def check(tree: dict) -> None:
+    def tree(self, tree: CSGTree) -> None:
+        def check(tree: CSGTree) -> None:
             if len(tree) > 1:
                 raise Exception("The tree can only have 1 operation per level.")
             operation = next(iter(tree))
             operands = tree[operation]
             for operand in operands:
                 if isinstance(operand, dict):
-                    check(operand)
+                    check(cast(CSGTree, operand))
 
         try:
             check(tree)
@@ -91,9 +102,8 @@ class CSGModel(Model):
         else:
             self._tree = tree
 
-    def add(self, shape: compas.geometry.Shape) -> tuple[int, int]:
-        """
-        Add a shape to the underlying OCC model.
+    def add(self, shape: Shape) -> DimTag:
+        """Add a shape to the underlying OCC model.
 
         Parameters
         ----------
@@ -113,26 +123,19 @@ class CSGModel(Model):
         return dimtag
 
     def compute_tree(self) -> None:
-        """
-        Comute the compound shape resulting from the operations on shape primitives in the tree.
+        """Compute the compound shape described by the CSG tree."""
 
-        Returns
-        -------
-        None
-
-        """
-
-        def walk(tree: dict) -> list[tuple[int, int]]:
+        def walk(tree: CSGTree) -> DimTag | None:
             operation = next(iter(tree))
             operands = tree[operation]
 
             for index, operand in enumerate(operands):
                 if isinstance(operand, dict):
-                    operands[index] = walk(operand)
+                    operands[index] = walk(cast(CSGTree, operand))
                 elif isinstance(operand, list):
-                    operands[index] = [self.add(o) for o in operand]
+                    operands[index] = [self.add(cast(Shape, item)) for item in operand]
                 else:
-                    operands[index] = self.add(operand)
+                    operands[index] = self.add(cast(Shape, operand))
 
             if operation == "union":
                 result = self.occ.fuse(operands[:-1], operands[-1:])
@@ -145,5 +148,7 @@ class CSGModel(Model):
             if operation == "intersection":
                 result = self.occ.intersect(operands[:-1], operands[-1:])
                 return result[0][0]
+
+            return None
 
         walk(self.tree)
